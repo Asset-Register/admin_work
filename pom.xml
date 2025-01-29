@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.project</groupId>
-    <artifactId>admin_access</artifactId>
+    <artifactId>adminwork</artifactId>
     <version>0.0.1-snapshot</version>
     <name>Admin</name>
     <description>Admin Roles/Permissions</description>
