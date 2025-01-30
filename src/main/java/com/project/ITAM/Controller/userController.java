@@ -39,19 +39,15 @@ public class userController {
     }
 
     @PatchMapping("/{id}/update")
-    public ResponseEntity<Users> updateUser(UsersRequest usersRequest,@PathVariable Long id){
+    public ResponseEntity<Users> updateUser(@RequestBody UsersRequest usersRequest,@PathVariable Long id){
 
         return ResponseEntity.ok(usersService.updateUsersById(usersRequest,id));
     }
 
     @DeleteMapping("/{id}/delete")
-    public String deleteUser(@RequestParam Long id){
+    public String deleteUser(@PathVariable Long id){
         usersService.deleteUsersById(id);
-        if(!userRepo.existsById(id)){
-            return "User deleted";
-        }else{
-            return "user not deleted";
-        }
+        return "";
     }
 
     @GetMapping("/{id}/read")

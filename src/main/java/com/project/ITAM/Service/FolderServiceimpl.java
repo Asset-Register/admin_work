@@ -1,5 +1,6 @@
 package com.project.ITAM.Service;
 
+import com.project.ITAM.Exception.NotFoundException;
 import com.project.ITAM.Model.Folder;
 import com.project.ITAM.Model.FolderRequest;
 import com.project.ITAM.Model.FolderType;
@@ -29,7 +30,7 @@ public class FolderServiceimpl implements FolderService{
         folder.setFolderType(folderRequest.getFolderType());
         if (userId != null) {
             Users users = userRepo.findById(userId)
-                    .orElseThrow(() -> new RuntimeException("Parent folder not found"));
+                    .orElseThrow(() -> new NotFoundException("Parent folder not found"));
             folder.setUser(users);
         }
 
@@ -40,7 +41,7 @@ public class FolderServiceimpl implements FolderService{
 
         if (folderRequest.getParentFolderId() != null) {
             Folder parentFolder = folderRepo.findById(folderRequest.getParentFolderId())
-                    .orElseThrow(() -> new RuntimeException("Parent folder not found"));
+                    .orElse(null);
             folder.setParentFolder(parentFolder);
         }
 

@@ -15,7 +15,7 @@ public class Users {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
-    @Column(nullable = false,name="firstName")
+    @Column(name="firstName")
     private String firstName;
 
     @Column(name="lastName")
@@ -25,7 +25,7 @@ public class Users {
     private String middleName;
 
     @ManyToOne
-    @JoinColumn(name = "groupId", nullable = false) // Foreign key in the users table
+    @JoinColumn(name = "groupId") // Foreign key in the users table
     private Groups group;
 
     @Column(name="email")

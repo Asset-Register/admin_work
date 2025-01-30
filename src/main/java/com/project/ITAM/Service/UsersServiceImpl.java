@@ -1,5 +1,6 @@
 package com.project.ITAM.Service;
 
+import com.project.ITAM.Exception.NotFoundException;
 import com.project.ITAM.Model.Groups;
 import com.project.ITAM.Model.Role;
 import com.project.ITAM.Model.Users;
@@ -10,6 +11,8 @@ import com.project.ITAM.Repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+
+import java.util.Optional;
 
 @Service
 public class UsersServiceImpl implements UsersService{
@@ -30,11 +33,11 @@ public class UsersServiceImpl implements UsersService{
 
         if(usersRequest.getGroupId()!=null){
             groups = groupRepo.findById(usersRequest.getGroupId())
-                    .orElseThrow(() -> new RuntimeException("Group not found"));
+                    .orElse(null);
         }
         if(usersRequest.getRoleId()!=null){
             role = rolesRepo.findById(usersRequest.getRoleId())
-                    .orElseThrow(() -> new RuntimeException("role not found"));
+                    .orElse(null);
         }
         return userRepo.save(Users.builder().group(groups).role(role).email(usersRequest.getEmail())
                 .disabled(usersRequest.getDisabled()).authentication(usersRequest.getAuthentication()).objects(usersRequest.getObjects())
@@ -45,24 +48,27 @@ public class UsersServiceImpl implements UsersService{
     @Override
     public Users getUsersById(Long userId) {
         Users users = userRepo.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new NotFoundException("User not found"));
         return users;
     }
 
     @Override
     public Users updateUsersById(UsersRequest usersRequest, Long userId) {
-        Users users = new Users();
-        Role role = new Role();
+        Users users = userRepo.findById(userId)
+                .orElseThrow(() ->  new NotFoundException( userId + " not found"));
+        Optional<Role> role = Optional.of(new Role());
         if(usersRequest.getRoleId()!=null) {
-            role =rolesRepo.findById(usersRequest.getRoleId())
-                    .orElseThrow(() -> new RuntimeException("Role not found"));
-            users.setRole(role);
+            role =rolesRepo.findById(usersRequest.getRoleId());
+            if(role.isPresent()) {
+                users.setRole(role.get());
+            }
         }
-        Groups groups= new Groups();
+        Optional<Groups> groups= Optional.of(new Groups());
         if(usersRequest.getGroupId()!=null){
-            groups = groupRepo.findById(usersRequest.getGroupId())
-                    .orElseThrow(() -> new RuntimeException("Group not found"));
-            users.setGroup(groups);
+            groups = groupRepo.findById(usersRequest.getGroupId());
+            if(groups.isPresent()) {
+                users.setGroup(groups.get());
+            }
         }
         if(!StringUtils.isEmpty(usersRequest.getEmail())) {
             users.setEmail(usersRequest.getEmail());
@@ -90,6 +96,9 @@ public class UsersServiceImpl implements UsersService{
 
     @Override
     public void deleteUsersById(Long userId) {
+        if (!userRepo.existsById(userId)) {
+            throw new NotFoundException("User with ID " + userId + " not found");
+        }
          userRepo.deleteById(userId);
     }
 

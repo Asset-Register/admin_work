@@ -1,5 +1,6 @@
 package com.project.ITAM.Service;
 
+import com.project.ITAM.Exception.NotFoundException;
 import com.project.ITAM.Model.Permission;
 import com.project.ITAM.Model.Role;
 import com.project.ITAM.Model.RoleRequest;
@@ -23,7 +24,7 @@ public class RoleServiceImpl implements RoleService{
         Permission permission = new Permission();
         if(roleRequest.getPermissionId()!=null){
             permission = permissionRepo.findById(roleRequest.getPermissionId())
-                    .orElseThrow(() -> new RuntimeException("Parent folder not found"));
+                    .orElseThrow(() -> new NotFoundException("Parent folder not found"));
         }
         return rolesRepo.save(Role.builder().permission(permission).roleName(roleRequest.getRoleName()).disabled(roleRequest.getDisabled()).build());
     }
@@ -31,18 +32,18 @@ public class RoleServiceImpl implements RoleService{
     @Override
     public Role getRoleById(Long roleId) {
         Role role = rolesRepo.findById(roleId)
-                .orElseThrow(() -> new RuntimeException("Role not found"));
+                .orElseThrow(() -> new NotFoundException("Role not found"));
         return role;
     }
 
     @Override
     public Role updateRoleById(RoleRequest roleRequest,Long roleId) {
          Role role = rolesRepo.findById(roleId)
-                    .orElseThrow(() -> new RuntimeException("Role not found"));
+                    .orElseThrow(() -> new NotFoundException("Role not found"));
         Permission permission = new Permission();
         if(roleRequest.getPermissionId()!=null){
             permission = permissionRepo.findById(roleRequest.getPermissionId())
-                    .orElseThrow(() -> new RuntimeException("Permission not found"));
+                    .orElseThrow(() -> new NotFoundException("Permission not found"));
             role.setPermission(permission);
         }
         if(!StringUtils.isEmpty(roleRequest.getRoleName())) {

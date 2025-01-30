@@ -1,5 +1,6 @@
 package com.project.ITAM.Service;
 
+import com.project.ITAM.Exception.NotFoundException;
 import com.project.ITAM.Model.Permission;
 import com.project.ITAM.Model.PermissionRequest;
 import com.project.ITAM.Repository.PermissionRepo;
@@ -26,14 +27,14 @@ public class PermissionServiceImpl implements PermissionService{
     @Override
     public Permission getPermissionById(Long permissionId) {
         Permission permission = permissionRepo.findById(permissionId)
-                .orElseThrow(() -> new RuntimeException("Permission not found"));
+                .orElseThrow(() -> new NotFoundException("Permission not found"));
         return permission;
     }
 
     @Override
     public Permission updatePermissionById(PermissionRequest permissionRequest, Long permissionId) {
         Permission permission = permissionRepo.findById(permissionId)
-                .orElseThrow(() -> new RuntimeException("Permission not found"));
+                .orElseThrow(() -> new NotFoundException("Permission not found"));
         if(!StringUtils.isEmpty(permissionRequest.getPermissionName())) {
             permission.setPermissionName(permissionRequest.getPermissionName());
         }

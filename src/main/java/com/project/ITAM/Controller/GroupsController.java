@@ -32,7 +32,7 @@ public class GroupsController {
     }
 
     @PatchMapping("/{id}/update")
-    public ResponseEntity<Groups> updateGroup(GroupRequest groupRequest,@PathVariable Long id){
+    public ResponseEntity<Groups> updateGroup(@RequestBody GroupRequest groupRequest,@PathVariable Long id){
         return ResponseEntity.ok(groupsService.updateGroupById(groupRequest,id));
     }
 
