@@ -1,6 +1,7 @@
 package com.project.ITAM.Controller;
 
 import com.project.ITAM.Model.DashBoard;
+import com.project.ITAM.Model.DashBoardRequest;
 import com.project.ITAM.Model.FileEntity;
 import com.project.ITAM.Service.DashBoardService;
 import com.project.ITAM.Service.FileService;
@@ -18,8 +19,8 @@ public class DashBoardController {
     private DashBoardService dashBoardService;
 
     @PostMapping("/upload")
-    public ResponseEntity<DashBoard> uploadDashBoard(@RequestBody DashBoard dashBoard, @RequestParam Long folderId) {
-        return ResponseEntity.ok(dashBoardService.uploadFile(dashBoard,folderId));
+    public ResponseEntity<DashBoard> uploadDashBoard(@RequestBody DashBoardRequest dashBoard) {
+        return ResponseEntity.ok(dashBoardService.uploadFile(dashBoard));
     }
 
     @GetMapping("/{folderId}/dashboard")

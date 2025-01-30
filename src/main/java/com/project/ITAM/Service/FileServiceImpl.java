@@ -1,6 +1,7 @@
 package com.project.ITAM.Service;
 
 import com.project.ITAM.Model.FileEntity;
+import com.project.ITAM.Model.FileEntityRequest;
 import com.project.ITAM.Model.Folder;
 import com.project.ITAM.Repository.FileRepo;
 import com.project.ITAM.Repository.FolderRepo;
@@ -19,16 +20,12 @@ public class FileServiceImpl implements FileService{
     private FolderRepo folderRepo;
 
     @Override
-    public FileEntity uploadFile(FileEntity file,Long folderId) {
-        Folder folder = folderRepo.findById(folderId).orElseThrow(() -> new RuntimeException("Folder not found"));
-
-        FileEntity fileEntity = new FileEntity();
-        fileEntity.setFileName(file.getFileName());
-        fileEntity.setFileType(file.getFileType());
-        fileEntity.setFilePath(file.getFilePath());
-        fileEntity.setFolder(folder);
-
-        return fileRepo.save(fileEntity);
+    public FileEntity uploadFile(FileEntityRequest fileEntityRequest) {
+        Folder folder = new Folder();
+        if(fileEntityRequest.getFolderId()!=null) {
+             folder = folderRepo.findById(fileEntityRequest.getFolderId()).orElseThrow(() -> new RuntimeException("Folder not found"));
+        }
+        return fileRepo.save(FileEntity.builder().fileName(fileEntityRequest.getFileName()).filePath(fileEntityRequest.getFilePath()).fileType(fileEntityRequest.getFileType()).folder(folder).build());
     }
 
     @Override

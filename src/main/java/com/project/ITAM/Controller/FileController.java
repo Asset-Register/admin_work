@@ -1,6 +1,7 @@
 package com.project.ITAM.Controller;
 
 import com.project.ITAM.Model.FileEntity;
+import com.project.ITAM.Model.FileEntityRequest;
 import com.project.ITAM.Service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +17,8 @@ public class FileController {
     private FileService fileService;
 
     @PostMapping("/upload")
-    public ResponseEntity<FileEntity> uploadFile(@RequestBody FileEntity file,@RequestParam Long folderId) {
-        return ResponseEntity.ok(fileService.uploadFile(file,folderId));
+    public ResponseEntity<FileEntity> uploadFile(@RequestBody FileEntityRequest fileEntityRequest) {
+        return ResponseEntity.ok(fileService.uploadFile(fileEntityRequest));
     }
 
     @GetMapping("/{folderId}/files")

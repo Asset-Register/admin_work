@@ -1,6 +1,7 @@
 package com.project.ITAM.Service;
 
 import com.project.ITAM.Model.DashBoard;
+import com.project.ITAM.Model.DashBoardRequest;
 import com.project.ITAM.Model.Folder;
 import com.project.ITAM.Repository.DashBoardRepo;
 import com.project.ITAM.Repository.FolderRepo;
@@ -18,13 +19,12 @@ public class DashBoardServiceimpl implements  DashBoardService{
     private FolderRepo folderRepo;
 
     @Override
-    public DashBoard uploadFile(DashBoard dashBoard, Long folderId) {
-        Folder folder = folderRepo.findById(folderId).orElseThrow(() -> new RuntimeException("Folder not found"));
-DashBoard dashBoard1 = new DashBoard();
-dashBoard1.setDashboardLink(dashBoard.getDashboardLink());
-dashBoard1.setFolder(folder);
-
-        return dashBoardRepo.save(dashBoard1);
+    public DashBoard uploadFile(DashBoardRequest dashBoardRequest) {
+        Folder folder = new Folder();
+        if(dashBoardRequest.getFolderId()!=null) {
+             folder = folderRepo.findById(dashBoardRequest.getFolderId()).orElseThrow(() -> new RuntimeException("Folder not found"));
+        }
+        return dashBoardRepo.save(DashBoard.builder().dashboardLink(dashBoardRequest.getDashboardLink()).folder(folder).build());
     }
 
     @Override
