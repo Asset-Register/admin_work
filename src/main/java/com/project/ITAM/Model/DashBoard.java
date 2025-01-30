@@ -15,12 +15,17 @@ public class DashBoard {
 
     private String dashboardLink;
 
-    private Long folderId; // Null if it's a root folder
+    @ManyToOne
+    @JoinColumn(name = "folder_id")
+    private Folder folder; // Folder where the file is stored
 
-    public DashBoard(Long id, String dashboardLink, Long folderId) {
+    public DashBoard() {
+    }
+
+    public DashBoard(Long id, String dashboardLink, Folder folder) {
         this.id = id;
         this.dashboardLink = dashboardLink;
-        this.folderId = folderId;
+        this.folder = folder;
     }
 }
 

@@ -32,8 +32,9 @@ public class Users {
     @Email(message = "Please provide a valid email address")
     private String email;
 
-    @Column(name="roleId")
-    private String roleId;
+    @ManyToOne
+    @JoinColumn(name = "roleId") // Foreign key in the users table
+    private Role role;
 
     @Column(name="objects")
     private String objects;
@@ -47,14 +48,14 @@ public class Users {
     public Users() {
     }
 
-    public Users(Long userId, String firstName, String lastName, String middleName, Groups group, String email, String roleId, String objects, String authentication, String disabled) {
+    public Users(Long userId, String firstName, String lastName, String middleName, Groups group, String email, Role roleId, String objects, String authentication, String disabled) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.middleName = middleName;
         this.group = group;
         this.email = email;
-        this.roleId = roleId;
+        this.role = roleId;
         this.objects = objects;
         this.authentication = authentication;
         this.disabled = disabled;

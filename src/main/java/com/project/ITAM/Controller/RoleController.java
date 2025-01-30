@@ -1,10 +1,14 @@
 package com.project.ITAM.Controller;
 
+import com.project.ITAM.Model.Folder;
 import com.project.ITAM.Model.Permission;
 import com.project.ITAM.Model.Role;
+import com.project.ITAM.Model.RoleRequest;
 import com.project.ITAM.Repository.PermissionRepo;
 import com.project.ITAM.Repository.RolesRepo;
+import com.project.ITAM.Service.RoleService;
 import jakarta.validation.Valid;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.QueryParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,49 +31,36 @@ public class RoleController {
     @Autowired
     private PermissionRepo permissionRepo;
 
+    @Autowired
+            private RoleService roleService;
+
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @PostMapping("/add")
-    public String addRole(@Valid @RequestBody Role role) {
-        Permission groups = permissionRepo.save(role.getPermission());
-        Role role1 = rolesRepo.save(role);
-        if (role1.getRoleId() != null) {
-            return "role Added";
-        } else {
-            return "role not Added";
-        }
+    public ResponseEntity<Role> addRole(@Valid @RequestBody RoleRequest role) {
+        logger.info("Create Role with permissionId:" + role.getRoleName());
+        return ResponseEntity.ok(roleService.createRole(role));
     }
 
-    @PatchMapping("/update")
-    public String updateRole(@Valid @RequestBody Role role){
-        boolean id = rolesRepo.existsById(role.getRoleId());
-        String result = null;
-        if(id){
-            Role role1 = rolesRepo.save(role);
-        }else{
-            result = "Id does not exist";
-        }
-        return result ;
+    @PatchMapping("/{roleId}/update")
+    public ResponseEntity<Role> updateRole(@Valid @RequestBody RoleRequest role, @PathVariable Long roleId){
+        logger.info("update Role :" + role.getRoleName());
+        return ResponseEntity.ok(roleService.updateRoleById(role,roleId));
     }
 
-    @DeleteMapping("/delete")
-    public String deleteRole(@RequestParam Long id){
-       rolesRepo.deleteById(id);
-       if(!rolesRepo.existsById(id)){
+    @DeleteMapping("/{roleId}/delete")
+    public String deleteRole(@PathVariable Long roleId){
+       roleService.deleteRoleById(roleId);
+       if(!rolesRepo.existsById(roleId)){
            return "role deleted";
        }else{
            return "role not deleted";
        }
     }
 
-    @GetMapping("/read")
-    public ResponseEntity<Object> getUser(@QueryParam("id") Long id){
-        Optional<Role> role= rolesRepo.findById(id);
-        if(role.isPresent()) {
-            return ResponseEntity.ok(role.get());
-        }else{
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("SQL execution failed");
-        }
+    @GetMapping("/{role_id}/read")
+    public ResponseEntity<Role> getRole(@PathVariable Long id){
+       return  ResponseEntity.ok(roleService.getRoleById(id));
     }
 
 }
