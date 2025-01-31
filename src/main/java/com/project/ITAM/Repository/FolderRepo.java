@@ -38,4 +38,20 @@ public interface FolderRepo extends JpaRepository<Folder,Long> {
         """, nativeQuery = true)
     List<Folder> findAccessFolders(@Param("userId") Long userId);
 
+
+   /* SELECT DISTINCT f.*
+    FROM folders f
+    LEFT JOIN folder_access fu ON f.id = fu.folder_id
+    LEFT JOIN folder_group_access fg ON f.id = fg.folder_id
+
+    LEFT JOIN users u ON (u.userId = fu.user_id OR u.groupId = fg.group_id )
+    WHERE
+    u.userId = 3  -- User must be the logged-in user
+    OR f.user_id = 3  -- Condition 1: User is the owner
+    OR f.folderType = 'PUBLIC'  -- Condition 2: Folder is public
+    OR (f.folderType = 'RESTRICTED' AND fu.user_id IS NOT NULL)  -- Condition 3: User is explicitly granted access
+    OR (f.folderType = 'RESTRICTED' AND fg.group_id IS NOT NULL);  -- Condition 4: User belongs to a group with access*/
+
+
+
 }

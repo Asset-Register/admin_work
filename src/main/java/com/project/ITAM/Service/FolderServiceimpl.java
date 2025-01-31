@@ -75,19 +75,24 @@ public class FolderServiceimpl implements FolderService{
                     .orElseThrow(() -> new NotFoundException("parent Folder not found"));
             folder.setParentFolder(parent_folder);
         }
-        if(folderRequest.getUserIds()!=null) {
+
+        if(!StringUtils.isEmpty(folderRequest.getFolderType())) {
+            folder.setFolderType(folderRequest.getFolderType());
+        }
+
+        if(folder.getFolderType()== FolderType.RESTRICTED && !CollectionUtils.isEmpty(folderRequest.getUserIds())) {
             // Fetch users from the database
             Set<Users> users = userRepo.findAllById(folderRequest.getUserIds()).stream().collect(Collectors.toSet());
             // Update allowed users
             folder.setAllowedUsers(users);
         }
-        if(folderRequest.getGroupIds()!=null) {
+        if(folder.getFolderType()== FolderType.RESTRICTED && !CollectionUtils.isEmpty(folderRequest.getGroupIds())) {
             // Fetch groups from the database
             Set<Groups> groups = groupRepo.findAllById(folderRequest.getGroupIds()).stream().collect(Collectors.toSet());
             // Update allowed groups
             folder.setAllowedGroups(groups);
         }
-        if(folderRequest.getObjectIds()!=null) {
+        if(folder.getFolderType()== FolderType.RESTRICTED && !CollectionUtils.isEmpty(folderRequest.getObjectIds())) {
             // Fetch objects from the database
             Set<ObjectEntity> objects = objectRepo.findAllById(folderRequest.getObjectIds()).stream().collect(Collectors.toSet());
             // Update allowed objects
@@ -96,9 +101,6 @@ public class FolderServiceimpl implements FolderService{
 
         if(!StringUtils.isEmpty(folderRequest.getFolderName())) {
            folder.setFolderName(folderRequest.getFolderName());
-        }
-        if(!StringUtils.isEmpty(folderRequest.getFolderType())) {
-           folder.setFolderType(folderRequest.getFolderType());
         }
 
         return folderRepo.save(folder);
