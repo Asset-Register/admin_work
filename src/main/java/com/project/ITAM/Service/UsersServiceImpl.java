@@ -1,11 +1,9 @@
 package com.project.ITAM.Service;
 
 import com.project.ITAM.Exception.NotFoundException;
-import com.project.ITAM.Model.Groups;
-import com.project.ITAM.Model.Role;
-import com.project.ITAM.Model.Users;
-import com.project.ITAM.Model.UsersRequest;
+import com.project.ITAM.Model.*;
 import com.project.ITAM.Repository.GroupRepo;
+import com.project.ITAM.Repository.ObjectRepo;
 import com.project.ITAM.Repository.RolesRepo;
 import com.project.ITAM.Repository.UserRepo;
 import jakarta.transaction.Transactional;
@@ -27,10 +25,14 @@ public class UsersServiceImpl implements UsersService{
     @Autowired
     private RolesRepo rolesRepo;
 
+    @Autowired
+    private ObjectRepo objectRepo;
+
     @Override
     public Users createUser(UsersRequest usersRequest) {
         Groups groups= new Groups();
         Role role = new Role();
+        ObjectEntity objectEntity = new ObjectEntity();
 
         if(usersRequest.getGroupId()!=null){
             groups = groupRepo.findById(usersRequest.getGroupId())
@@ -40,9 +42,13 @@ public class UsersServiceImpl implements UsersService{
             role = rolesRepo.findById(usersRequest.getRoleId())
                     .orElse(null);
         }
+        if(usersRequest.getObjectId()!=null){
+            objectEntity = objectRepo.findById(usersRequest.getObjectId())
+                    .orElse(null);
+        }
         return userRepo.save(Users.builder().group(groups).role(role).email(usersRequest.getEmail())
-                .disabled(usersRequest.getDisabled()).authentication(usersRequest.getAuthentication()).objects(usersRequest.getObjects())
-                .firstName(usersRequest.getFirstName()).objects(usersRequest.getObjects())
+                .disabled(usersRequest.getDisabled()).authentication(usersRequest.getAuthentication())
+                .firstName(usersRequest.getFirstName())
                 .lastName(usersRequest.getLastName()).middleName(usersRequest.getMiddleName()).build());
     }
 
@@ -57,28 +63,23 @@ public class UsersServiceImpl implements UsersService{
     public Users updateUsersById(UsersRequest usersRequest, Long userId) {
         Users users = userRepo.findById(userId)
                 .orElseThrow(() ->  new NotFoundException( userId + " not found"));
-        Optional<Role> role = Optional.of(new Role());
         if(usersRequest.getRoleId()!=null) {
-            role =rolesRepo.findById(usersRequest.getRoleId());
-            if(role.isPresent()) {
-                users.setRole(role.get());
-            }
+            Optional<Role>  role =rolesRepo.findById(usersRequest.getRoleId());
+            role.ifPresent(users::setRole);
         }
-        Optional<Groups> groups= Optional.of(new Groups());
         if(usersRequest.getGroupId()!=null){
-            groups = groupRepo.findById(usersRequest.getGroupId());
-            if(groups.isPresent()) {
-                users.setGroup(groups.get());
-            }
+            Optional<Groups> groups = groupRepo.findById(usersRequest.getGroupId());
+            groups.ifPresent(users::setGroup);
+        }
+        if(usersRequest.getObjectId()!=null){
+            Optional<ObjectEntity> objectEntity = objectRepo.findById(usersRequest.getObjectId());
+            objectEntity.ifPresent(users::setObject);
         }
         if(!StringUtils.isEmpty(usersRequest.getEmail())) {
             users.setEmail(usersRequest.getEmail());
         }
         if(!StringUtils.isEmpty(usersRequest.getAuthentication())) {
             users.setAuthentication(usersRequest.getAuthentication());
-        }
-        if(!StringUtils.isEmpty(usersRequest.getObjects())) {
-            users.setObjects(usersRequest.getObjects());
         }
         if(!StringUtils.isEmpty(usersRequest.getLastName())) {
             users.setLastName(usersRequest.getLastName());

@@ -19,7 +19,7 @@ public class UsersRequest {
 
     private Long roleId;
 
-    private String objects;
+    private Long objectId;
 
     private String authentication;
 
@@ -28,14 +28,14 @@ public class UsersRequest {
     public UsersRequest() {
     }
 
-    public UsersRequest(String firstName, String lastName, String middleName, Long groupId, String email, Long roleId, String objects, String authentication, String disabled) {
+    public UsersRequest(String firstName, String lastName, String middleName, Long groupId, String email, Long roleId, Long objects, String authentication, String disabled) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.middleName = middleName;
         this.groupId = groupId;
         this.email = email;
         this.roleId = roleId;
-        this.objects = objects;
+        this.objectId = objects;
         this.authentication = authentication;
         this.disabled = disabled;
     }

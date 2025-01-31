@@ -39,8 +39,9 @@ public class Users {
     @JoinColumn(name = "roleId") // Foreign key in the users table
     private Role role;
 
-    @Column(name="objects")
-    private String objects;
+    @ManyToOne
+    @JoinColumn(name = "objectId") // Foreign key in the users table
+    private ObjectEntity object;
 
     @Column(name="authentication")
     private String authentication;
@@ -62,7 +63,7 @@ public class Users {
     public Users() {
     }
 
-    public Users(Long userId, String firstName, String lastName, String middleName, Groups group, String email, Role role, String objects, String authentication, String disabled, Set<Folder> accessibleFolders, Set<Groups> groups) {
+    public Users(Long userId, String firstName, String lastName, String middleName, Groups group, String email, Role role, ObjectEntity objects, String authentication, String disabled, Set<Folder> accessibleFolders, Set<Groups> groups) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -70,7 +71,7 @@ public class Users {
         this.group = group;
         this.email = email;
         this.role = role;
-        this.objects = objects;
+        this.object = objects;
         this.authentication = authentication;
         this.disabled = disabled;
         this.accessibleFolders = accessibleFolders;
