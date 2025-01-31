@@ -8,6 +8,7 @@ import com.project.ITAM.Model.UsersRequest;
 import com.project.ITAM.Repository.GroupRepo;
 import com.project.ITAM.Repository.RolesRepo;
 import com.project.ITAM.Repository.UserRepo;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -100,6 +101,23 @@ public class UsersServiceImpl implements UsersService{
             throw new NotFoundException("User with ID " + userId + " not found");
         }
          userRepo.deleteById(userId);
+    }
+
+    @Override
+    @Transactional
+    public Users addUserToGroup(Long userId, Long groupId) {
+        Optional<Users> userOpt = userRepo.findById(userId);
+        Optional<Groups> groupOpt = groupRepo.findById(groupId);
+
+        if (userOpt.isPresent() && groupOpt.isPresent()) {
+            Users user = userOpt.get();
+            Groups group = groupOpt.get();
+
+            user.getGroups().add(group);
+             return userRepo.save(user);
+        } else {
+            throw new NotFoundException("User or Group not found");
+        }
     }
 
     }

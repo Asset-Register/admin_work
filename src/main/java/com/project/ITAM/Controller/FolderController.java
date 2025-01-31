@@ -42,6 +42,12 @@ public class FolderController {
         return ResponseEntity.ok(folderRepo.findAll());
     }
 
+    @PatchMapping("/{UserId}/update")
+    public ResponseEntity<Folder> updateFolders(@PathVariable Long id,@RequestBody FolderRequest folderRequest) {
+        Folder folder = folderService.updateFolder(folderRequest,id);
+        return ResponseEntity.ok(folder);
+    }
+
     @GetMapping("/getfolder/root")
     public ResponseEntity<List<Folder>> getRootFolders() {
         logger.info("Root Folders:" + folderRepo.findByParentFolderIsNull());

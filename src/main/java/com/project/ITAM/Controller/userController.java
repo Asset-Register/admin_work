@@ -47,13 +47,18 @@ public class userController {
     @DeleteMapping("/{id}/delete")
     public String deleteUser(@PathVariable Long id){
         usersService.deleteUsersById(id);
-        return "";
+        return "user deleted";
     }
 
     @GetMapping("/{id}/read")
     public ResponseEntity<Users> getUser(@PathVariable Long id){
 
         return ResponseEntity.ok(usersService.getUsersById(id));
+    }
+
+    @PostMapping("/adduser/{user_id}/group/{group_id}")
+    public ResponseEntity<Users> addUsertoGroup(@PathVariable Long userId,@PathVariable Long groupId){
+        return ResponseEntity.ok(usersService.addUserToGroup(userId,groupId));
     }
 
 }

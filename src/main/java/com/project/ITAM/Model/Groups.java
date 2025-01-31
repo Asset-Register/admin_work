@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Builder
 @Data
@@ -29,15 +32,23 @@ public class Groups {
     @Column(name="authentication")
     private String authentication;
 
+    @ManyToMany(mappedBy = "allowedGroups")
+    private Set<Folder> accessibleFolders = new HashSet<>();
+
+    @ManyToMany(mappedBy = "groups")
+    private Set<Users> users = new HashSet<>();
+
     public Groups() {
     }
 
-    public Groups(Long groupId, String groupName, String email, String objects, String disabled, String authentication) {
+    public Groups(Long groupId, String groupName, String email, String objects, String disabled, String authentication, Set<Folder> accessibleFolders, Set<Users> users) {
         this.groupId = groupId;
         this.groupName = groupName;
         this.email = email;
         this.objects = objects;
         this.disabled = disabled;
         this.authentication = authentication;
+        this.accessibleFolders = accessibleFolders;
+        this.users = users;
     }
 }

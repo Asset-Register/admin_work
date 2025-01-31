@@ -5,6 +5,9 @@ import jakarta.validation.constraints.Email;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Builder
 @Data
@@ -45,19 +48,32 @@ public class Users {
     @Column(name="disabled")
     private String disabled;
 
+    @ManyToMany(mappedBy = "allowedUsers")
+    private Set<Folder> accessibleFolders = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_groups",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "group_id")
+    )
+    private Set<Groups> groups = new HashSet<>();
+
     public Users() {
     }
 
-    public Users(Long userId, String firstName, String lastName, String middleName, Groups group, String email, Role roleId, String objects, String authentication, String disabled) {
+    public Users(Long userId, String firstName, String lastName, String middleName, Groups group, String email, Role role, String objects, String authentication, String disabled, Set<Folder> accessibleFolders, Set<Groups> groups) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.middleName = middleName;
         this.group = group;
         this.email = email;
-        this.role = roleId;
+        this.role = role;
         this.objects = objects;
         this.authentication = authentication;
         this.disabled = disabled;
+        this.accessibleFolders = accessibleFolders;
+        this.groups = groups;
     }
 }

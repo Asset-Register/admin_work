@@ -12,4 +12,6 @@ public interface UsersService {
 
     public void deleteUsersById(Long userId);
 
+    public Users addUserToGroup(Long userId,Long GroupId);
+
 }

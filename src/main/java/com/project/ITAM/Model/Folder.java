@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -38,16 +39,35 @@ public class Folder {
     )
     private Set<Users> allowedUsers;
 
+    @ManyToMany
+    @JoinTable(
+            name = "folder_group_access",
+            joinColumns = @JoinColumn(name = "folder_id"),
+            inverseJoinColumns = @JoinColumn(name = "group_id")
+    )
+    private Set<Groups> allowedGroups = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "folder_object_access",
+            joinColumns = @JoinColumn(name = "folder_id"),
+            inverseJoinColumns = @JoinColumn(name = "object_id")
+    )
+    private Set<ObjectEntity> allowedObjects = new HashSet<>();
+
+
     public Folder() {
     }
 
-    public Folder(Long id, String folderName, Folder parentFolder, FolderType folderType, Users user, Set<Users> allowedUsers) {
+    public Folder(Long id, String folderName, Folder parentFolder, FolderType folderType, Users user, Set<Users> allowedUsers, Set<Groups> allowedGroups, Set<ObjectEntity> allowedObjects) {
         this.id = id;
         this.folderName = folderName;
         this.parentFolder = parentFolder;
         this.folderType = folderType;
         this.user = user;
         this.allowedUsers = allowedUsers;
+        this.allowedGroups = allowedGroups;
+        this.allowedObjects = allowedObjects;
     }
 }
 
