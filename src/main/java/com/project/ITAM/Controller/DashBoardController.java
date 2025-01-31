@@ -20,11 +20,23 @@ public class DashBoardController {
 
     @PostMapping("/upload")
     public ResponseEntity<DashBoard> uploadDashBoard(@RequestBody DashBoardRequest dashBoard) {
-        return ResponseEntity.ok(dashBoardService.uploadFile(dashBoard));
+        return ResponseEntity.ok(dashBoardService.uploadDashBoard(dashBoard));
     }
 
     @GetMapping("/{folderId}/dashboard")
     public ResponseEntity<List<DashBoard>> getDashBoardInnFolder(@PathVariable Long folderId) {
         return ResponseEntity.ok(dashBoardService.getDashboardInFolder(folderId));
     }
+
+    @PatchMapping("/{dashBoardId}/update")
+    public ResponseEntity<DashBoard> updateFileName(@PathVariable Long dashBoardId,@RequestBody DashBoardRequest dashBoardRequest){
+        return ResponseEntity.ok(dashBoardService.updatedashBoard(dashBoardId,dashBoardRequest));
+    }
+
+    @DeleteMapping("/{dashBoardId}/delete")
+    public String deleteByFileId(@PathVariable Long dashBoardId){
+        dashBoardService.deleteDashBoard(dashBoardId);
+        return "dashBoard deleted";
+    }
+
 }

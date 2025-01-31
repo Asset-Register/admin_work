@@ -53,6 +53,9 @@ public class GroupsServiceImpl implements GroupsService{
 
     @Override
     public void deleteGroupById(Long groupId) {
-     groupRepo.deleteById(groupId);
+        if (!groupRepo.existsById(groupId)) {
+            throw new NotFoundException("group with ID " + groupId + " not found");
+        }
+        groupRepo.deleteById(groupId);
     }
 }

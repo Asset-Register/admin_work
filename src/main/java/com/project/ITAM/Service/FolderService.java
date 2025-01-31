@@ -14,4 +14,8 @@ public interface FolderService {
 
     public List<Folder> getFolderByUserId(Long folderId);
 
+    public List<Folder> getFolderByUserIdANDGroupID(Long folderId);
+
+    public void deleteByFolderId(Long folderId);
+
 }

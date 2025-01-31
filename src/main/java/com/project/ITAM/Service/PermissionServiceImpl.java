@@ -46,6 +46,9 @@ public class PermissionServiceImpl implements PermissionService{
 
     @Override
     public void deletePermissionById(Long permissionId) {
+        if (!permissionRepo.existsById(permissionId)) {
+            throw new NotFoundException("permission with ID " + permissionId + " not found");
+        }
            permissionRepo.deleteById(permissionId);
     }
 }

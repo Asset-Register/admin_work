@@ -24,7 +24,7 @@ public class Folder {
     private Folder parentFolder; // Null if it's a root folder
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name= "folderType")
     private FolderType folderType;// "private" or "public" or "Restricted"
 
     @ManyToOne

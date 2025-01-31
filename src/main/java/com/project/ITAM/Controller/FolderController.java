@@ -42,9 +42,9 @@ public class FolderController {
         return ResponseEntity.ok(folderRepo.findAll());
     }
 
-    @PatchMapping("/{UserId}/update")
-    public ResponseEntity<Folder> updateFolders(@PathVariable Long id,@RequestBody FolderRequest folderRequest) {
-        Folder folder = folderService.updateFolder(folderRequest,id);
+    @PatchMapping("/{folderId}/update")
+    public ResponseEntity<Folder> updateFolders(@PathVariable Long folderId,@RequestBody FolderRequest folderRequest) {
+        Folder folder = folderService.updateFolder(folderRequest,folderId);
         return ResponseEntity.ok(folder);
     }
 
@@ -66,6 +66,19 @@ public class FolderController {
         List<Folder> folder = folderService.getFolderByUserId(userId);
         logger.info("Get Folders By UserId:" + folder);
         return ResponseEntity.ok(folder);
+    }
+
+    @GetMapping("/{userId}/Allfolder")
+    public ResponseEntity<List<Folder>> getAllUserIDFolders(@PathVariable Long userId) {
+        List<Folder> folder = folderService.getFolderByUserIdANDGroupID(userId);
+        logger.info("Get ALL Folders Related to UserId:" + folder);
+        return ResponseEntity.ok(folder);
+    }
+
+    @DeleteMapping("/{folderId}/delete")
+    public String deleteByFolderId(@PathVariable Long folderId){
+        folderService.deleteByFolderId(folderId);
+        return "folder deleted";
     }
 
 }

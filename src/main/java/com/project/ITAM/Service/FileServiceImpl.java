@@ -8,8 +8,11 @@ import com.project.ITAM.Repository.FileRepo;
 import com.project.ITAM.Repository.FolderRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class FileServiceImpl implements FileService{
@@ -32,5 +35,32 @@ public class FileServiceImpl implements FileService{
     @Override
     public List<FileEntity> getFilesInFolder(Long folderId) {
         return fileRepo.findByFolderId(folderId);
+    }
+
+    @Override
+    public FileEntity updateFile(Long id, FileEntityRequest fileEntityRequest) {
+        FileEntity file = fileRepo.findById(id).orElseThrow(()->new NotFoundException("file id not exist"));
+        if(!StringUtils.isEmpty(fileEntityRequest.getFileName())) {
+           file.setFileName(fileEntityRequest.getFileName());
+        }
+        if(!StringUtils.isEmpty(fileEntityRequest.getFilePath())) {
+            file.setFilePath(fileEntityRequest.getFilePath());
+        }
+        if(fileEntityRequest.getFolderId()!=null) {
+           Optional<Folder> folder =folderRepo.findById(fileEntityRequest.getFolderId());
+            if(folder.isPresent()) {
+                file.setFolder(folder.get());
+            }
+        }
+
+        return fileRepo.save(file);
+    }
+
+    @Override
+    public void deleteFile(Long id) {
+        if (!fileRepo.existsById(id)) {
+            throw new NotFoundException("file with ID " + id + " not found");
+        }
+        fileRepo.deleteById(id);
     }
 }

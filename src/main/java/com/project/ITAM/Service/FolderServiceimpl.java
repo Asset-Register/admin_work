@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -42,7 +41,7 @@ public class FolderServiceimpl implements FolderService{
             folder.setUser(users);
         }
 
-        if (folderRequest.getFolderType() == FolderType.RESTRICTED) {
+        if (folderRequest.getFolderType() == FolderType.Restricted) {
             if(!CollectionUtils.isEmpty(folderRequest.getUserIds())) {
                 Set<Users>    allowedUsers = userRepo.findAllById(folderRequest.getUserIds()).stream().collect(Collectors.toSet());
                 folder.setAllowedUsers(allowedUsers);
@@ -72,7 +71,7 @@ public class FolderServiceimpl implements FolderService{
                 .orElseThrow(() -> new NotFoundException("folder not found"));
         if(folderRequest.getParentFolderId()!=null) {
             Folder parent_folder = folderRepo.findById(folderRequest.getParentFolderId())
-                    .orElseThrow(() -> new NotFoundException("parent Folder not found"));
+                    .orElseThrow(() -> new NotFoundException("Entered parent Folder not present"));
             folder.setParentFolder(parent_folder);
         }
 
@@ -80,19 +79,19 @@ public class FolderServiceimpl implements FolderService{
             folder.setFolderType(folderRequest.getFolderType());
         }
 
-        if(folder.getFolderType()== FolderType.RESTRICTED && !CollectionUtils.isEmpty(folderRequest.getUserIds())) {
+        if(folder.getFolderType()== FolderType.Restricted && !CollectionUtils.isEmpty(folderRequest.getUserIds())) {
             // Fetch users from the database
             Set<Users> users = userRepo.findAllById(folderRequest.getUserIds()).stream().collect(Collectors.toSet());
             // Update allowed users
             folder.setAllowedUsers(users);
         }
-        if(folder.getFolderType()== FolderType.RESTRICTED && !CollectionUtils.isEmpty(folderRequest.getGroupIds())) {
+        if(folder.getFolderType()== FolderType.Restricted && !CollectionUtils.isEmpty(folderRequest.getGroupIds())) {
             // Fetch groups from the database
             Set<Groups> groups = groupRepo.findAllById(folderRequest.getGroupIds()).stream().collect(Collectors.toSet());
             // Update allowed groups
             folder.setAllowedGroups(groups);
         }
-        if(folder.getFolderType()== FolderType.RESTRICTED && !CollectionUtils.isEmpty(folderRequest.getObjectIds())) {
+        if(folder.getFolderType()== FolderType.Restricted && !CollectionUtils.isEmpty(folderRequest.getObjectIds())) {
             // Fetch objects from the database
             Set<ObjectEntity> objects = objectRepo.findAllById(folderRequest.getObjectIds()).stream().collect(Collectors.toSet());
             // Update allowed objects
@@ -114,5 +113,18 @@ public class FolderServiceimpl implements FolderService{
     @Override
     public List<Folder> getFolderByUserId(Long userId) {
         return folderRepo.findAccessibleFolders(userId);
+    }
+
+    @Override
+    public List<Folder> getFolderByUserIdANDGroupID(Long userId) {
+        return folderRepo.findAccessFolders(userId);
+    }
+
+    @Override
+    public void deleteByFolderId(Long folderId) {
+        if (!folderRepo.existsById(folderId)) {
+            throw new NotFoundException("folder with ID " + folderId + " not found");
+        }
+        folderRepo.deleteById(folderId);
     }
 }

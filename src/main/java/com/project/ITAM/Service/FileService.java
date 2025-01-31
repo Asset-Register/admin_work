@@ -10,4 +10,8 @@ public interface FileService {
     public FileEntity uploadFile(FileEntityRequest fileEntityRequest);
 
     public List<FileEntity> getFilesInFolder(Long folderId);
+
+    public FileEntity updateFile(Long id,FileEntityRequest fileEntityRequest);
+
+    public void deleteFile(Long id);
 }
