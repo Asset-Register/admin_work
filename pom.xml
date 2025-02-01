@@ -59,17 +59,22 @@
             <artifactId>flyway-core</artifactId>
             <version>9.22.0</version>
         </dependency>
-       <!-- <dependency>
+        <!--<dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-ui</artifactId>
-            <version>1.6.9</version> &lt;!&ndash; Use this stable version &ndash;&gt;
+            <version>1.7.0</version> &lt;!&ndash; Use this stable version &ndash;&gt;
         </dependency>-->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.3.0</version>
+        </dependency>
             <!-- Swagger Dependencies -->
-            <dependency>
+            <!--<dependency>
                 <groupId>io.springfox</groupId>
                 <artifactId>springfox-boot-starter</artifactId>
                 <version>3.0.0</version>
-            </dependency>
+            </dependency>-->
 
         <dependency>
             <groupId>org.springframework.cloud</groupId>
