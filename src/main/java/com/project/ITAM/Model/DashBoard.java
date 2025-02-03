@@ -13,7 +13,28 @@ public class DashBoard {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String dashboardLink;
+    @Column(name="dashBoardName")
+    private String dashBoardName;
+
+    @Column(name="accessType")
+    private  FolderType accessType;
+
+    @ManyToOne
+    @JoinColumn(name = "objectId")
+    private ObjectEntity object;
+
+    @Lob
+    @Column(name="description")
+    private String description;
+
+    @Column(name="dashboardType")
+    private String dashboardType;
+
+    @Column(name="sourceName")
+    private String sourceName;
+
+    @Column(name="tableName")
+    private String tableName;
 
     @ManyToOne
     @JoinColumn(name = "folder_id")
@@ -22,9 +43,15 @@ public class DashBoard {
     public DashBoard() {
     }
 
-    public DashBoard(Long id, String dashboardLink, Folder folder) {
+    public DashBoard(Long id, String dashBoardName, FolderType accessType, ObjectEntity object, String description, String dashboardType, String sourceName, String tableName, Folder folder) {
         this.id = id;
-        this.dashboardLink = dashboardLink;
+        this.dashBoardName = dashBoardName;
+        this.accessType = accessType;
+        this.object = object;
+        this.description = description;
+        this.dashboardType = dashboardType;
+        this.sourceName = sourceName;
+        this.tableName = tableName;
         this.folder = folder;
     }
 }

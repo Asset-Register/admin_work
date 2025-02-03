@@ -13,8 +13,13 @@ public class FileEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name="fileName")
     private String fileName;
+
+    @Column(name="fileType")
     private String fileType;
+
+    @Column(name="filePath")
     private String filePath; // Store actual file path
 
     @ManyToOne
