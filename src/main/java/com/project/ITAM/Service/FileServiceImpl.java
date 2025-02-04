@@ -38,6 +38,11 @@ public class FileServiceImpl implements FileService{
     }
 
     @Override
+    public List<FileEntity> getAllFiles() {
+        return fileRepo.findAll();
+    }
+
+    @Override
     public FileEntity updateFile(Long id, FileEntityRequest fileEntityRequest) {
         FileEntity file = fileRepo.findById(id).orElseThrow(()->new NotFoundException("file id not exist"));
         if(!StringUtils.isEmpty(fileEntityRequest.getFileName())) {

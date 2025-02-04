@@ -2,6 +2,7 @@ package com.project.ITAM.Controller;
 
 import com.project.ITAM.Model.FileEntity;
 import com.project.ITAM.Model.FileEntityRequest;
+import com.project.ITAM.Model.Groups;
 import com.project.ITAM.Service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -35,5 +36,10 @@ public class FileController {
     public String deleteByFileId(@PathVariable Long fileId){
         fileService.deleteFile(fileId);
         return "file deleted";
+    }
+
+    @GetMapping("/readAll")
+    public ResponseEntity<List<FileEntity>> getAllGroups(){
+        return  ResponseEntity.ok(fileService.getAllFiles());
     }
 }

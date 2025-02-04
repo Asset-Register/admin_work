@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -61,6 +62,11 @@ public class RoleController {
     @GetMapping("/{role_id}/read")
     public ResponseEntity<Role> getRole(@PathVariable Long id){
        return  ResponseEntity.ok(roleService.getRoleById(id));
+    }
+
+    @GetMapping("/readAll")
+    public ResponseEntity<List<Role>> getRole(){
+        return  ResponseEntity.ok(roleService.getAllRoles());
     }
 
 }

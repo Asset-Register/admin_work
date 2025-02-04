@@ -3,6 +3,8 @@ package com.project.ITAM.Service;
 import com.project.ITAM.Model.Users;
 import com.project.ITAM.Model.UsersRequest;
 
+import java.util.List;
+
 public interface UsersService {
     public Users createUser(UsersRequest usersRequest);
 
@@ -13,5 +15,7 @@ public interface UsersService {
     public void deleteUsersById(Long userId);
 
     public Users addUserToGroup(Long userId,Long GroupId);
+
+    public List<Users> getAllUsers();
 
 }

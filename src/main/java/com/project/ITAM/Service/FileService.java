@@ -11,6 +11,8 @@ public interface FileService {
 
     public List<FileEntity> getFilesInFolder(Long folderId);
 
+    public List<FileEntity> getAllFiles();
+
     public FileEntity updateFile(Long id,FileEntityRequest fileEntityRequest);
 
     public void deleteFile(Long id);

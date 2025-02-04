@@ -1,9 +1,6 @@
 package com.project.ITAM.Controller;
 
-import com.project.ITAM.Model.Folder;
-import com.project.ITAM.Model.Groups;
-import com.project.ITAM.Model.Users;
-import com.project.ITAM.Model.UsersRequest;
+import com.project.ITAM.Model.*;
 import com.project.ITAM.Repository.GroupRepo;
 import com.project.ITAM.Repository.UserRepo;
 import com.project.ITAM.Service.UsersService;
@@ -17,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -59,6 +57,11 @@ public class userController {
     @PostMapping("/adduser/{user_id}/group/{group_id}")
     public ResponseEntity<Users> addUsertoGroup(@PathVariable Long userId,@PathVariable Long groupId){
         return ResponseEntity.ok(usersService.addUserToGroup(userId,groupId));
+    }
+
+    @GetMapping("/readAll")
+    public ResponseEntity<List<Users>> getAllUsers(){
+        return  ResponseEntity.ok(usersService.getAllUsers());
     }
 
 }

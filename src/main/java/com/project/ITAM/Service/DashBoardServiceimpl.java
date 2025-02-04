@@ -46,6 +46,11 @@ public class DashBoardServiceimpl implements  DashBoardService{
     }
 
     @Override
+    public List<DashBoard> getAllDashboard() {
+        return dashBoardRepo.findAll();
+    }
+
+    @Override
     public DashBoard updatedashBoard(Long id, DashBoardRequest dashBoardRequest) {
         DashBoard dashBoard = dashBoardRepo.findById(id).orElseThrow(()->new NotFoundException("dashBoard id not exist"));
         if(!StringUtils.isEmpty(dashBoardRequest.getDashboardName())) {

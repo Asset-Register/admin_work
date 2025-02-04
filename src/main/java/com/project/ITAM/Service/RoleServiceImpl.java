@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
+
 @Service
 public class RoleServiceImpl implements RoleService{
 
@@ -34,6 +36,11 @@ public class RoleServiceImpl implements RoleService{
         Role role = rolesRepo.findById(roleId)
                 .orElseThrow(() -> new NotFoundException("Role not found"));
         return role;
+    }
+
+    @Override
+    public List<Role> getAllRoles() {
+        return rolesRepo.findAll();
     }
 
     @Override

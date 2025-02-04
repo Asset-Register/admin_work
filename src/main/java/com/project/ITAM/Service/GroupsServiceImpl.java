@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
+
 @Service
 public class GroupsServiceImpl implements GroupsService{
 
@@ -25,6 +27,11 @@ public class GroupsServiceImpl implements GroupsService{
         Groups group = groupRepo.findById(groupId)
                 .orElseThrow(() -> new NotFoundException("Group not found"));
         return group;
+    }
+
+    @Override
+    public List<Groups> getAllGroups() {
+        return groupRepo.findAll();
     }
 
     @Override

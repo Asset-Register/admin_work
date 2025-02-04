@@ -39,4 +39,9 @@ public class DashBoardController {
         return "dashBoard deleted";
     }
 
+    @GetMapping("/readAll")
+    public ResponseEntity<List<DashBoard>> getAllDashboard(){
+        return  ResponseEntity.ok(dashBoardService.getAllDashboard());
+    }
+
 }

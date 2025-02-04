@@ -16,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/permission")
 @Validated
@@ -54,6 +56,11 @@ public class PermissionController {
     @GetMapping("/{permission_id}/read")
     public ResponseEntity<Permission> getPermission(@PathVariable Long id){
        return  ResponseEntity.ok(permissionService.getPermissionById(id));
+    }
+
+    @GetMapping("/readAll")
+    public ResponseEntity<List<Permission>> getPermission(){
+        return  ResponseEntity.ok(permissionService.getAllPermission());
     }
 
 }

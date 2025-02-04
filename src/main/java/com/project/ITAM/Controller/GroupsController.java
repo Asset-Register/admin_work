@@ -2,6 +2,7 @@ package com.project.ITAM.Controller;
 
 import com.project.ITAM.Model.GroupRequest;
 import com.project.ITAM.Model.Groups;
+import com.project.ITAM.Model.Permission;
 import com.project.ITAM.Repository.GroupRepo;
 import com.project.ITAM.Repository.UserRepo;
 import com.project.ITAM.Service.GroupsService;
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/groups")
@@ -49,6 +52,11 @@ public class GroupsController {
     @GetMapping("/{id}/read")
     public ResponseEntity<Groups> getGroup(@PathVariable Long id) {
         return ResponseEntity.ok(groupsService.getGroupById(id));
+    }
+
+    @GetMapping("/readAll")
+    public ResponseEntity<List<Groups>> getAllGroups(){
+        return  ResponseEntity.ok(groupsService.getAllGroups());
     }
 
 }
