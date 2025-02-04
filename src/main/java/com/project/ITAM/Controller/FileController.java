@@ -6,12 +6,15 @@ import com.project.ITAM.Model.Groups;
 import com.project.ITAM.Service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("api/files")
+@CrossOrigin
+@Validated
 public class FileController {
 
     @Autowired

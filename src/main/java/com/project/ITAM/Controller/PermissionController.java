@@ -20,6 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/permission")
+@CrossOrigin
 @Validated
 public class PermissionController {
 

@@ -18,6 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/groups")
+@CrossOrigin
 @Validated
 public class GroupsController {
 

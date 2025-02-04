@@ -23,6 +23,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/roles")
+@CrossOrigin
 @Validated
 public class RoleController {
 

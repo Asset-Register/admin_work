@@ -20,6 +20,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/user")
 @Validated
+@CrossOrigin
 public class userController {
 
     @Autowired

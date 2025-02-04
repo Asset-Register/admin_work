@@ -7,12 +7,15 @@ import com.project.ITAM.Service.DashBoardService;
 import com.project.ITAM.Service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("api/dashboard")
+@CrossOrigin
+@Validated
 public class DashBoardController {
 
     @Autowired
