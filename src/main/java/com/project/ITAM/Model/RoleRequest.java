@@ -1,14 +1,15 @@
 package com.project.ITAM.Model;
 
-import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
+
+import java.util.List;
 
 @Builder
 @Data
 public class RoleRequest {
 
-    private Long permissionId;
+    private List<Long> permissionId;
 
     private String roleName;
 

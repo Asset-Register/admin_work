@@ -3,12 +3,17 @@ package com.project.ITAM.Service;
 import com.project.ITAM.Exception.NotFoundException;
 import com.project.ITAM.Model.GroupRequest;
 import com.project.ITAM.Model.Groups;
+import com.project.ITAM.Model.ObjectEntity;
 import com.project.ITAM.Repository.GroupRepo;
+import com.project.ITAM.Repository.ObjectRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class GroupsServiceImpl implements GroupsService{
@@ -16,10 +21,22 @@ public class GroupsServiceImpl implements GroupsService{
     @Autowired
     private GroupRepo groupRepo;
 
+    @Autowired
+    private ObjectRepo objectRepo;
+
     @Override
     public Groups createGroups(GroupRequest groupRequest) {
+        Set<ObjectEntity> objectEntity = new HashSet<>();
+        if( !CollectionUtils.isEmpty(groupRequest.getObjectId())) {
+            // Fetch groups from the database
+            objectEntity = new HashSet<>(objectRepo.findAllById(groupRequest.getObjectId()));
+            if(objectEntity.isEmpty()){
+                throw new NotFoundException("entered objectId not exist");
+            }
+        }
+
         return groupRepo.save(Groups.builder().groupName(groupRequest.getGroupName()).authentication(groupRequest.getAuthentication())
-                .disabled(groupRequest.getDisabled()).email(groupRequest.getEmail()).objects(groupRequest.getObjects()).build());
+                .disabled(groupRequest.getDisabled()).email(groupRequest.getEmail()).objectEntities(objectEntity).build());
     }
 
     @Override
@@ -45,8 +62,14 @@ public class GroupsServiceImpl implements GroupsService{
         if(!StringUtils.isEmpty(groupRequest.getGroupName())) {
             groups.setGroupName(groupRequest.getGroupName());
         }
-        if(!StringUtils.isEmpty(groupRequest.getObjects())) {
-            groups.setObjects(groupRequest.getObjects());
+        if( !CollectionUtils.isEmpty(groupRequest.getObjectId())) {
+            // Fetch groups from the database
+            Set<ObjectEntity> objectEntity = new HashSet<>(objectRepo.findAllById(groupRequest.getObjectId()));
+            if(!objectEntity.isEmpty()){
+                groups.setObjectEntities(objectEntity);
+            }else{
+                throw new NotFoundException("object id not found");
+            }
         }
         if(!StringUtils.isEmpty(groupRequest.getEmail())) {
             groups.setEmail(groupRequest.getEmail());

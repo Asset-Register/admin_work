@@ -3,6 +3,8 @@ package com.project.ITAM.Model;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
+
 @Builder
 @Data
 public class UsersRequest {
@@ -13,13 +15,13 @@ public class UsersRequest {
 
     private String middleName;
 
-    private Long groupId;
+    private List<Long> groupId;
 
     private String email;
 
-    private Long roleId;
+    private List<Long> roleId;
 
-    private Long objectId;
+    private List<Long> objectId;
 
     private String authentication;
 
@@ -28,7 +30,7 @@ public class UsersRequest {
     public UsersRequest() {
     }
 
-    public UsersRequest(String firstName, String lastName, String middleName, Long groupId, String email, Long roleId, Long objects, String authentication, String disabled) {
+    public UsersRequest(String firstName, String lastName, String middleName, List<Long> groupId, String email, List<Long> roleId, List<Long> objects, String authentication, String disabled) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.middleName = middleName;

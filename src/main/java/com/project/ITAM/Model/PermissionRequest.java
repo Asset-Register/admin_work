@@ -9,8 +9,6 @@ public class PermissionRequest {
 
     private String permissionName;
 
-    private Long roleId;
-
     private String type;
 
 

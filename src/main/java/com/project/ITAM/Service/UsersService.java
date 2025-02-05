@@ -12,6 +12,8 @@ public interface UsersService {
 
     public Users updateUsersById(UsersRequest usersRequest,Long userId);
 
+    public Users updateUsersByRoleId(Long userId,String roleId);
+
     public void deleteUsersById(Long userId);
 
     public Users addUserToGroup(Long userId,Long GroupId);

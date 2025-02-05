@@ -23,8 +23,13 @@ public class Groups {
     @Column(name="email")
     private String email;
 
-    @Column(name="objects")
-    private String objects;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "groups_object",
+            joinColumns = @JoinColumn(name = "group_id"),
+            inverseJoinColumns = @JoinColumn(name = "object_id")
+    )
+    private Set<ObjectEntity> objectEntities = new HashSet<>();
 
     @Column(name="disabled")
     private String disabled;
@@ -41,11 +46,11 @@ public class Groups {
     public Groups() {
     }
 
-    public Groups(Long groupId, String groupName, String email, String objects, String disabled, String authentication, Set<Folder> accessibleFolders, Set<Users> users) {
+    public Groups(Long groupId, String groupName, String email, Set<ObjectEntity> objects, String disabled, String authentication, Set<Folder> accessibleFolders, Set<Users> users) {
         this.groupId = groupId;
         this.groupName = groupName;
         this.email = email;
-        this.objects = objects;
+        this.objectEntities = objects;
         this.disabled = disabled;
         this.authentication = authentication;
         this.accessibleFolders = accessibleFolders;

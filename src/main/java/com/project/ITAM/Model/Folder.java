@@ -31,7 +31,7 @@ public class Folder {
     @JoinColumn(name = "user_id", nullable = false)
     private Users user;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "folder_access",
             joinColumns = @JoinColumn(name = "folder_id"),
@@ -39,7 +39,7 @@ public class Folder {
     )
     private Set<Users> allowedUsers;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "folder_group_access",
             joinColumns = @JoinColumn(name = "folder_id"),
@@ -47,7 +47,7 @@ public class Folder {
     )
     private Set<Groups> allowedGroups = new HashSet<>();
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "folder_object_access",
             joinColumns = @JoinColumn(name = "folder_id"),

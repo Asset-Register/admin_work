@@ -37,10 +37,16 @@ public class userController {
         return ResponseEntity.ok(usersService.createUser(usersRequest));
     }
 
-    @PatchMapping("/{id}/update")
-    public ResponseEntity<Users> updateUser(@RequestBody UsersRequest usersRequest,@PathVariable Long id){
+    @PatchMapping("/{user_id}/update")
+    public ResponseEntity<Users> updateUser(@RequestBody UsersRequest usersRequest,@PathVariable Long userId){
 
-        return ResponseEntity.ok(usersService.updateUsersById(usersRequest,id));
+        return ResponseEntity.ok(usersService.updateUsersById(usersRequest,userId));
+    }
+
+    @PatchMapping("/{userId}/Role/{roleIds}")
+    public ResponseEntity<Users> updateUserwithRoles(@PathVariable("userId") Long userId,@PathVariable("roleIds") String roleIds){
+
+        return ResponseEntity.ok(usersService.updateUsersByRoleId(userId,roleIds));
     }
 
     @DeleteMapping("/{id}/delete")

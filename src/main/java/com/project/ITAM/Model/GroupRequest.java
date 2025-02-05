@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
+
 @Builder
 @Data
 public class GroupRequest {
@@ -12,7 +14,7 @@ public class GroupRequest {
 
     private String email;
 
-    private String objects;
+    private List<Long> objectId;
 
     private String disabled;
 
@@ -21,10 +23,10 @@ public class GroupRequest {
     public GroupRequest() {
     }
 
-    public GroupRequest(String groupName, String email, String objects, String disabled, String authentication) {
+    public GroupRequest(String groupName, String email, List<Long> objects, String disabled, String authentication) {
         this.groupName = groupName;
         this.email = email;
-        this.objects = objects;
+        this.objectId = objects;
         this.disabled = disabled;
         this.authentication = authentication;
     }

@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Builder
@@ -16,9 +18,13 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long roleId;
 
-    @ManyToOne
-    @JoinColumn(name = "permissionId", nullable = false) // Foreign key in the users table
-    private Permission permission;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "role_permission",
+            joinColumns = @JoinColumn(name = "role_id"),
+            inverseJoinColumns = @JoinColumn(name = "permission_id")
+    )
+    private Set<Permission> permissions = new HashSet<>();
 
     @Column(nullable = false,name="roleName")
     private String roleName;
@@ -29,9 +35,9 @@ public class Role {
     public Role() {
     }
 
-    public Role(Long roleId, Permission permission, String roleName, String disabled) {
+    public Role(Long roleId, Set<Permission> permission, String roleName, String disabled) {
         this.roleId = roleId;
-        this.permission = permission;
+        this.permissions = permission;
         this.roleName = roleName;
         this.disabled = disabled;
     }

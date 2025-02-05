@@ -9,10 +9,11 @@ import com.project.ITAM.Repository.UserRepo;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UsersServiceImpl implements UsersService{
@@ -31,25 +32,26 @@ public class UsersServiceImpl implements UsersService{
 
     @Override
     public Users createUser(UsersRequest usersRequest) {
-        Groups groups= new Groups();
-        Role role = new Role();
-        ObjectEntity objectEntity = new ObjectEntity();
+        Set<Groups> groups= new HashSet<>();
+        Set<Role> role = new HashSet<>();
+        Set<ObjectEntity> objectEntity = new HashSet<>();
 
-        if(usersRequest.getGroupId()!=null){
-            groups = groupRepo.findById(usersRequest.getGroupId())
-                    .orElse(null);
+        if( !CollectionUtils.isEmpty(usersRequest.getGroupId())) {
+            // Fetch users from the database
+            groups = new HashSet<>(groupRepo.findAllById(usersRequest.getGroupId()));
         }
-        if(usersRequest.getRoleId()!=null){
-            role = rolesRepo.findById(usersRequest.getRoleId())
-                    .orElse(null);
+        if( !CollectionUtils.isEmpty(usersRequest.getRoleId())) {
+            // Fetch groups from the database
+            role = new HashSet<>(rolesRepo.findAllById(usersRequest.getRoleId()));
         }
-        if(usersRequest.getObjectId()!=null){
-            objectEntity = objectRepo.findById(usersRequest.getObjectId())
-                    .orElse(null);
+        if( !CollectionUtils.isEmpty(usersRequest.getObjectId())) {
+            // Fetch groups from the database
+            objectEntity = new HashSet<>(objectRepo.findAllById(usersRequest.getObjectId()));
         }
-        return userRepo.save(Users.builder().group(groups).role(role).email(usersRequest.getEmail())
+
+        return userRepo.save(Users.builder().email(usersRequest.getEmail())
                 .disabled(usersRequest.getDisabled()).authentication(usersRequest.getAuthentication())
-                .firstName(usersRequest.getFirstName())
+                .firstName(usersRequest.getFirstName()).groups(groups).roles(role).objects(objectEntity)
                 .lastName(usersRequest.getLastName()).middleName(usersRequest.getMiddleName()).build());
     }
 
@@ -64,17 +66,23 @@ public class UsersServiceImpl implements UsersService{
     public Users updateUsersById(UsersRequest usersRequest, Long userId) {
         Users users = userRepo.findById(userId)
                 .orElseThrow(() ->  new NotFoundException( userId + " not found"));
-        if(usersRequest.getRoleId()!=null) {
-            Optional<Role>  role =rolesRepo.findById(usersRequest.getRoleId());
-            role.ifPresent(users::setRole);
+        if(!CollectionUtils.isEmpty(usersRequest.getGroupId())) {
+            // Fetch groups from the database
+            Set<Groups> groups = new HashSet<>(groupRepo.findAllById(usersRequest.getGroupId()));
+            // Update allowed groups
+            users.setGroups(groups);
         }
-        if(usersRequest.getGroupId()!=null){
-            Optional<Groups> groups = groupRepo.findById(usersRequest.getGroupId());
-            groups.ifPresent(users::setGroup);
+        if(!CollectionUtils.isEmpty(usersRequest.getRoleId())) {
+            // Fetch roles from the database
+            Set<Role> roles = new HashSet<>(rolesRepo.findAllById(usersRequest.getRoleId()));
+            // Update allowed roles
+            users.setRoles(roles);
         }
-        if(usersRequest.getObjectId()!=null){
-            Optional<ObjectEntity> objectEntity = objectRepo.findById(usersRequest.getObjectId());
-            objectEntity.ifPresent(users::setObject);
+        if(!CollectionUtils.isEmpty(usersRequest.getObjectId())) {
+            // Fetch groups from the database
+            Set<ObjectEntity> objectEntities = new HashSet<>(objectRepo.findAllById(usersRequest.getObjectId()));
+            // Update allowed groups
+            users.setObjects(objectEntities);
         }
         if(!StringUtils.isEmpty(usersRequest.getEmail())) {
             users.setEmail(usersRequest.getEmail());
@@ -95,6 +103,28 @@ public class UsersServiceImpl implements UsersService{
             users.setDisabled(usersRequest.getDisabled());
         }
         return userRepo.save(users);
+    }
+
+    @Override
+    public Users updateUsersByRoleId(Long userId, String roleIds) {
+        Set<Long> idSet = Arrays.stream(roleIds.split(","))
+                .map(Long::valueOf)
+                .collect(Collectors.toSet());
+        Users users = userRepo.findById(userId)
+                .orElseThrow(() ->  new NotFoundException( userId + " not found"));
+        if(!CollectionUtils.isEmpty(idSet)) {
+            // Fetch roles from the database
+            Set<Role> roles = new HashSet<>(rolesRepo.findAllById(idSet));
+            if(!roles.isEmpty()) {
+                // Update allowed roles
+                users.setRoles(roles);
+            }else{
+              throw  new NotFoundException("enter valid role ids");
+            }
+        }else{
+           throw  new NotFoundException("enter valid role id");
+        }
+        return users;
     }
 
     @Override
