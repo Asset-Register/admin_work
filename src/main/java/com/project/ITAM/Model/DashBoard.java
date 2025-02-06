@@ -40,10 +40,22 @@ public class DashBoard {
     @JoinColumn(name = "folder_id")
     private Folder folder; // Folder where the file is stored
 
+    @Column(name="createdBy")
+    private String createdBy;
+
+    @Column(name="updatedBy")
+    private String updatedBy;
+
+    @Column(name="createdTime")
+    private String createdTime;
+
+    @Column(name="updatedTime")
+    private String updatedTime;
+
     public DashBoard() {
     }
 
-    public DashBoard(Long id, String dashBoardName, FolderType accessType, ObjectEntity object, String description, String dashboardType, String sourceName, String tableName, Folder folder) {
+    public DashBoard(Long id, String dashBoardName, FolderType accessType, ObjectEntity object, String description, String dashboardType, String sourceName, String tableName, Folder folder, String createdBy, String updatedBy, String createdTime, String updatedTime) {
         this.id = id;
         this.dashBoardName = dashBoardName;
         this.accessType = accessType;
@@ -53,6 +65,10 @@ public class DashBoard {
         this.sourceName = sourceName;
         this.tableName = tableName;
         this.folder = folder;
+        this.createdBy = createdBy;
+        this.updatedBy = updatedBy;
+        this.createdTime = createdTime;
+        this.updatedTime = updatedTime;
     }
 }
 

@@ -1,14 +1,22 @@
 package com.project.ITAM.Service;
 
 import com.project.ITAM.Exception.NotFoundException;
-import com.project.ITAM.Model.*;
+import com.project.ITAM.Model.DashBoard;
+import com.project.ITAM.Model.DashBoardRequest;
+import com.project.ITAM.Model.Folder;
+import com.project.ITAM.Model.ObjectEntity;
 import com.project.ITAM.Repository.DashBoardRepo;
 import com.project.ITAM.Repository.FolderRepo;
 import com.project.ITAM.Repository.ObjectRepo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +31,10 @@ public class DashBoardServiceimpl implements  DashBoardService{
     @Autowired
     private ObjectRepo objectRepo;
 
+    Logger logger = LoggerFactory.getLogger(this.getClass());
+    LocalDateTime updateddate = LocalDateTime.now(ZoneId.systemDefault());
+    String formattedDate = updateddate.format(DateTimeFormatter. ofPattern("yyyy-MM-dd HH:mm:ss"));
+
     @Override
     public DashBoard uploadDashBoard(DashBoardRequest dashBoardRequest) {
         Folder folder = new Folder();
@@ -34,7 +46,7 @@ public class DashBoardServiceimpl implements  DashBoardService{
             objectEntity = objectRepo.findById(dashBoardRequest.getObjectId()).orElseThrow(() -> new NotFoundException("object not found"));
         }
 
-        return dashBoardRepo.save(DashBoard.builder().dashBoardName(dashBoardRequest.getDashboardName())
+        return dashBoardRepo.save(DashBoard.builder().dashBoardName(dashBoardRequest.getDashboardName()).createdBy("dafault").createdTime(formattedDate)
                         .accessType(dashBoardRequest.getAccessType()).dashboardType(dashBoardRequest.getDashBoardType())
                         .sourceName(dashBoardRequest.getSourceName()).tableName(dashBoardRequest.getTableName()).description(dashBoardRequest.getDescription())
                 .folder(folder).object(objectEntity).build());
@@ -79,7 +91,8 @@ public class DashBoardServiceimpl implements  DashBoardService{
             Optional<ObjectEntity> objectEntity =objectRepo.findById(dashBoardRequest.getObjectId());
             objectEntity.ifPresent(dashBoard::setObject);
         }
-
+           dashBoard.setUpdatedBy("default");
+        dashBoard.setUpdatedTime(formattedDate);
         return dashBoardRepo.save(dashBoard);
     }
 

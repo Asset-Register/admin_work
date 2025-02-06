@@ -6,11 +6,16 @@ import com.project.ITAM.Model.FileEntityRequest;
 import com.project.ITAM.Model.Folder;
 import com.project.ITAM.Repository.FileRepo;
 import com.project.ITAM.Repository.FolderRepo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,13 +28,18 @@ public class FileServiceImpl implements FileService{
     @Autowired
     private FolderRepo folderRepo;
 
+    Logger logger = LoggerFactory.getLogger(this.getClass());
+    LocalDateTime updateddate = LocalDateTime.now(ZoneId.systemDefault());
+    String formattedDate = updateddate.format(DateTimeFormatter. ofPattern("yyyy-MM-dd HH:mm:ss"));
+
     @Override
     public FileEntity uploadFile(FileEntityRequest fileEntityRequest) {
         Folder folder = new Folder();
         if(fileEntityRequest.getFolderId()!=null) {
              folder = folderRepo.findById(fileEntityRequest.getFolderId()).orElseThrow(() -> new NotFoundException("Folder not found"));
         }
-        return fileRepo.save(FileEntity.builder().fileName(fileEntityRequest.getFileName()).filePath(fileEntityRequest.getFilePath()).fileType(fileEntityRequest.getFileType()).folder(folder).build());
+        return fileRepo.save(FileEntity.builder().createdBy("default").createdTime(formattedDate)
+                .fileName(fileEntityRequest.getFileName()).filePath(fileEntityRequest.getFilePath()).fileType(fileEntityRequest.getFileType()).folder(folder).build());
     }
 
     @Override
@@ -57,7 +67,8 @@ public class FileServiceImpl implements FileService{
                 file.setFolder(folder.get());
             }
         }
-
+           file.setUpdatedBy("default");
+        file.setUpdatedTime(formattedDate);
         return fileRepo.save(file);
     }
 

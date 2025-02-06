@@ -55,11 +55,22 @@ public class Folder {
     )
     private Set<ObjectEntity> allowedObjects = new HashSet<>();
 
+    @Column(name="createdBy")
+    private String createdBy;
+
+    @Column(name="updatedBy")
+    private String updatedBy;
+
+    @Column(name="createdTime")
+    private String createdTime;
+
+    @Column(name="updatedTime")
+    private String updatedTime;
 
     public Folder() {
     }
 
-    public Folder(Long id, String folderName, Folder parentFolder, FolderType folderType, Users user, Set<Users> allowedUsers, Set<Groups> allowedGroups, Set<ObjectEntity> allowedObjects) {
+    public Folder(Long id, String folderName, Folder parentFolder, FolderType folderType, Users user, Set<Users> allowedUsers, Set<Groups> allowedGroups, Set<ObjectEntity> allowedObjects, String createdBy, String updatedBy, String createdTime, String updatedTime) {
         this.id = id;
         this.folderName = folderName;
         this.parentFolder = parentFolder;
@@ -68,6 +79,10 @@ public class Folder {
         this.allowedUsers = allowedUsers;
         this.allowedGroups = allowedGroups;
         this.allowedObjects = allowedObjects;
+        this.createdBy = createdBy;
+        this.updatedBy = updatedBy;
+        this.createdTime = createdTime;
+        this.updatedTime = updatedTime;
     }
 }
 

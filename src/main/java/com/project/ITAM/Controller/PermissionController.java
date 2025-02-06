@@ -38,14 +38,14 @@ public class PermissionController {
         return ResponseEntity.ok(permissionService.createPermission(permissionRequest));
     }
 
-    @PatchMapping("/{permissionId}/update")
-    public ResponseEntity<Permission> updatePermission(@Valid @RequestBody PermissionRequest permissionRequest, @PathVariable Long permissionId){
+    @PatchMapping("/{permission_id}/update")
+    public ResponseEntity<Permission> updatePermission(@Valid @RequestBody PermissionRequest permissionRequest, @PathVariable("permission_id") Long permissionId){
         logger.info("update permission :" + permissionRequest.getPermissionName());
         return ResponseEntity.ok(permissionService.updatePermissionById(permissionRequest,permissionId));
     }
 
-    @DeleteMapping("/{permissionId}/delete")
-    public String deletePermission(@PathVariable Long id){
+    @DeleteMapping("/{permission_id}/delete")
+    public String deletePermission(@PathVariable("permission_id") Long id){
         permissionService.deletePermissionById(id);
        if(!permissionRepo.existsById(id)){
            return "permission deleted";
@@ -55,7 +55,7 @@ public class PermissionController {
     }
 
     @GetMapping("/{permission_id}/read")
-    public ResponseEntity<Permission> getPermission(@PathVariable Long id){
+    public ResponseEntity<Permission> getPermission(@PathVariable("permission_id") Long id){
        return  ResponseEntity.ok(permissionService.getPermissionById(id));
     }
 

@@ -32,13 +32,29 @@ public class Role {
     @Column(name="disabled")
     private String disabled;
 
+    @Column(name="createdBy")
+    private String createdBy;
+
+    @Column(name="updatedBy")
+    private String updatedBy;
+
+    @Column(name="createdTime")
+    private String createdTime;
+
+    @Column(name="updatedTime")
+    private String updatedTime;
+
     public Role() {
     }
 
-    public Role(Long roleId, Set<Permission> permission, String roleName, String disabled) {
+    public Role(Long roleId, Set<Permission> permissions, String roleName, String disabled, String createdBy, String updatedBy, String createdTime, String updatedTime) {
         this.roleId = roleId;
-        this.permissions = permission;
+        this.permissions = permissions;
         this.roleName = roleName;
         this.disabled = disabled;
+        this.createdBy = createdBy;
+        this.updatedBy = updatedBy;
+        this.createdTime = createdTime;
+        this.updatedTime = updatedTime;
     }
 }

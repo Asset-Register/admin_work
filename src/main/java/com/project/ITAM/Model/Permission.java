@@ -20,12 +20,28 @@ public class Permission {
     @Column(name="type")
     private String type;
 
+    @Column(name="createdBy")
+    private String createdBy;
+
+    @Column(name="updatedBy")
+    private String updatedBy;
+
+    @Column(name="createdTime")
+    private String createdTime;
+
+    @Column(name="updatedTime")
+    private String updatedTime;
+
     public Permission() {
     }
 
-    public Permission(Long permissionId, String permissionName, String type) {
+    public Permission(Long permissionId, String permissionName, String type, String createdBy, String updatedBy, String createdTime, String updatedTime) {
         this.permissionId = permissionId;
         this.permissionName = permissionName;
         this.type = type;
+        this.createdBy = createdBy;
+        this.updatedBy = updatedBy;
+        this.createdTime = createdTime;
+        this.updatedTime = updatedTime;
     }
 }

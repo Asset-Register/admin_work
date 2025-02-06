@@ -21,4 +21,16 @@ public class FolderAccess {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private Users user;
+
+    @Column(name="createdBy")
+    private String createdBy;
+
+    @Column(name="updatedBy")
+    private String updatedBy;
+
+    @Column(name="createdTime")
+    private String createdTime;
+
+    @Column(name="updatedTime")
+    private String updatedTime;
 }

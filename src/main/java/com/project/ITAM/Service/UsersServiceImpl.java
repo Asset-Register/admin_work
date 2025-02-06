@@ -7,11 +7,16 @@ import com.project.ITAM.Repository.ObjectRepo;
 import com.project.ITAM.Repository.RolesRepo;
 import com.project.ITAM.Repository.UserRepo;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -29,6 +34,10 @@ public class UsersServiceImpl implements UsersService{
 
     @Autowired
     private ObjectRepo objectRepo;
+
+    Logger logger = LoggerFactory.getLogger(this.getClass());
+    LocalDateTime updateddate = LocalDateTime.now(ZoneId.systemDefault());
+    String formattedDate = updateddate.format(DateTimeFormatter. ofPattern("yyyy-MM-dd HH:mm:ss"));
 
     @Override
     public Users createUser(UsersRequest usersRequest) {
@@ -52,7 +61,8 @@ public class UsersServiceImpl implements UsersService{
         return userRepo.save(Users.builder().email(usersRequest.getEmail())
                 .disabled(usersRequest.getDisabled()).authentication(usersRequest.getAuthentication())
                 .firstName(usersRequest.getFirstName()).groups(groups).roles(role).objects(objectEntity)
-                .lastName(usersRequest.getLastName()).middleName(usersRequest.getMiddleName()).build());
+                .lastName(usersRequest.getLastName()).middleName(usersRequest.getMiddleName())
+                .createdBy("default").createdTime(formattedDate).build());
     }
 
     @Override
@@ -102,6 +112,8 @@ public class UsersServiceImpl implements UsersService{
         if(!StringUtils.isEmpty(usersRequest.getDisabled())) {
             users.setDisabled(usersRequest.getDisabled());
         }
+        users.setUpdatedTime(formattedDate);
+        users.setUpdatedBy("default");
         return userRepo.save(users);
     }
 
@@ -124,6 +136,8 @@ public class UsersServiceImpl implements UsersService{
         }else{
            throw  new NotFoundException("enter valid role id");
         }
+        users.setUpdatedTime(formattedDate);
+        users.setUpdatedBy("default");
         return users;
     }
 

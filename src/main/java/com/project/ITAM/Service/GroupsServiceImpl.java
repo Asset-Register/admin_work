@@ -6,11 +6,16 @@ import com.project.ITAM.Model.Groups;
 import com.project.ITAM.Model.ObjectEntity;
 import com.project.ITAM.Repository.GroupRepo;
 import com.project.ITAM.Repository.ObjectRepo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -24,6 +29,11 @@ public class GroupsServiceImpl implements GroupsService{
     @Autowired
     private ObjectRepo objectRepo;
 
+    Logger logger = LoggerFactory.getLogger(this.getClass());
+    LocalDateTime updateddate = LocalDateTime.now(ZoneId.systemDefault());
+    String formattedDate = updateddate.format(DateTimeFormatter. ofPattern("yyyy-MM-dd HH:mm:ss"));
+
+
     @Override
     public Groups createGroups(GroupRequest groupRequest) {
         Set<ObjectEntity> objectEntity = new HashSet<>();
@@ -35,7 +45,8 @@ public class GroupsServiceImpl implements GroupsService{
             }
         }
 
-        return groupRepo.save(Groups.builder().groupName(groupRequest.getGroupName()).authentication(groupRequest.getAuthentication())
+        return groupRepo.save(Groups.builder().groupName(groupRequest.getGroupName()).createdBy("default").createdTime(formattedDate)
+                .authentication(groupRequest.getAuthentication())
                 .disabled(groupRequest.getDisabled()).email(groupRequest.getEmail()).objectEntities(objectEntity).build());
     }
 
@@ -77,7 +88,8 @@ public class GroupsServiceImpl implements GroupsService{
         if(!StringUtils.isEmpty(groupRequest.getDisabled())) {
             groups.setDisabled(groupRequest.getDisabled());
         }
-
+         groups.setUpdatedBy("default");
+        groups.setUpdatedTime(formattedDate);
         return groupRepo.save(groups);
     }
 

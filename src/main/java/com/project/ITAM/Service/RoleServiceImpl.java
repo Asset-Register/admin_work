@@ -7,11 +7,16 @@ import com.project.ITAM.Model.Role;
 import com.project.ITAM.Model.RoleRequest;
 import com.project.ITAM.Repository.PermissionRepo;
 import com.project.ITAM.Repository.RolesRepo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -25,6 +30,11 @@ public class RoleServiceImpl implements RoleService{
     @Autowired
     private PermissionRepo permissionRepo;
 
+    Logger logger = LoggerFactory.getLogger(this.getClass());
+    LocalDateTime updateddate = LocalDateTime.now(ZoneId.systemDefault());
+    String formattedDate = updateddate.format(DateTimeFormatter. ofPattern("yyyy-MM-dd HH:mm:ss"));
+
+
     @Override
     public Role createRole(RoleRequest roleRequest) {
         Set<Permission> permission = new HashSet<>();
@@ -34,7 +44,8 @@ public class RoleServiceImpl implements RoleService{
                 throw new NotFoundException("permission Id not found");
             }
         }
-        return rolesRepo.save(Role.builder().permissions(permission).roleName(roleRequest.getRoleName()).disabled(roleRequest.getDisabled()).build());
+        return rolesRepo.save(Role.builder().createdBy("default").createdTime(formattedDate)
+                .permissions(permission).roleName(roleRequest.getRoleName()).disabled(roleRequest.getDisabled()).build());
     }
 
     @Override
@@ -65,9 +76,10 @@ public class RoleServiceImpl implements RoleService{
             role.setRoleName(roleRequest.getRoleName());
         }
         if(!StringUtils.isEmpty(roleRequest.getDisabled())) {
-            role.setRoleName(roleRequest.getDisabled());
+            role.setDisabled(roleRequest.getDisabled());
         }
-
+role.setUpdatedBy("default");
+        role.setUpdatedTime(formattedDate);
         return rolesRepo.save(role);
     }
 

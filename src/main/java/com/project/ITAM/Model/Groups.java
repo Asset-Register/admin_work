@@ -43,17 +43,33 @@ public class Groups {
     @ManyToMany(mappedBy = "groups")
     private Set<Users> users = new HashSet<>();
 
+    @Column(name="createdBy")
+    private String createdBy;
+
+    @Column(name="updatedBy")
+    private String updatedBy;
+
+    @Column(name="createdTime")
+    private String createdTime;
+
+    @Column(name="updatedTime")
+    private String updatedTime;
+
     public Groups() {
     }
 
-    public Groups(Long groupId, String groupName, String email, Set<ObjectEntity> objects, String disabled, String authentication, Set<Folder> accessibleFolders, Set<Users> users) {
+    public Groups(Long groupId, String groupName, String email, Set<ObjectEntity> objectEntities, String disabled, String authentication, Set<Folder> accessibleFolders, Set<Users> users, String createdBy, String updatedBy, String createdTime, String updatedTime) {
         this.groupId = groupId;
         this.groupName = groupName;
         this.email = email;
-        this.objectEntities = objects;
+        this.objectEntities = objectEntities;
         this.disabled = disabled;
         this.authentication = authentication;
         this.accessibleFolders = accessibleFolders;
         this.users = users;
+        this.createdBy = createdBy;
+        this.updatedBy = updatedBy;
+        this.createdTime = createdTime;
+        this.updatedTime = updatedTime;
     }
 }

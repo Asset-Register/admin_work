@@ -6,11 +6,16 @@ import com.project.ITAM.Repository.FolderRepo;
 import com.project.ITAM.Repository.GroupRepo;
 import com.project.ITAM.Repository.ObjectRepo;
 import com.project.ITAM.Repository.UserRepo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -29,6 +34,10 @@ public class FolderServiceimpl implements FolderService{
 
     @Autowired
     private ObjectRepo objectRepo;
+
+    Logger logger = LoggerFactory.getLogger(this.getClass());
+    LocalDateTime updateddate = LocalDateTime.now(ZoneId.systemDefault());
+    String formattedDate = updateddate.format(DateTimeFormatter. ofPattern("yyyy-MM-dd HH:mm:ss"));
 
     @Override
     public Folder createFolder(FolderRequest folderRequest, Long userId) {
@@ -61,7 +70,8 @@ public class FolderServiceimpl implements FolderService{
                     .orElse(null);
             folder.setParentFolder(parentFolder);
         }
-
+            folder.setCreatedBy("default");
+        folder.setCreatedTime(formattedDate);
         return folderRepo.save(folder);
     }
 
@@ -101,7 +111,8 @@ public class FolderServiceimpl implements FolderService{
         if(!StringUtils.isEmpty(folderRequest.getFolderName())) {
            folder.setFolderName(folderRequest.getFolderName());
         }
-
+            folder.setUpdatedBy("default");
+        folder.setUpdatedTime(formattedDate);
         return folderRepo.save(folder);
     }
 

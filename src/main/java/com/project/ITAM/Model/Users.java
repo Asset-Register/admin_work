@@ -64,10 +64,22 @@ public class Users {
     )
     private Set<ObjectEntity> objects = new HashSet<>();
 
+    @Column(name="createdBy")
+    private String createdBy;
+
+    @Column(name="updatedBy")
+    private String updatedBy;
+
+    @Column(name="createdTime")
+    private String createdTime;
+
+    @Column(name="updatedTime")
+    private String updatedTime;
+
     public Users() {
     }
 
-    public Users(Long userId, String firstName, String lastName, String middleName, String email, String authentication, String disabled, Set<Folder> accessibleFolders, Set<Groups> groups, Set<Role> roles, Set<ObjectEntity> objects) {
+    public Users(Long userId, String firstName, String lastName, String middleName, String email, String authentication, String disabled, Set<Folder> accessibleFolders, Set<Groups> groups, Set<Role> roles, Set<ObjectEntity> objects, String createdBy, String updatedBy, String createdTime, String updatedTime) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -79,5 +91,9 @@ public class Users {
         this.groups = groups;
         this.roles = roles;
         this.objects = objects;
+        this.createdBy = createdBy;
+        this.updatedBy = updatedBy;
+        this.createdTime = createdTime;
+        this.updatedTime = updatedTime;
     }
 }
