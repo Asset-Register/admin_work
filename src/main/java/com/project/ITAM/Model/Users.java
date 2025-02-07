@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -27,7 +28,7 @@ public class Users {
     @Column(name="middleName")
     private String middleName;
 
-    @Column(name="email")
+    @Column(name="email",unique = true, nullable = false)
     @Email(message = "Please provide a valid email address")
     private String email;
 
@@ -64,6 +65,10 @@ public class Users {
     )
     private Set<ObjectEntity> objects = new HashSet<>();
 
+    @Lob
+    @Column(name="password")
+    private String password;
+
     @Column(name="createdBy")
     private String createdBy;
 
@@ -76,10 +81,13 @@ public class Users {
     @Column(name="updatedTime")
     private String updatedTime;
 
+    @Column(name="lastLoginTime")
+    private String lastLoginTime;
+
     public Users() {
     }
 
-    public Users(Long userId, String firstName, String lastName, String middleName, String email, String authentication, String disabled, Set<Folder> accessibleFolders, Set<Groups> groups, Set<Role> roles, Set<ObjectEntity> objects, String createdBy, String updatedBy, String createdTime, String updatedTime) {
+    public Users(Long userId, String firstName, String lastName, String middleName, String email, String authentication, String disabled, Set<Folder> accessibleFolders, Set<Groups> groups, Set<Role> roles, Set<ObjectEntity> objects, String password, String createdBy, String updatedBy, String createdTime, String updatedTime, String lastLoginTime) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -91,9 +99,11 @@ public class Users {
         this.groups = groups;
         this.roles = roles;
         this.objects = objects;
+        this.password = password;
         this.createdBy = createdBy;
         this.updatedBy = updatedBy;
         this.createdTime = createdTime;
         this.updatedTime = updatedTime;
+        this.lastLoginTime = lastLoginTime;
     }
 }
