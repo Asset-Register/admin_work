@@ -37,7 +37,7 @@ public class FolderController {
         return ResponseEntity.ok(folderService.createFolder(folder,userId));
     }
 
-    @GetMapping("/getAllfolders")
+    @GetMapping("/getAll")
     public ResponseEntity<List<Folder>> getAllFolders() {
         logger.info("Number of folders:" + folderRepo.findAll().size());
         return ResponseEntity.ok(folderRepo.findAll());
@@ -55,21 +55,21 @@ public class FolderController {
         return ResponseEntity.ok(folderRepo.findByParentFolderIsNull());
     }
 
-    @GetMapping("/{folderId}/folder")
+    @GetMapping("/{folderId}")
     public ResponseEntity<Folder> getFolderById(@PathVariable Long folderId) {
         Folder folder = folderService.getFolderById(folderId);
         logger.info("Get Folder By Id:" + folder);
         return ResponseEntity.ok(folder);
     }
 
-    @GetMapping("/{userId}/folder")
+    @GetMapping("/{userId}/user")
     public ResponseEntity<List<Folder>> getFolderByUserId(@PathVariable Long userId) {
         List<Folder> folder = folderService.getFolderByUserId(userId);
         logger.info("Get Folders By UserId:" + folder);
         return ResponseEntity.ok(folder);
     }
 
-    @GetMapping("/{userId}/Allfolder")
+    @GetMapping("/{userId}/all")
     public ResponseEntity<List<Folder>> getAllUserIDFolders(@PathVariable Long userId) {
         List<Folder> folder = folderService.getFolderByUserIdANDGroupID(userId);
         logger.info("Get ALL Folders Related to UserId:" + folder);

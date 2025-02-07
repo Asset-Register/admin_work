@@ -118,7 +118,9 @@ public class FolderServiceimpl implements FolderService{
 
     @Override
     public Folder getFolderById(Long folderId) {
-        return folderRepo.getById(folderId);
+        Folder folder = folderRepo.findById(folderId)
+                .orElseThrow(() ->  new NotFoundException( + folderId + " not found"));
+        return folder;
     }
 
     @Override
