@@ -26,13 +26,29 @@ public class ObjectEntity {
     @ManyToMany(mappedBy = "allowedObjects")
     private Set<Folder> accessibleFolders = new HashSet<>();
 
+    @Column(name="createdBy")
+    private String createdBy;
+
+    @Column(name="updatedBy")
+    private String updatedBy;
+
+    @Column(name="createdTime")
+    private String createdTime;
+
+    @Column(name="updatedTime")
+    private String updatedTime;
+
     public ObjectEntity() {
     }
 
-    public ObjectEntity(Long objectId, String objectName, String email, Set<Folder> accessibleFolders) {
+    public ObjectEntity(Long objectId, String objectName, String email, Set<Folder> accessibleFolders, String createdBy, String updatedBy, String createdTime, String updatedTime) {
         this.objectId = objectId;
         this.objectName = objectName;
         this.email = email;
         this.accessibleFolders = accessibleFolders;
+        this.createdBy = createdBy;
+        this.updatedBy = updatedBy;
+        this.createdTime = createdTime;
+        this.updatedTime = updatedTime;
     }
 }

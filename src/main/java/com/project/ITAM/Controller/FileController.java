@@ -26,17 +26,17 @@ public class FileController {
     }
 
     @GetMapping("/{folderId}/get")
-    public ResponseEntity<List<FileEntity>> getFilesInFolder(@PathVariable Long folderId) {
+    public ResponseEntity<List<FileEntity>> getFilesInFolder(@PathVariable("folderId") Long folderId) {
         return ResponseEntity.ok(fileService.getFilesInFolder(folderId));
     }
 
     @PatchMapping("/{fileId}/update")
-    public ResponseEntity<FileEntity> updateFileName(@PathVariable Long fileId,@RequestBody FileEntityRequest fileEntityRequest){
+    public ResponseEntity<FileEntity> updateFileName(@PathVariable("fileId") Long fileId,@RequestBody FileEntityRequest fileEntityRequest){
         return ResponseEntity.ok(fileService.updateFile(fileId,fileEntityRequest));
     }
 
     @DeleteMapping("/{fileId}/delete")
-    public String deleteByFileId(@PathVariable Long fileId){
+    public String deleteByFileId(@PathVariable("fileId") Long fileId){
         fileService.deleteFile(fileId);
         return "file deleted";
     }

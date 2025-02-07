@@ -6,12 +6,11 @@ import com.project.ITAM.Model.FileEntityRequest;
 import com.project.ITAM.Model.Folder;
 import com.project.ITAM.Repository.FileRepo;
 import com.project.ITAM.Repository.FolderRepo;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;

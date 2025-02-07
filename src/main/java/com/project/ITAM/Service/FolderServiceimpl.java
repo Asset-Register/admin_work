@@ -10,8 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -85,7 +85,7 @@ public class FolderServiceimpl implements FolderService{
             folder.setParentFolder(parent_folder);
         }
 
-        if(!StringUtils.isEmpty(folderRequest.getFolderType())) {
+        if(!StringUtils.isEmpty(folderRequest.getFolderType().toString())) {
             folder.setFolderType(folderRequest.getFolderType());
         }
 
