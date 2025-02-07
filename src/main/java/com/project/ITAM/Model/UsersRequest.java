@@ -27,6 +27,8 @@ public class UsersRequest {
 
     private String disabled;
 
+    private String password;
+
     public UsersRequest() {
     }
 
