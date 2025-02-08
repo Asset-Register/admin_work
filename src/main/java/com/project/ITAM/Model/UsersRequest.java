@@ -32,15 +32,16 @@ public class UsersRequest {
     public UsersRequest() {
     }
 
-    public UsersRequest(String firstName, String lastName, String middleName, List<Long> groupId, String email, List<Long> roleId, List<Long> objects, String authentication, String disabled) {
+    public UsersRequest(String firstName, String lastName, String middleName, List<Long> groupId, String email, List<Long> roleId, List<Long> objectId, String authentication, String disabled, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.middleName = middleName;
         this.groupId = groupId;
         this.email = email;
         this.roleId = roleId;
-        this.objectId = objects;
+        this.objectId = objectId;
         this.authentication = authentication;
         this.disabled = disabled;
+        this.password = password;
     }
 }

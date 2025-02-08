@@ -3,8 +3,6 @@ package com.project.ITAM.Config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -53,9 +51,10 @@ public class SecurityConfig {
 
     private void configureNoSecurity(HttpSecurity http) throws Exception {
         http
-            .authorizeHttpRequests(auth -> auth
-                .anyRequest().permitAll()
-            );
+                .authorizeRequests()  // For Spring Security < 5.0 use .authorizeRequests()
+                .requestMatchers("/api/**").authenticated()  // Use requestMatchers() instead of antMatchers()
+         //       .requestMatchers("/swagger-ui/**").permitAll()
+                .anyRequest().permitAll();  // Make sure it's the last one
     }
 
     @Bean
@@ -63,9 +62,14 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
+  /*  public boolean isAuthenticated() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication != null && authentication.isAuthenticated();
+    }*/
+
+    /*@Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
             throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
-    }
+    }*/
 }
