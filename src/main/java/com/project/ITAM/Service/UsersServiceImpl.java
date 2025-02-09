@@ -155,7 +155,7 @@ public class UsersServiceImpl implements UsersService{
         }
         folderRepo.saveAll(folderRepo.findAll());
 
-         userRepo.deleteById(userId);
+         userRepo.delete(users);
     }
 
     @Override

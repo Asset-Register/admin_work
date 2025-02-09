@@ -179,13 +179,28 @@ public class FolderServiceimpl implements FolderService{
         if (!folderRepo.existsById(folderId)) {
             throw new NotFoundException("folder with ID " + folderId + " not found");
         }
-        Optional<Folder> folderOpt = folderRepo.findById(folderId);
-        if (folderOpt.isPresent()) {
-            Folder folder = folderOpt.get();
+        Folder folder = folderRepo.findById(folderId).orElseThrow(()-> new NotFoundException("folder Id not found"));
            fileRepo.deleteByFolder(folder);
             dashBoardRepo.deleteByFolder(folder);
-            folderRepo.delete(folder);
+
+        // Remove the folder from all groups before deleting
+        for (Groups groups : groupRepo.findAll()) {
+            groups.getAccessibleFolders().remove(folder);
         }
-     //   folderRepo.deleteById(folderId);
+        groupRepo.saveAll(groupRepo.findAll());
+
+        // Remove the folder from all users before deleting
+        for (Users users : userRepo.findAll()) {
+            users.getAccessibleFolders().remove(folder);
+        }
+        userRepo.saveAll(userRepo.findAll());
+
+        // Remove the folder from all objects before deleting
+        for (ObjectEntity object : objectRepo.findAll()) {
+            object.getAccessibleFolders().remove(folder);
+        }
+        objectRepo.saveAll(objectRepo.findAll());
+
+        folderRepo.delete(folder);
     }
 }
