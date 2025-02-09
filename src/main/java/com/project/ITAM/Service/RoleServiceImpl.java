@@ -1,12 +1,10 @@
 package com.project.ITAM.Service;
 
 import com.project.ITAM.Exception.NotFoundException;
-import com.project.ITAM.Model.ObjectEntity;
-import com.project.ITAM.Model.Permission;
-import com.project.ITAM.Model.Role;
-import com.project.ITAM.Model.RoleRequest;
+import com.project.ITAM.Model.*;
 import com.project.ITAM.Repository.PermissionRepo;
 import com.project.ITAM.Repository.RolesRepo;
+import com.project.ITAM.Repository.UserRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +24,9 @@ public class RoleServiceImpl implements RoleService{
 
     @Autowired
     private RolesRepo rolesRepo;
+
+    @Autowired
+    private UserRepo userRepo;
 
     @Autowired
     private PermissionRepo permissionRepo;
@@ -88,6 +89,13 @@ role.setUpdatedBy("default");
         if (!rolesRepo.existsById(roleId)) {
             throw new NotFoundException("role with ID " + roleId + " not found");
         }
-       rolesRepo.deleteById(roleId);
+        Role role = rolesRepo.findById(roleId)
+                .orElseThrow(() -> new NotFoundException("Role not found"));
+        // Remove the role from all users before deleting
+        for (Users user : userRepo.findAll()) {
+            user.getRoles().remove(role);
+        }
+        userRepo.saveAll(userRepo.findAll());
+        rolesRepo.deleteById(roleId);
     }
 }

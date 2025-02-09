@@ -40,7 +40,7 @@ public class Users {
     @ManyToMany(mappedBy = "allowedUsers")
     private Set<Folder> accessibleFolders = new HashSet<>();
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "user_groups",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -48,7 +48,7 @@ public class Users {
     )
     private Set<Groups> groups = new HashSet<>();
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     @JoinTable(
             name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -56,7 +56,7 @@ public class Users {
     )
     private Set<Role> roles = new HashSet<>();
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "user_objects",
             joinColumns = @JoinColumn(name = "user_id"),

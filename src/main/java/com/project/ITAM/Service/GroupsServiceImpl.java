@@ -1,11 +1,11 @@
 package com.project.ITAM.Service;
 
 import com.project.ITAM.Exception.NotFoundException;
-import com.project.ITAM.Model.GroupRequest;
-import com.project.ITAM.Model.Groups;
-import com.project.ITAM.Model.ObjectEntity;
+import com.project.ITAM.Model.*;
+import com.project.ITAM.Repository.FolderRepo;
 import com.project.ITAM.Repository.GroupRepo;
 import com.project.ITAM.Repository.ObjectRepo;
+import com.project.ITAM.Repository.UserRepo;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +28,12 @@ public class GroupsServiceImpl implements GroupsService{
 
     @Autowired
     private ObjectRepo objectRepo;
+
+    @Autowired
+    private UserRepo userRepo;
+
+    @Autowired
+    private FolderRepo folderRepo;
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
     LocalDateTime updateddate = LocalDateTime.now(ZoneId.systemDefault());
@@ -98,6 +104,20 @@ public class GroupsServiceImpl implements GroupsService{
         if (!groupRepo.existsById(groupId)) {
             throw new NotFoundException("group with ID " + groupId + " not found");
         }
+        Groups groups = groupRepo.findById(groupId)
+                .orElseThrow(() ->  new NotFoundException( + groupId + " not found"));
+        // Remove the group from all users before deleting
+        for (Users user : userRepo.findAll()) {
+            user.getGroups().remove(groups);
+        }
+        userRepo.saveAll(userRepo.findAll());
+
+        // Remove the group from all folders before deleting
+        for (Folder folder : folderRepo.findAll()) {
+            folder.getAllowedGroups().remove(groups);
+        }
+        folderRepo.saveAll(folderRepo.findAll());
+
         groupRepo.deleteById(groupId);
     }
 }

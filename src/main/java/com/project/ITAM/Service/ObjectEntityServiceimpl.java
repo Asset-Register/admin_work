@@ -1,9 +1,11 @@
 package com.project.ITAM.Service;
 
 import com.project.ITAM.Exception.NotFoundException;
-import com.project.ITAM.Model.ObjectEntity;
-import com.project.ITAM.Model.ObjectEntityRequest;
+import com.project.ITAM.Model.*;
+import com.project.ITAM.Repository.FolderRepo;
+import com.project.ITAM.Repository.GroupRepo;
 import com.project.ITAM.Repository.ObjectRepo;
+import com.project.ITAM.Repository.UserRepo;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +22,15 @@ public class ObjectEntityServiceimpl implements ObjectEntityService{
 
     @Autowired
     private ObjectRepo objectRepo;
+
+    @Autowired
+    private UserRepo userRepo;
+
+    @Autowired
+    private GroupRepo groupRepo;
+
+    @Autowired
+    private FolderRepo folderRepo;
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
     LocalDateTime updateddate = LocalDateTime.now(ZoneId.systemDefault());
@@ -61,6 +72,26 @@ public class ObjectEntityServiceimpl implements ObjectEntityService{
         if (!objectRepo.existsById(objectId)) {
             throw new NotFoundException("dashboard with ID " + objectId + " not found");
         }
+        ObjectEntity objectEntity = objectRepo.findById(objectId).orElseThrow(() -> new NotFoundException("Object Id not found"));
+        // Remove the objectEntity from all users before deleting
+        for (Users user : userRepo.findAll()) {
+            user.getObjects().remove(objectEntity);
+        }
+        userRepo.saveAll(userRepo.findAll());
+
+        // Remove the objectEntity from all groups before deleting
+        for (Groups groups : groupRepo.findAll()) {
+            groups.getObjectEntities().remove(objectEntity);
+        }
+        groupRepo.saveAll(groupRepo.findAll());
+
+        // Remove the objectEntity from all folders before deleting
+        for (Folder folder : folderRepo.findAll()) {
+            folder.getAllowedObjects().remove(objectEntity);
+        }
+        folderRepo.saveAll(folderRepo.findAll());
+
+
         objectRepo.deleteById(objectId);
     }
 }

@@ -3,6 +3,7 @@ package com.project.ITAM.Service;
 import com.project.ITAM.Exception.NotFoundException;
 import com.project.ITAM.Model.Permission;
 import com.project.ITAM.Model.PermissionRequest;
+import com.project.ITAM.Model.Role;
 import com.project.ITAM.Repository.PermissionRepo;
 import com.project.ITAM.Repository.RolesRepo;
 import org.slf4j.Logger;
@@ -69,6 +70,12 @@ public class PermissionServiceImpl implements PermissionService{
         if (!permissionRepo.existsById(permissionId)) {
             throw new NotFoundException("permission with ID " + permissionId + " not found");
         }
+        Permission permission = permissionRepo.findById(permissionId)
+                .orElseThrow(() -> new NotFoundException("Permission not found"));
+        for(Role roles:rolesRepo.findAll()){
+            roles.getPermissions().remove(permission);
+        }
+        rolesRepo.saveAll(rolesRepo.findAll());
            permissionRepo.deleteById(permissionId);
     }
 }
