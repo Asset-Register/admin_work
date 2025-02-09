@@ -1,10 +1,13 @@
 package com.project.ITAM.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -55,6 +58,10 @@ public class Folder {
     )
     private Set<ObjectEntity> allowedObjects = new HashSet<>();
 
+    @OneToMany(mappedBy = "parentFolder", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore // Prevent recursion when serializing
+    private List<Folder> childFolders = new ArrayList<>();
+
     @Column(name="createdBy")
     private String createdBy;
 
@@ -70,7 +77,7 @@ public class Folder {
     public Folder() {
     }
 
-    public Folder(Long id, String folderName, Folder parentFolder, FolderType folderType, Users user, Set<Users> allowedUsers, Set<Groups> allowedGroups, Set<ObjectEntity> allowedObjects, String createdBy, String updatedBy, String createdTime, String updatedTime) {
+    public Folder(Long id, String folderName, Folder parentFolder, FolderType folderType, Users user, Set<Users> allowedUsers, Set<Groups> allowedGroups, Set<ObjectEntity> allowedObjects, List<Folder> childFolders, String createdBy, String updatedBy, String createdTime, String updatedTime) {
         this.id = id;
         this.folderName = folderName;
         this.parentFolder = parentFolder;
@@ -79,6 +86,7 @@ public class Folder {
         this.allowedUsers = allowedUsers;
         this.allowedGroups = allowedGroups;
         this.allowedObjects = allowedObjects;
+        this.childFolders = childFolders;
         this.createdBy = createdBy;
         this.updatedBy = updatedBy;
         this.createdTime = createdTime;

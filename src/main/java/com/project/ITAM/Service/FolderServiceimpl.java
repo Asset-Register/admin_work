@@ -2,10 +2,8 @@ package com.project.ITAM.Service;
 
 import com.project.ITAM.Exception.NotFoundException;
 import com.project.ITAM.Model.*;
-import com.project.ITAM.Repository.FolderRepo;
-import com.project.ITAM.Repository.GroupRepo;
-import com.project.ITAM.Repository.ObjectRepo;
-import com.project.ITAM.Repository.UserRepo;
+import com.project.ITAM.Repository.*;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +15,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -35,6 +34,12 @@ public class FolderServiceimpl implements FolderService{
     @Autowired
     private ObjectRepo objectRepo;
 
+    @Autowired
+    private FileRepo fileRepo;
+
+    @Autowired
+    private DashBoardRepo dashBoardRepo;
+
     Logger logger = LoggerFactory.getLogger(this.getClass());
     LocalDateTime updateddate = LocalDateTime.now(ZoneId.systemDefault());
     String formattedDate = updateddate.format(DateTimeFormatter. ofPattern("yyyy-MM-dd HH:mm:ss"));
@@ -46,7 +51,7 @@ public class FolderServiceimpl implements FolderService{
         folder.setFolderType(folderRequest.getFolderType());
         if (userId != null) {
             Users users = userRepo.findById(userId)
-                    .orElseThrow(() -> new NotFoundException("Parent folder not found"));
+                    .orElseThrow(() -> new NotFoundException("userId not found"));
             folder.setUser(users);
         }
 
@@ -116,28 +121,71 @@ public class FolderServiceimpl implements FolderService{
         return folderRepo.save(folder);
     }
 
+    @Transactional
     @Override
-    public Folder getFolderById(Long folderId) {
+    public FolderDTO getFolderById(Long folderId) {
         Folder folder = folderRepo.findById(folderId)
                 .orElseThrow(() ->  new NotFoundException( + folderId + " not found"));
-        return folder;
+        return convertToDTO(folder);
     }
 
+    @Transactional
     @Override
-    public List<Folder> getFolderByUserId(Long userId) {
-        return folderRepo.findAccessibleFolders(userId);
+    public List<FolderDTO> getAllFolders() {
+        List<Folder> folders = folderRepo.findAll();
+        return folders.stream()
+                .map(this::convertToDTO) // Convert each Folder to FolderDTO
+                .collect(Collectors.toList());
     }
 
+    @Transactional
     @Override
-    public List<Folder> getFolderByUserIdANDGroupID(Long userId) {
-        return folderRepo.findAccessFolders(userId);
+    public List<FolderDTO> getParentFolders() {
+        List<Folder> folders = folderRepo.findByParentFolderIsNull();
+        return folders.stream()
+                .map(this::convertToDTO) // Convert each Folder to FolderDTO
+                .collect(Collectors.toList());
     }
 
+    private FolderDTO convertToDTO(Folder folder) {
+        List<FolderDTO> childDTOs = folder.getChildFolders().stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+
+        return new FolderDTO(folder.getId(), folder.getFolderName(), childDTOs,folder.getUser().getUserId(),folder.getFolderType());
+    }
+
+    @Transactional
+    @Override
+    public List<FolderDTO> getFolderByUserId(Long userId) {
+        List<Folder> folders =  folderRepo.findAccessibleFolders(userId);
+        return folders.stream()
+                .map(this::convertToDTO) // Convert each Folder to FolderDTO
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    @Override
+    public List<FolderDTO> getFolderByUserIdANDGroupID(Long userId) {
+        List<Folder> folders = folderRepo.findAccessFolders(userId);
+        return folders.stream()
+                .map(this::convertToDTO) // Convert each Folder to FolderDTO
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
     @Override
     public void deleteByFolderId(Long folderId) {
         if (!folderRepo.existsById(folderId)) {
             throw new NotFoundException("folder with ID " + folderId + " not found");
         }
-        folderRepo.deleteById(folderId);
+        Optional<Folder> folderOpt = folderRepo.findById(folderId);
+        if (folderOpt.isPresent()) {
+            Folder folder = folderOpt.get();
+           fileRepo.deleteByFolder(folder);
+            dashBoardRepo.deleteByFolder(folder);
+            folderRepo.delete(folder);
+        }
+     //   folderRepo.deleteById(folderId);
     }
 }
