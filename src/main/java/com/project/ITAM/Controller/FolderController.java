@@ -1,6 +1,7 @@
 package com.project.ITAM.Controller;
 
 import com.project.ITAM.Model.Folder;
+import com.project.ITAM.Model.FolderDTO;
 import com.project.ITAM.Model.FolderRequest;
 import com.project.ITAM.Repository.FileRepo;
 import com.project.ITAM.Repository.FolderRepo;
@@ -38,9 +39,9 @@ public class FolderController {
     }
 
     @GetMapping("/getAll")
-    public ResponseEntity<List<Folder>> getAllFolders() {
-        logger.info("Number of folders:" + folderRepo.findAll().size());
-        return ResponseEntity.ok(folderRepo.findAll());
+    public ResponseEntity<List<FolderDTO>> getAllFolders() {
+        logger.info("Number of folders:" + folderService.getAllFolders().size());
+        return ResponseEntity.ok(folderService.getAllFolders());
     }
 
     @PatchMapping("/{folderId}/update")
@@ -50,28 +51,28 @@ public class FolderController {
     }
 
     @GetMapping("/getfolder/root")
-    public ResponseEntity<List<Folder>> getRootFolders() {
-        logger.info("Root Folders:" + folderRepo.findByParentFolderIsNull());
-        return ResponseEntity.ok(folderRepo.findByParentFolderIsNull());
+    public ResponseEntity<List<FolderDTO>> getRootFolders() {
+        logger.info("Root Folders:" + folderService.getParentFolders());
+        return ResponseEntity.ok(folderService.getParentFolders());
     }
 
     @GetMapping("/{folderId}")
-    public ResponseEntity<Folder> getFolderById(@PathVariable Long folderId) {
-        Folder folder = folderService.getFolderById(folderId);
+    public ResponseEntity<FolderDTO> getFolderById(@PathVariable Long folderId) {
+        FolderDTO folder = folderService.getFolderById(folderId);
         logger.info("Get Folder By Id:" + folder);
         return ResponseEntity.ok(folder);
     }
 
     @GetMapping("/{userId}/user")
-    public ResponseEntity<List<Folder>> getFolderByUserId(@PathVariable Long userId) {
-        List<Folder> folder = folderService.getFolderByUserId(userId);
+    public ResponseEntity<List<FolderDTO>> getFolderByUserId(@PathVariable Long userId) {
+        List<FolderDTO> folder = folderService.getFolderByUserId(userId);
         logger.info("Get Folders By UserId:" + folder);
         return ResponseEntity.ok(folder);
     }
 
     @GetMapping("/{userId}/all")
-    public ResponseEntity<List<Folder>> getAllUserIDFolders(@PathVariable Long userId) {
-        List<Folder> folder = folderService.getFolderByUserIdANDGroupID(userId);
+    public ResponseEntity<List<FolderDTO>> getAllUserIDFolders(@PathVariable Long userId) {
+        List<FolderDTO> folder = folderService.getFolderByUserIdANDGroupID(userId);
         logger.info("Get ALL Folders Related to UserId:" + folder);
         return ResponseEntity.ok(folder);
     }

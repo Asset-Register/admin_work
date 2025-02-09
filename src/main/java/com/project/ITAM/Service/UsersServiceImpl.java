@@ -2,10 +2,7 @@ package com.project.ITAM.Service;
 
 import com.project.ITAM.Exception.NotFoundException;
 import com.project.ITAM.Model.*;
-import com.project.ITAM.Repository.GroupRepo;
-import com.project.ITAM.Repository.ObjectRepo;
-import com.project.ITAM.Repository.RolesRepo;
-import com.project.ITAM.Repository.UserRepo;
+import com.project.ITAM.Repository.*;
 import jakarta.transaction.Transactional;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -35,6 +32,9 @@ public class UsersServiceImpl implements UsersService{
 
     @Autowired
     private ObjectRepo objectRepo;
+
+    @Autowired
+    private FolderRepo folderRepo;
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
     LocalDateTime updateddate = LocalDateTime.now(ZoneId.systemDefault());
@@ -151,7 +151,16 @@ public class UsersServiceImpl implements UsersService{
         if (!userRepo.existsById(userId)) {
             throw new NotFoundException("User with ID " + userId + " not found");
         }
-         userRepo.deleteById(userId);
+        Users users = userRepo.findById(userId)
+                .orElseThrow(() ->  new NotFoundException( userId + " not found"));
+
+        // Remove the user from all folders before deleting
+        for (Folder folder : folderRepo.findAll()) {
+            folder.getAllowedUsers().remove(users);
+        }
+        folderRepo.saveAll(folderRepo.findAll());
+
+         userRepo.delete(users);
     }
 
     @Override
