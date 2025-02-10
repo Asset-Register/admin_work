@@ -2,10 +2,7 @@ package com.project.ITAM.Service;
 
 import com.project.ITAM.Exception.NotFoundException;
 import com.project.ITAM.Model.*;
-import com.project.ITAM.Repository.FolderRepo;
-import com.project.ITAM.Repository.GroupRepo;
-import com.project.ITAM.Repository.ObjectRepo;
-import com.project.ITAM.Repository.UserRepo;
+import com.project.ITAM.Repository.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +31,9 @@ public class GroupsServiceImpl implements GroupsService{
 
     @Autowired
     private FolderRepo folderRepo;
+
+    @Autowired
+            private DashBoardRepo dashBoardRepo;
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
     LocalDateTime updateddate = LocalDateTime.now(ZoneId.systemDefault());
@@ -117,6 +117,12 @@ public class GroupsServiceImpl implements GroupsService{
             folder.getAllowedGroups().remove(groups);
         }
         folderRepo.saveAll(folderRepo.findAll());
+
+        // Remove the group from all folders before deleting
+        for (DashBoard dashBoard : dashBoardRepo.findAll()) {
+            dashBoard.getGroups().remove(groups);
+        }
+        dashBoardRepo.saveAll(dashBoardRepo.findAll());
 
         groupRepo.deleteById(groupId);
     }

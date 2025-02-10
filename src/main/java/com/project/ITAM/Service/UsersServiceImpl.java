@@ -35,6 +35,9 @@ public class UsersServiceImpl implements UsersService{
     @Autowired
     private FolderRepo folderRepo;
 
+    @Autowired
+            private DashBoardRepo dashBoardRepo;
+
     Logger logger = LoggerFactory.getLogger(this.getClass());
     LocalDateTime updateddate = LocalDateTime.now(ZoneId.systemDefault());
     String formattedDate = updateddate.format(DateTimeFormatter. ofPattern("yyyy-MM-dd HH:mm:ss"));
@@ -154,6 +157,12 @@ public class UsersServiceImpl implements UsersService{
             folder.getAllowedUsers().remove(users);
         }
         folderRepo.saveAll(folderRepo.findAll());
+
+        // Remove the group from all folders before deleting
+        for (DashBoard dashBoard : dashBoardRepo.findAll()) {
+            dashBoard.getUsers().remove(users);
+        }
+        dashBoardRepo.saveAll(dashBoardRepo.findAll());
 
          userRepo.delete(users);
     }

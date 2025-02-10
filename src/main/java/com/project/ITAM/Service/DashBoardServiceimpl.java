@@ -130,19 +130,6 @@ public class DashBoardServiceimpl implements  DashBoardService{
         if (!dashBoardRepo.existsById(id)) {
             throw new NotFoundException("dashboard with ID " + id + " not found");
         }
-        DashBoard dashBoard = dashBoardRepo.findById(id).orElseThrow(()->new NotFoundException("dashBoard id not exist"));
-        // Remove the folder from all groups before deleting
-        for (Groups groups : groupRepo.findAll()) {
-            groups.getAccessibleFolders().remove(dashBoard);
-        }
-        groupRepo.saveAll(groupRepo.findAll());
-
-        // Remove the folder from all users before deleting
-        for (Users users : userRepo.findAll()) {
-            users.getAccessibleFolders().remove(dashBoard);
-        }
-        userRepo.saveAll(userRepo.findAll());
-
         dashBoardRepo.deleteById(id);
     }
 }
