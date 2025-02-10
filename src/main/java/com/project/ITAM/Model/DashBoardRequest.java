@@ -3,6 +3,9 @@ package com.project.ITAM.Model;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
+import java.util.Map;
+
 @Builder
 @Data
 public class DashBoardRequest {
@@ -12,28 +15,17 @@ public class DashBoardRequest {
 
     private Long objectId;
 
-    private FolderType accessType;
+    private FolderType folderType;
 
     private String description;
 
-    private String dashBoardType;
+    private String chartType;
 
-    private String sourceName;
+    private Map<String,List<String>> columnNames;
 
-    private String tableName;
+    private List<String> tableName;
 
-    public DashBoardRequest() {
-    }
-
-    public DashBoardRequest(String dashboardName, Long folderId, Long objectId, FolderType accessType, String description, String dashBoardType, String sourceName, String tableName) {
-        this.dashboardName = dashboardName;
-        this.folderId = folderId;
-        this.objectId = objectId;
-        this.accessType = accessType;
-        this.description = description;
-        this.dashBoardType = dashBoardType;
-        this.sourceName = sourceName;
-        this.tableName = tableName;
-    }
+    private List<Long> userIds; // Only required for RESTRICTED folders
+    private List<Long> groupIds; // Only required for RESTRICTED folders
 }
 
