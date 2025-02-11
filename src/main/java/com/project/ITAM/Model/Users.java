@@ -76,10 +76,13 @@ public class Users {
     @Column(name="updatedTime")
     private String updatedTime;
 
+    @Column(name="password")
+    private String password;
+
     public Users() {
     }
 
-    public Users(Long userId, String firstName, String lastName, String middleName, String email, String authentication, String disabled, Set<Folder> accessibleFolders, Set<Groups> groups, Set<Role> roles, Set<ObjectEntity> objects, String createdBy, String updatedBy, String createdTime, String updatedTime) {
+    public Users(Long userId, String firstName, String lastName, String middleName, String email, String authentication, String disabled, Set<Folder> accessibleFolders, Set<Groups> groups, Set<Role> roles, Set<ObjectEntity> objects, String createdBy, String updatedBy, String createdTime, String updatedTime, String password) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -95,5 +98,6 @@ public class Users {
         this.updatedBy = updatedBy;
         this.createdTime = createdTime;
         this.updatedTime = updatedTime;
+        this.password = password;
     }
 }

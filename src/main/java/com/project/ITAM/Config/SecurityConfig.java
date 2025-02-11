@@ -37,7 +37,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/**").permitAll()  // Public endpoints
                         .anyRequest().authenticated()  // Secure all other endpoints
-                ).oauth2Login();
+                ).oauth2Login(httpSecurityOAuth2LoginConfigurer -> {});
     }
 
     private void configureBasicAuthSecurity(HttpSecurity http) throws Exception {

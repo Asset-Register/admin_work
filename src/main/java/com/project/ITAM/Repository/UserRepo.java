@@ -7,11 +7,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Optional;
+
 @EnableJpaRepositories
 public interface UserRepo extends JpaRepository<Users,Long> {
-
-    /*@Modifying
-    @Query("DELETE FROM user_roles ur WHERE ur.role_id = :roleId")
-    void deleteByRoleId(@Param("roleId") Long roleId);*/
+    Optional<Users> findByEmail(String email);
 
 }
