@@ -27,18 +27,6 @@ public class UsersRequest {
 
     private String disabled;
 
-    public UsersRequest() {
-    }
+    private String password;
 
-    public UsersRequest(String firstName, String lastName, String middleName, List<Long> groupId, String email, List<Long> roleId, List<Long> objects, String authentication, String disabled) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.middleName = middleName;
-        this.groupId = groupId;
-        this.email = email;
-        this.roleId = roleId;
-        this.objectId = objects;
-        this.authentication = authentication;
-        this.disabled = disabled;
-    }
 }
