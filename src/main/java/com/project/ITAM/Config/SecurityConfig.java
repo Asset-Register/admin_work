@@ -49,8 +49,8 @@ public class SecurityConfig {
     private void configureBasicAuthSecurity(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/**").permitAll()  // Public endpoints
-                        .anyRequest().authenticated()  // Secure all other endpoints
+                        .requestMatchers("/api/**")//.hasAnyRole("admin","user") // Public endpoints
+                        .permitAll().anyRequest().authenticated()  // Secure all other endpoints
                 )
                 .httpBasic(httpBasic -> {});
     }
