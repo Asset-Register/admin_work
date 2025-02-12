@@ -13,7 +13,8 @@ public class Theme {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="bgColor_id")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "bg_color_id") // This column is used to store the reference to the BgColor entity
     private BgColor bgColor;
 
     @Column(name="selectedColor")

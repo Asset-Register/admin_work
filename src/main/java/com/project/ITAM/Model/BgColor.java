@@ -28,16 +28,20 @@ public class BgColor {
     @Column(name="layoutTextColor")
     private String layoutTextColor;
 
+    @OneToOne(mappedBy = "bgColor")
+    private Theme theme;
+
     public BgColor() {
     }
 
-    public BgColor(Long id, String backgroundColor, String textColor, String textWhite, String textBlack, String layoutTextColor) {
+    public BgColor(Long id, String backgroundColor, String textColor, String textWhite, String textBlack, String layoutTextColor, Theme theme) {
         this.id = id;
         this.backgroundColor = backgroundColor;
         this.textColor = textColor;
         this.textWhite = textWhite;
         this.textBlack = textBlack;
         this.layoutTextColor = layoutTextColor;
+        this.theme = theme;
     }
 }
 
