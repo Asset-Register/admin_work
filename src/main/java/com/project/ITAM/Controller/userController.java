@@ -4,6 +4,7 @@ import com.project.ITAM.Model.*;
 import com.project.ITAM.Repository.GroupRepo;
 import com.project.ITAM.Repository.UserRepo;
 import com.project.ITAM.Service.UsersService;
+import com.project.ITAM.helper.SecureUtil;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.QueryParam;
 import org.slf4j.Logger;
@@ -12,7 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,49 +33,53 @@ public class userController {
     private UserRepo userRepo;
 
     @Autowired
+    private SecureUtil secureUtil;
+
+    @Autowired
             private UsersService usersService;
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @PostMapping("/add")
-    public ResponseEntity<Users> addUser(@Valid @RequestBody UsersRequest usersRequest){
-
+    public ResponseEntity<Users> addUser(@Valid @RequestBody UsersRequest usersRequest,@AuthenticationPrincipal UserDetails userDetails){
+        String user= secureUtil.getLoginUser(userDetails);
         return ResponseEntity.ok(usersService.createUser(usersRequest));
     }
 
     @PatchMapping("/{user_id}/update")
-    public ResponseEntity<Users> updateUser(@RequestBody UsersRequest usersRequest,@PathVariable("user_id") Long userId){
-
+    public ResponseEntity<Users> updateUser(@RequestBody UsersRequest usersRequest,@PathVariable("user_id") Long userId,@AuthenticationPrincipal UserDetails userDetails){
+        String user= secureUtil.getLoginUser(userDetails);
         return ResponseEntity.ok(usersService.updateUsersById(usersRequest,userId));
     }
 
     @PatchMapping("/{userId}/Role/{roleIds}")
-    public ResponseEntity<Users> updateUserwithRoles(@PathVariable("userId") Long userId,@PathVariable("roleIds") String roleIds){
-
+    public ResponseEntity<Users> updateUserwithRoles(@PathVariable("userId") Long userId,@PathVariable("roleIds") String roleIds,@AuthenticationPrincipal UserDetails userDetails){
+        String user= secureUtil.getLoginUser(userDetails);
         return ResponseEntity.ok(usersService.updateUsersByRoleId(userId,roleIds));
     }
 
     @DeleteMapping("/{id}/delete")
-    public String deleteUser(@PathVariable Long id){
+    public String deleteUser(@PathVariable Long id,@AuthenticationPrincipal UserDetails userDetails){
+        String user= secureUtil.getLoginUser(userDetails);
         usersService.deleteUsersById(id);
         return "user deleted";
     }
 
     @GetMapping("/{id}/read")
-    public ResponseEntity<Users> getUser(@PathVariable Long id){
-
+    public ResponseEntity<Users> getUser(@PathVariable Long id,@AuthenticationPrincipal UserDetails userDetails){
+        String user= secureUtil.getLoginUser(userDetails);
         return ResponseEntity.ok(usersService.getUsersById(id));
     }
 
     @PostMapping("/adduser/{user_id}/group/{group_id}")
-    public ResponseEntity<Users> addUsertoGroup(@PathVariable Long userId,@PathVariable Long groupId){
+    public ResponseEntity<Users> addUsertoGroup(@PathVariable Long userId,@PathVariable Long groupId,@AuthenticationPrincipal UserDetails userDetails){
+        String user= secureUtil.getLoginUser(userDetails);
         return ResponseEntity.ok(usersService.addUserToGroup(userId,groupId));
     }
 
     @GetMapping("/readAll")
-    public ResponseEntity<List<Users>> getAllUsers(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userId = authentication.getName();
+    public ResponseEntity<List<Users>> getAllUsers(@AuthenticationPrincipal UserDetails userDetails){
+        String user= secureUtil.getLoginUser(userDetails);
         return  ResponseEntity.ok(usersService.getAllUsers());
     }
 

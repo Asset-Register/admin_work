@@ -32,16 +32,16 @@ public class DatabaseUserDetailsService implements UserDetailsService {
         Users userEntity = userRepo.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
 
-        // Convert UserEntity to Spring Security UserDetails
+       /* // Convert UserEntity to Spring Security UserDetails
         Set<SimpleGrantedAuthority> authorities = userEntity.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getRoleName())) // Assuming Role has a method `getName()`
-                .collect(Collectors.toSet());
+                .collect(Collectors.toSet());*/
 
         // Convert UserEntity to Spring Security UserDetails
         return User.builder()
                 .username(userEntity.getEmail())
                 .password(userEntity.getPassword()) // Already hashed
-                .authorities(authorities) // e.g., "USER" or "ADMIN"
+            //    .authorities(authorities) // e.g., "USER" or "ADMIN"
                 .build();
     }
 }
