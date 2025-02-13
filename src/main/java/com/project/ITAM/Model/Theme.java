@@ -26,15 +26,31 @@ public class Theme {
     @Column(name="isCustom")
     private String isCustom;
 
+    @Column(name="createdBy")
+    private String createdBy;
+
+    @Column(name="updatedBy")
+    private String updatedBy;
+
+    @Column(name="createdTime")
+    private String createdTime;
+
+    @Column(name="updatedTime")
+    private String updatedTime;
+
     public Theme() {
     }
 
-    public Theme(Long id, BgColor bgColor, String selectedColor, String selectedShade, String isCustom) {
+    public Theme(Long id, BgColor bgColor, String selectedColor, String selectedShade, String isCustom, String createdBy, String updatedBy, String createdTime, String updatedTime) {
         this.id = id;
         this.bgColor = bgColor;
         this.selectedColor = selectedColor;
         this.selectedShade = selectedShade;
         this.isCustom = isCustom;
+        this.createdBy = createdBy;
+        this.updatedBy = updatedBy;
+        this.createdTime = createdTime;
+        this.updatedTime = updatedTime;
     }
 }
 

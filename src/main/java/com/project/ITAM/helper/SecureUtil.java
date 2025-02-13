@@ -10,7 +10,9 @@ import org.springframework.stereotype.Component;
 public class SecureUtil {
 
     public String getLoginUser(UserDetails userDetails1) {
-        String userId1 = userDetails1.getUsername();
+        if(userDetails1!=null) {
+            String userId1 = userDetails1.getUsername();
+        }
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || authentication.getPrincipal() == null) {
             // return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not authenticated");
