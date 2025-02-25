@@ -31,20 +31,17 @@ public class ThemeController {
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @PostMapping("/add")
-    public ResponseEntity<Theme> addUser(@Valid @RequestBody ThemeRequest themeRequest, @AuthenticationPrincipal UserDetails userDetails){
-        String user= secureUtil.getLoginUser(userDetails);
+    public ResponseEntity<Theme> addUser(@Valid @RequestBody ThemeRequest themeRequest){
         return ResponseEntity.ok(themeService.createTheme(themeRequest));
     }
 
     @PatchMapping("/{theme_id}/update")
-    public ResponseEntity<Theme> updateUser(@RequestBody ThemeRequest themeRequest,@PathVariable("theme_id") Long themeId,@AuthenticationPrincipal UserDetails userDetails){
-        String user= secureUtil.getLoginUser(userDetails);
+    public ResponseEntity<Theme> updateUser(@RequestBody ThemeRequest themeRequest,@PathVariable("theme_id") Long themeId){
         return ResponseEntity.ok(themeService.updateTheme(themeRequest,themeId));
     }
 
     @DeleteMapping("/{theme_id}/delete")
-    public String deleteUser(@PathVariable("theme_id") Long id,@AuthenticationPrincipal UserDetails userDetails){
-        String user= secureUtil.getLoginUser(userDetails);
+    public String deleteUser(@PathVariable("theme_id") Long id){
         themeService.deleteTheme(id);
         return "theme deleted";
     }
@@ -56,8 +53,7 @@ public class ThemeController {
     }
 
     @GetMapping("/readAll")
-    public ResponseEntity<List<Theme>> getAllUsers(@AuthenticationPrincipal UserDetails userDetails){
-        String user= secureUtil.getLoginUser(userDetails);
+    public ResponseEntity<List<Theme>> getAllUsers(){
         return  ResponseEntity.ok(themeService.getAllTheme());
     }
 

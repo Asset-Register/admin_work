@@ -1,3 +1,4 @@
+/*
 package com.project.ITAM.Config;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -70,16 +71,20 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-  /*  public boolean isAuthenticated() {
+ public boolean isAuthenticated() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return authentication != null && authentication.isAuthenticated();
-    }*/
+    }
 
-    /*@Bean
+
+@Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
             throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
-    }*/
+    }
+
+
+
 
     @Bean
     public AuthenticationSuccessHandler authenticationSuccessHandler() {
@@ -92,3 +97,4 @@ public class SecurityConfig {
         };
     }
 }
+*/

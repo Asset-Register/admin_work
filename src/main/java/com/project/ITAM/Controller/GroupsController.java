@@ -2,10 +2,9 @@ package com.project.ITAM.Controller;
 
 import com.project.ITAM.Model.GroupRequest;
 import com.project.ITAM.Model.Groups;
-import com.project.ITAM.Model.Permission;
 import com.project.ITAM.Repository.GroupRepo;
-import com.project.ITAM.Repository.UserRepo;
 import com.project.ITAM.Service.GroupsService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +26,9 @@ public class GroupsController {
 
     @Autowired
             private GroupsService groupsService;
+
+    /*@Autowired
+            JwtUtil jwtUtil;*/
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -56,7 +58,12 @@ public class GroupsController {
     }
 
     @GetMapping("/readAll")
-    public ResponseEntity<List<Groups>> getAllGroups(){
+    public ResponseEntity<List<Groups>> getAllGroups(HttpServletRequest request){
+     //   String token = request.getHeader("Authorization"); // Get Bearer token
+       /* String token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJpYXQiOjE3NDAwNDk2MjEsImV4cCI6MTc0MDEzNjAyMX0.7er0YTQwdNCQsjRXJrtWxhB4xVt-shBLExxJgz8QQbHAm26fpWxkNLZ7UWQXXkfYefFT7Clv9otyYoIQSlXnjQ";
+        if (token != null*//* && token.startsWith("Bearer ")*//*) {
+            String userId = JwtUtil.extractUserId(token); // Extract userId from token
+        }*/
         return  ResponseEntity.ok(groupsService.getAllGroups());
     }
 

@@ -1,3 +1,4 @@
+/*
 
 package com.project.ITAM.Config;
 
@@ -38,3 +39,4 @@ public class AzureADConfig {
     }
 }
 
+*/
