@@ -3,14 +3,13 @@ package com.project.ITAM.Controller;
 import com.project.ITAM.Model.Theme;
 import com.project.ITAM.Model.ThemeRequest;
 import com.project.ITAM.Service.ThemeService;
-import com.project.ITAM.helper.SecureUtil;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
+/*import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;*/
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,9 +20,6 @@ import java.util.List;
 @Validated
 @CrossOrigin
 public class ThemeController {
-
-    @Autowired
-    private SecureUtil secureUtil;
 
     @Autowired
             private ThemeService themeService;
@@ -47,8 +43,8 @@ public class ThemeController {
     }
 
     @GetMapping("/{theme_id}/read")
-    public ResponseEntity<Theme> getUser(@PathVariable("theme_id") Long id,@AuthenticationPrincipal UserDetails userDetails){
-        String user= secureUtil.getLoginUser(userDetails);
+    public ResponseEntity<Theme> getUser(@PathVariable("theme_id") Long id){
+     //   String user= secureUtil.getLoginUser(userDetails);
         return ResponseEntity.ok(themeService.getThemeById(id));
     }
 

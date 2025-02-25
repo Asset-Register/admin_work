@@ -1,3 +1,4 @@
+/*
 package com.project.ITAM.helper;
 
 import org.springframework.security.core.Authentication;
@@ -29,3 +30,4 @@ public class SecureUtil {
         return  userId;
     }
 }
+*/
