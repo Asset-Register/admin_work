@@ -40,6 +40,11 @@ public class DashBoardServiceimpl implements  DashBoardService{
     LocalDateTime updateddate = LocalDateTime.now(ZoneId.systemDefault());
     String formattedDate = updateddate.format(DateTimeFormatter. ofPattern("yyyy-MM-dd HH:mm:ss"));
 
+    /** update dashBoard
+     *
+     * @param dashBoardRequest
+     * @return
+     */
     @Override
     public DashBoard uploadDashBoard(DashBoardRequest dashBoardRequest) {
         Folder folder = new Folder();
@@ -68,16 +73,31 @@ public class DashBoardServiceimpl implements  DashBoardService{
                 .folder(folder).object(objectEntity).build());
     }
 
+    /** get dashboard in folder
+     *
+     * @param folderId
+     * @return
+     */
     @Override
     public List<DashBoard> getDashboardInFolder(Long folderId) {
         return dashBoardRepo.findByFolderId(folderId);
     }
 
+    /** get ALl dashBoard
+     *
+     * @return
+     */
     @Override
     public List<DashBoard> getAllDashboard() {
         return dashBoardRepo.findAll();
     }
 
+    /** update DashBoard
+     *
+     * @param id
+     * @param dashBoardRequest
+     * @return
+     */
     @Override
     public DashBoard updatedashBoard(Long id, DashBoardRequest dashBoardRequest) {
         DashBoard dashBoard = dashBoardRepo.findById(id).orElseThrow(()->new NotFoundException("dashBoard id not exist"));
@@ -125,6 +145,10 @@ public class DashBoardServiceimpl implements  DashBoardService{
         return dashBoardRepo.save(dashBoard);
     }
 
+    /** Delete DashBoard
+     *
+     * @param id
+     */
     @Override
     public void deleteDashBoard(Long id) {
         if (!dashBoardRepo.existsById(id)) {
