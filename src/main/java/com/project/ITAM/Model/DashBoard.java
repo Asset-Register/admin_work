@@ -80,6 +80,9 @@ public class DashBoard {
     @Transient
     private Map<String, List<String>> columnNames = new HashMap<>();
 
+    @Transient
+    private Map<Map<String, Object>, Long> columnNamesWithValuesANDCounting = new HashMap<>();
+
     // Convert JSON string to Map after loading from DB
     @PostLoad
     private void loadColumnNames() {
@@ -107,7 +110,7 @@ public class DashBoard {
         }
     }
 
-    public DashBoard(Long id, Set<Users> users, Set<Groups> groups, String dashBoardName, FolderType accessType, ObjectEntity object, String description, String chartType, String tableNamesJson, List<String> tableNames, Folder folder, String createdBy, String updatedBy, String createdTime, String updatedTime, String columnNamesJson, Map<String, List<String>> columnNames) {
+    public DashBoard(Long id, Set<Users> users, Set<Groups> groups, String dashBoardName, FolderType accessType, ObjectEntity object, String description, String chartType, String tableNamesJson, List<String> tableNames, Folder folder, String createdBy, String updatedBy, String createdTime, String updatedTime, String columnNamesJson, Map<String, List<String>> columnNames, Map<Map<String, Object>, Long> columnNamesWithValuesANDCounting) {
         this.id = id;
         this.users = users;
         this.groups = groups;
@@ -125,6 +128,7 @@ public class DashBoard {
         this.updatedTime = updatedTime;
         this.columnNamesJson = columnNamesJson;
         this.columnNames = columnNames;
+        this.columnNamesWithValuesANDCounting = columnNamesWithValuesANDCounting;
     }
 
     public DashBoard() {

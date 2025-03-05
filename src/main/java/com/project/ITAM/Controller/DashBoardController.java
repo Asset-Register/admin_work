@@ -29,6 +29,11 @@ public class DashBoardController {
         return ResponseEntity.ok(dashBoardService.getDashboardInFolder(folderId));
     }
 
+    @GetMapping("/{folderId}/withUniqueColumnsValues")
+    public ResponseEntity<List<DashBoard>> getDashBoardInnFolderwithUniqueColumns(@PathVariable("folderId") Long folderId) {
+        return ResponseEntity.ok(dashBoardService.getSelectedColumnValueDashBoard(folderId));
+    }
+
     @PatchMapping("/{dashBoardId}/update")
     public ResponseEntity<DashBoard> updateFileName(@PathVariable("dashBoardId") Long dashBoardId,@RequestBody DashBoardRequest dashBoardRequest){
         return ResponseEntity.ok(dashBoardService.updatedashBoard(dashBoardId,dashBoardRequest));
