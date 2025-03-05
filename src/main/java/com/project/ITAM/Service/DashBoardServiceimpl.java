@@ -183,8 +183,10 @@ public class DashBoardServiceimpl implements  DashBoardService{
                                 Collectors.counting()
                         ));
                 dashBoard.setColumnNamesWithValuesANDCounting(groupedRecords);
+                logger.info("dashBoard with uniqueColumns"+dashBoard);
             }
         }
+        logger.info("dashBoard with uniqueColumns"+dashBoards);
         return dashBoards;
     }
 }
