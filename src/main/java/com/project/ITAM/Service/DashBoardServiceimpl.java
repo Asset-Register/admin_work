@@ -3,6 +3,7 @@ package com.project.ITAM.Service;
 import com.project.ITAM.Exception.NotFoundException;
 import com.project.ITAM.Model.*;
 import com.project.ITAM.Repository.*;
+import com.project.ITAM.client.ITAMClient;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,13 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.net.URI;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,6 +37,9 @@ public class DashBoardServiceimpl implements  DashBoardService{
 
     @Autowired
     private GroupRepo groupRepo;
+
+    @Autowired
+            private ITAMClient itamClient;
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
     LocalDateTime updateddate = LocalDateTime.now(ZoneId.systemDefault());
@@ -155,5 +160,31 @@ public class DashBoardServiceimpl implements  DashBoardService{
             throw new NotFoundException("dashboard with ID " + id + " not found");
         }
         dashBoardRepo.deleteById(id);
+    }
+
+    @Override
+    public List<DashBoard> getSelectedColumnValueDashBoard(Long folderId){
+
+        List<DashBoard> dashBoards = dashBoardRepo.findByFolderId(folderId);
+        for (DashBoard dashBoard:dashBoards) {
+            for(String tableName: dashBoard.getTableNames()) {
+                String columnNames = dashBoard.getColumnNames().entrySet().stream()
+                        .filter(entry-> entry.getKey().equalsIgnoreCase(tableName))
+                        .flatMap(entry-> entry.getValue().stream())
+                        .collect(Collectors.joining(","));
+              //  String encodedColumns = URLDecoder.decode(columnNames, StandardCharsets.UTF_8);
+             //   URI uri = URI.create(URLDecoder.decode(finalUrl, StandardCharsets.UTF_8));
+                List<Map<String, Object>> columnNamesWithValues =  itamClient
+                        .getColumnValues(tableName, columnNames.replace("%2C",","));
+
+                Map<Map<String, Object>, Long> groupedRecords = columnNamesWithValues.stream()
+                        .collect(Collectors.groupingBy(
+                                map -> new HashMap<>(map),  // Ensures a proper key instance
+                                Collectors.counting()
+                        ));
+                dashBoard.setColumnNamesWithValuesANDCounting(groupedRecords);
+            }
+        }
+        return dashBoards;
     }
 }

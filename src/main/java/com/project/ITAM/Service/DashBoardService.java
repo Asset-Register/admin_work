@@ -18,4 +18,6 @@ public interface DashBoardService {
     public DashBoard updatedashBoard(Long id, DashBoardRequest dashBoardRequest);
 
     public void deleteDashBoard(Long id);
+
+    public List<DashBoard> getSelectedColumnValueDashBoard(Long folderId);
 }
