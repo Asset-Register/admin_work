@@ -195,6 +195,12 @@ public class FolderServiceimpl implements FolderService{
         }
         userRepo.saveAll(userRepo.findAll());
 
+        // Remove user associations
+        folder.getAllowedUsers().clear();
+        folder.getAllowedGroups().clear();
+        folder.getAllowedObjects().clear();
+        folderRepo.save(folder); // Save to persist the change
+
         // Remove the folder from all objects before deleting
         for (ObjectEntity object : objectRepo.findAll()) {
             object.getAccessibleFolders().remove(folder);

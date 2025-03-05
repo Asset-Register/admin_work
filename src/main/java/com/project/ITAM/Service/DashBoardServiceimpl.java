@@ -4,6 +4,7 @@ import com.project.ITAM.Exception.NotFoundException;
 import com.project.ITAM.Model.*;
 import com.project.ITAM.Repository.*;
 import com.project.ITAM.client.ITAMClient;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -115,7 +116,7 @@ public class DashBoardServiceimpl implements  DashBoardService{
         if(!StringUtils.isEmpty(dashBoardRequest.getDescription())) {
             dashBoard.setDescription(dashBoardRequest.getDescription());
         }
-        if(!StringUtils.isEmpty(dashBoardRequest.getFolderType().toString())) {
+        if(!ObjectUtils.isEmpty(dashBoardRequest.getFolderType())) {
             dashBoard.setAccessType(dashBoardRequest.getFolderType());
         }
         if(!CollectionUtils.isEmpty(dashBoardRequest.getColumnNames())) {
