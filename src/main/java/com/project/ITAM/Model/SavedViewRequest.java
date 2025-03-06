@@ -9,6 +9,10 @@ public class SavedViewRequest {
 
     private String viewName;
 
+    private String jobName;
+
+    private String dataSource;
+
     private Long folderId;
 
     private FilterRequest filters; // JSON String

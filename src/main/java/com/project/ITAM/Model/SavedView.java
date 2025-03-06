@@ -20,6 +20,12 @@ public class SavedView {
     @Column(name = "viewName")
     private String viewName;
 
+    @Column(name = "jobName")
+    private String jobName;
+
+    @Column(name="dataSource")
+    private String dataSource;
+
     @ManyToOne
     @JoinColumn(name = "folder_id", nullable = false)
     private Folder folder;
@@ -42,9 +48,11 @@ public class SavedView {
     public SavedView() {
     }
 
-    public SavedView(Long id, String viewName, Folder folder, String filters, String createdBy, String updatedBy, String createdTime, String updatedTime) {
+    public SavedView(Long id, String viewName, String jobName, String dataSource, Folder folder, String filters, String createdBy, String updatedBy, String createdTime, String updatedTime) {
         this.id = id;
         this.viewName = viewName;
+        this.jobName = jobName;
+        this.dataSource = dataSource;
         this.folder = folder;
         this.filters = filters;
         this.createdBy = createdBy;
