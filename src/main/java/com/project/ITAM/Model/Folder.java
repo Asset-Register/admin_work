@@ -24,6 +24,7 @@ public class Folder {
 
     @ManyToOne
     @JoinColumn(name = "parent_id")
+    @JsonIgnore
     private Folder parentFolder; // Null if it's a root folder
 
     @Enumerated(EnumType.STRING)
@@ -32,6 +33,7 @@ public class Folder {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
     private Users user;
 
     @ManyToMany(cascade = CascadeType.ALL)

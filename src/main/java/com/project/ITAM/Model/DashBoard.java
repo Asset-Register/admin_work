@@ -1,5 +1,6 @@
 package com.project.ITAM.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.*;
@@ -32,6 +33,7 @@ public class DashBoard {
             joinColumns = @JoinColumn(name = "dashboard_id"),
             inverseJoinColumns = @JoinColumn(name = "group_id")
     )
+    @JsonIgnore
     private Set<Groups> groups = new HashSet<>();
 
 
@@ -53,6 +55,7 @@ public class DashBoard {
     private String chartType;
 
     @Column(columnDefinition = "TEXT") // Stores the List<String> as JSON string
+    @JsonIgnore
     private String tableNamesJson;
 
     @Transient
@@ -60,6 +63,7 @@ public class DashBoard {
 
     @ManyToOne
     @JoinColumn(name = "folder_id")
+    @JsonIgnore
     private Folder folder; // Folder where the file is stored
 
     @Column(name="createdBy")
@@ -75,6 +79,7 @@ public class DashBoard {
     private String updatedTime;
 
     @Column(columnDefinition = "TEXT") // Store JSON string
+    @JsonIgnore
     private String columnNamesJson;
 
     @Transient

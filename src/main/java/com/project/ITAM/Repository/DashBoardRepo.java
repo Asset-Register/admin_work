@@ -11,6 +11,7 @@ import java.util.List;
 @EnableJpaRepositories
 public interface DashBoardRepo extends JpaRepository<DashBoard,Long> {
 
+    @Query(value = "SELECT * FROM DashBoard WHERE folder_id = :folderId",nativeQuery = true)
     List<DashBoard> findByFolderId(Long folderId);
 
     @Query(value = "SELECT * FROM DashBoard WHERE objectId = :objectId",nativeQuery = true)

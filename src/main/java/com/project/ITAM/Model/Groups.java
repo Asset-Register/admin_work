@@ -37,7 +37,7 @@ public class Groups {
     @Column(name="authentication")
     private String authentication;
 
-    @ManyToMany(mappedBy = "allowedGroups")
+    @ManyToMany(mappedBy = "allowedGroups",cascade = CascadeType.ALL)
     private Set<Folder> accessibleFolders = new HashSet<>();
 
     @ManyToMany(mappedBy = "groups")
