@@ -19,14 +19,34 @@ public class DashBoardController {
     @Autowired
     private DashBoardService dashBoardService;
 
+    /** create new dashBpoard
+     *
+     * @param dashBoard
+     * @return
+     */
     @PostMapping("/upload")
     public ResponseEntity<DashBoard> uploadDashBoard(@RequestBody DashBoardRequest dashBoard) {
         return ResponseEntity.ok(dashBoardService.uploadDashBoard(dashBoard));
     }
 
+    /** filter based on folder id
+     *
+     * @param folderId
+     * @return
+     */
     @GetMapping("/{folderId}/read")
     public ResponseEntity<List<DashBoard>> getDashBoardInnFolder(@PathVariable("folderId") Long folderId) {
         return ResponseEntity.ok(dashBoardService.getDashboardInFolder(folderId));
+    }
+
+    /** filter based on objectId
+     *
+     * @param objectId
+     * @return
+     */
+    @GetMapping("/{object_id}/filter")
+    public ResponseEntity<List<DashBoard>> getDashBoardbasedOnObjectId(@PathVariable("object_id") Long objectId) {
+        return ResponseEntity.ok(dashBoardService.getDashboardBasedOnObjects(objectId));
     }
 
     @GetMapping("/{folderId}/withUniqueColumnsValues")

@@ -13,6 +13,8 @@ public interface DashBoardService {
 
     public List<DashBoard> getDashboardInFolder(Long folderId);
 
+    public List<DashBoard> getDashboardBasedOnObjects(Long objectId);
+
     public List<DashBoard> getAllDashboard();
 
     public DashBoard updatedashBoard(Long id, DashBoardRequest dashBoardRequest);

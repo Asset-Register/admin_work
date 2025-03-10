@@ -37,7 +37,7 @@ public class Users {
     @Column(name="disabled")
     private String disabled;
 
-    @ManyToMany(mappedBy = "allowedUsers")
+    @ManyToMany(mappedBy = "allowedUsers",cascade = CascadeType.ALL)
     private Set<Folder> accessibleFolders = new HashSet<>();
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})

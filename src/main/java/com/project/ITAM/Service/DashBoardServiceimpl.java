@@ -89,6 +89,11 @@ public class DashBoardServiceimpl implements  DashBoardService{
         return dashBoardRepo.findByFolderId(folderId);
     }
 
+    @Override
+    public List<DashBoard> getDashboardBasedOnObjects(Long objectId) {
+        return dashBoardRepo.findByObjectId(objectId);
+    }
+
     /** get ALl dashBoard
      *
      * @return

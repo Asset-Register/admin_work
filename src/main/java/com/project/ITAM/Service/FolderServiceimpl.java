@@ -184,13 +184,13 @@ public class FolderServiceimpl implements FolderService{
             dashBoardRepo.deleteByFolder(folder);
 
         // Remove the folder from all groups before deleting
-        for (Groups groups : groupRepo.findAll()) {
+        for (Groups groups : folder.getAllowedGroups()) {
             groups.getAccessibleFolders().remove(folder);
         }
         groupRepo.saveAll(groupRepo.findAll());
 
         // Remove the folder from all users before deleting
-        for (Users users : userRepo.findAll()) {
+        for (Users users : folder.getAllowedUsers()) {
             users.getAccessibleFolders().remove(folder);
         }
         userRepo.saveAll(userRepo.findAll());
@@ -202,7 +202,7 @@ public class FolderServiceimpl implements FolderService{
         folderRepo.save(folder); // Save to persist the change
 
         // Remove the folder from all objects before deleting
-        for (ObjectEntity object : objectRepo.findAll()) {
+        for (ObjectEntity object : folder.getAllowedObjects()) {
             object.getAccessibleFolders().remove(folder);
         }
         objectRepo.saveAll(objectRepo.findAll());
