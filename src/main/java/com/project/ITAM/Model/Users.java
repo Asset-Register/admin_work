@@ -3,15 +3,15 @@ package com.project.ITAM.Model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Builder
-@Data
+@Getter
+@Setter
 @Table(name= "Users")
 public class Users {
 
@@ -40,6 +40,7 @@ public class Users {
 
     @ManyToMany(mappedBy = "allowedUsers",cascade = CascadeType.ALL)
     @JsonIgnore
+    @ToString.Exclude
     private Set<Folder> accessibleFolders = new HashSet<>();
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
@@ -49,6 +50,7 @@ public class Users {
             inverseJoinColumns = @JoinColumn(name = "group_id")
     )
     @JsonIgnore
+    @ToString.Exclude
     private Set<Groups> groups = new HashSet<>();
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
@@ -58,6 +60,7 @@ public class Users {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     @JsonIgnore
+    @ToString.Exclude
     private Set<Role> roles = new HashSet<>();
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
@@ -66,6 +69,7 @@ public class Users {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "object_id")
     )
+    @ToString.Exclude
     private Set<ObjectEntity> objects = new HashSet<>();
 
     @Column(name="createdBy")

@@ -2,8 +2,7 @@ package com.project.ITAM.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -12,7 +11,8 @@ import java.util.Set;
 
 @Entity
 @Builder
-@Data
+@Getter
+@Setter
 @Table(name = "folders")
 public class Folder {
     @Id
@@ -34,6 +34,7 @@ public class Folder {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     @JsonIgnore
+    @ToString.Exclude
     private Users user;
 
     @ManyToMany(cascade = CascadeType.ALL)
@@ -42,6 +43,7 @@ public class Folder {
             joinColumns = @JoinColumn(name = "folder_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
+    @ToString.Exclude
     private Set<Users> allowedUsers;
 
     @ManyToMany(cascade = CascadeType.ALL)
@@ -50,6 +52,7 @@ public class Folder {
             joinColumns = @JoinColumn(name = "folder_id"),
             inverseJoinColumns = @JoinColumn(name = "group_id")
     )
+    @ToString.Exclude
     private Set<Groups> allowedGroups = new HashSet<>();
 
     @ManyToMany(cascade = CascadeType.ALL)
@@ -58,10 +61,12 @@ public class Folder {
             joinColumns = @JoinColumn(name = "folder_id"),
             inverseJoinColumns = @JoinColumn(name = "object_id")
     )
+    @ToString.Exclude
     private Set<ObjectEntity> allowedObjects = new HashSet<>();
 
     @OneToMany(mappedBy = "parentFolder", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore // Prevent recursion when serializing
+    @ToString.Exclude
     private List<Folder> childFolders = new ArrayList<>();
 
     @Column(name="createdBy")
