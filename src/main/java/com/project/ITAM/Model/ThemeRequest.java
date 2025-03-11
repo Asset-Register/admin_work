@@ -1,10 +1,14 @@
 package com.project.ITAM.Model;
 
-import lombok.Builder;
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.Column;
+import lombok.*;
 
 @Builder
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ThemeRequest {
 
     private BgColor bgColor;
@@ -14,6 +18,7 @@ public class ThemeRequest {
     private String selectedShade; // Store actual file path
 
     private String isCustom;
+
 
 }
 

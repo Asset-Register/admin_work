@@ -178,10 +178,10 @@ public class DashBoardServiceimpl implements  DashBoardService{
                         .filter(entry-> entry.getKey().equalsIgnoreCase(tableName))
                         .flatMap(entry-> entry.getValue().stream())
                         .collect(Collectors.joining(","));
-              //  String encodedColumns = URLDecoder.decode(columnNames, StandardCharsets.UTF_8);
+                String encodedColumns = URLDecoder.decode(columnNames, StandardCharsets.UTF_8);
              //   URI uri = URI.create(URLDecoder.decode(finalUrl, StandardCharsets.UTF_8));
                 List<Map<String, Object>> columnNamesWithValues =  itamClient
-                        .getColumnValues(tableName, columnNames.replace("%2C",","));
+                        .getColumnValues(tableName, encodedColumns.replace("%2C",","));
 
                 Map<Map<String, Object>, Long> groupedRecords = columnNamesWithValues.stream()
                         .collect(Collectors.groupingBy(

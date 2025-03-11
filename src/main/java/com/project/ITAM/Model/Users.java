@@ -39,7 +39,6 @@ public class Users {
     private String disabled;
 
     @ManyToMany(mappedBy = "allowedUsers",cascade = CascadeType.ALL)
-    @JsonIgnore
     @ToString.Exclude
     private Set<Folder> accessibleFolders = new HashSet<>();
 
@@ -49,7 +48,6 @@ public class Users {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "group_id")
     )
-    @JsonIgnore
     @ToString.Exclude
     private Set<Groups> groups = new HashSet<>();
 
@@ -59,7 +57,6 @@ public class Users {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    @JsonIgnore
     @ToString.Exclude
     private Set<Role> roles = new HashSet<>();
 
