@@ -5,6 +5,7 @@ import com.project.ITAM.Model.LogoEntity;
 import com.project.ITAM.Model.LogoRequest;
 import com.project.ITAM.Repository.LogoRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,7 +27,7 @@ public class LogoServiceImpl implements LogoService{
 
     @Override
     public LogoEntity getLogo(Long logoId) {
-        return logoRepo.findById(logoId).orElseThrow(()-> new NotFoundException("logo id not found"));
+       return logoRepo.findById(logoId).orElseThrow(()-> new NotFoundException("logo id not found"));
     }
 
     @Override
