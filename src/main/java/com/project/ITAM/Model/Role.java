@@ -3,6 +3,7 @@ package com.project.ITAM.Model;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -12,6 +13,7 @@ import java.util.Set;
 @Builder
 @Data
 @Table(name= "Role")
+@ToString(exclude = "users")
 public class Role {
 
     @Id

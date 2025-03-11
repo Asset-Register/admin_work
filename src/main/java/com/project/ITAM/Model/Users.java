@@ -14,6 +14,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name= "Users")
+@ToString(exclude = "role")
 public class Users {
 
     @Id

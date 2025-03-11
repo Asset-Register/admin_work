@@ -2,10 +2,7 @@ package com.project.ITAM.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -18,6 +15,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "folders")
+@ToString(exclude = {"parentFolder", "childFolders", "allowedUsers", "allowedGroups", "allowedObjects"})
 public class Folder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
