@@ -1,8 +1,7 @@
 package com.project.ITAM.Model;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -10,6 +9,8 @@ import java.util.Set;
 @Entity
 @Builder
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name= "Groups")
 public class Groups {
 
@@ -55,21 +56,4 @@ public class Groups {
     @Column(name="updatedTime")
     private String updatedTime;
 
-    public Groups() {
-    }
-
-    public Groups(Long groupId, String groupName, String email, Set<ObjectEntity> objectEntities, String disabled, String authentication, Set<Folder> accessibleFolders, Set<Users> users, String createdBy, String updatedBy, String createdTime, String updatedTime) {
-        this.groupId = groupId;
-        this.groupName = groupName;
-        this.email = email;
-        this.objectEntities = objectEntities;
-        this.disabled = disabled;
-        this.authentication = authentication;
-        this.accessibleFolders = accessibleFolders;
-        this.users = users;
-        this.createdBy = createdBy;
-        this.updatedBy = updatedBy;
-        this.createdTime = createdTime;
-        this.updatedTime = updatedTime;
-    }
 }

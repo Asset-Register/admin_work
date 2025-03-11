@@ -10,8 +10,9 @@ import java.util.Set;
 
 @Entity
 @Builder
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name= "Users")
 public class Users {
 
@@ -39,7 +40,7 @@ public class Users {
     private String disabled;
 
     @ManyToMany(mappedBy = "allowedUsers",cascade = CascadeType.ALL)
-    @ToString.Exclude
+    @JsonIgnore
     private Set<Folder> accessibleFolders = new HashSet<>();
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
@@ -48,7 +49,7 @@ public class Users {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "group_id")
     )
-    @ToString.Exclude
+    @JsonIgnore
     private Set<Groups> groups = new HashSet<>();
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
@@ -57,7 +58,6 @@ public class Users {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    @ToString.Exclude
     private Set<Role> roles = new HashSet<>();
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
@@ -66,7 +66,6 @@ public class Users {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "object_id")
     )
-    @ToString.Exclude
     private Set<ObjectEntity> objects = new HashSet<>();
 
     @Column(name="createdBy")
@@ -82,27 +81,7 @@ public class Users {
     private String updatedTime;
 
     @Column(name="password")
+    @JsonIgnore
     private String password;
 
-    public Users() {
-    }
-
-    public Users(Long userId, String firstName, String lastName, String middleName, String email, String authentication, String disabled, Set<Folder> accessibleFolders, Set<Groups> groups, Set<Role> roles, Set<ObjectEntity> objects, String createdBy, String updatedBy, String createdTime, String updatedTime, String password) {
-        this.userId = userId;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.middleName = middleName;
-        this.email = email;
-        this.authentication = authentication;
-        this.disabled = disabled;
-        this.accessibleFolders = accessibleFolders;
-        this.groups = groups;
-        this.roles = roles;
-        this.objects = objects;
-        this.createdBy = createdBy;
-        this.updatedBy = updatedBy;
-        this.createdTime = createdTime;
-        this.updatedTime = updatedTime;
-        this.password = password;
-    }
 }

@@ -2,7 +2,10 @@ package com.project.ITAM.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -11,8 +14,9 @@ import java.util.Set;
 
 @Entity
 @Builder
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "folders")
 public class Folder {
     @Id
@@ -33,8 +37,6 @@ public class Folder {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    @JsonIgnore
-    @ToString.Exclude
     private Users user;
 
     @ManyToMany(cascade = CascadeType.ALL)
@@ -43,7 +45,6 @@ public class Folder {
             joinColumns = @JoinColumn(name = "folder_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    @ToString.Exclude
     private Set<Users> allowedUsers;
 
     @ManyToMany(cascade = CascadeType.ALL)
@@ -52,7 +53,6 @@ public class Folder {
             joinColumns = @JoinColumn(name = "folder_id"),
             inverseJoinColumns = @JoinColumn(name = "group_id")
     )
-    @ToString.Exclude
     private Set<Groups> allowedGroups = new HashSet<>();
 
     @ManyToMany(cascade = CascadeType.ALL)
@@ -61,12 +61,10 @@ public class Folder {
             joinColumns = @JoinColumn(name = "folder_id"),
             inverseJoinColumns = @JoinColumn(name = "object_id")
     )
-    @ToString.Exclude
     private Set<ObjectEntity> allowedObjects = new HashSet<>();
 
     @OneToMany(mappedBy = "parentFolder", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore // Prevent recursion when serializing
-    @ToString.Exclude
     private List<Folder> childFolders = new ArrayList<>();
 
     @Column(name="createdBy")
@@ -81,23 +79,5 @@ public class Folder {
     @Column(name="updatedTime")
     private String updatedTime;
 
-    public Folder() {
-    }
-
-    public Folder(Long id, String folderName, Folder parentFolder, FolderType folderType, Users user, Set<Users> allowedUsers, Set<Groups> allowedGroups, Set<ObjectEntity> allowedObjects, List<Folder> childFolders, String createdBy, String updatedBy, String createdTime, String updatedTime) {
-        this.id = id;
-        this.folderName = folderName;
-        this.parentFolder = parentFolder;
-        this.folderType = folderType;
-        this.user = user;
-        this.allowedUsers = allowedUsers;
-        this.allowedGroups = allowedGroups;
-        this.allowedObjects = allowedObjects;
-        this.childFolders = childFolders;
-        this.createdBy = createdBy;
-        this.updatedBy = updatedBy;
-        this.createdTime = createdTime;
-        this.updatedTime = updatedTime;
-    }
 }
 
