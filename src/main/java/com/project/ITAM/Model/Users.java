@@ -1,9 +1,9 @@
 package com.project.ITAM.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -11,7 +11,10 @@ import java.util.Set;
 @Entity
 @Builder
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name= "Users")
+@ToString(exclude = "role")
 public class Users {
 
     @Id
@@ -38,6 +41,7 @@ public class Users {
     private String disabled;
 
     @ManyToMany(mappedBy = "allowedUsers",cascade = CascadeType.ALL)
+    @JsonIgnore
     private Set<Folder> accessibleFolders = new HashSet<>();
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
@@ -46,6 +50,7 @@ public class Users {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "group_id")
     )
+    @JsonIgnore
     private Set<Groups> groups = new HashSet<>();
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
@@ -77,27 +82,7 @@ public class Users {
     private String updatedTime;
 
     @Column(name="password")
+    @JsonIgnore
     private String password;
 
-    public Users() {
-    }
-
-    public Users(Long userId, String firstName, String lastName, String middleName, String email, String authentication, String disabled, Set<Folder> accessibleFolders, Set<Groups> groups, Set<Role> roles, Set<ObjectEntity> objects, String createdBy, String updatedBy, String createdTime, String updatedTime, String password) {
-        this.userId = userId;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.middleName = middleName;
-        this.email = email;
-        this.authentication = authentication;
-        this.disabled = disabled;
-        this.accessibleFolders = accessibleFolders;
-        this.groups = groups;
-        this.roles = roles;
-        this.objects = objects;
-        this.createdBy = createdBy;
-        this.updatedBy = updatedBy;
-        this.createdTime = createdTime;
-        this.updatedTime = updatedTime;
-        this.password = password;
-    }
 }

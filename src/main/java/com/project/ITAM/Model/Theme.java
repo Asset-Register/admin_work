@@ -1,31 +1,27 @@
 package com.project.ITAM.Model;
 
+import com.project.ITAM.Model.BgColor;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 @Entity
+@Getter
+@Setter
 @Builder
-@Data
-@Table(name = "Theme")
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name= "Theme")
 public class Theme {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "bg_color_id") // This column is used to store the reference to the BgColor entity
-    private BgColor bgColor;
+    @Embedded
+    private BgColor bgColor; // This will store BGColor fields inside the Theme table
 
-    @Column(name="selectedColor")
     private String selectedColor;
-
-    @Column(name="selectedShade")
-    private String selectedShade; // Store actual file path
-
-    @Column(name="isCustom")
+    private String selectedShade;
     private String isCustom;
-
     @Column(name="createdBy")
     private String createdBy;
 
@@ -37,20 +33,4 @@ public class Theme {
 
     @Column(name="updatedTime")
     private String updatedTime;
-
-    public Theme() {
-    }
-
-    public Theme(Long id, BgColor bgColor, String selectedColor, String selectedShade, String isCustom, String createdBy, String updatedBy, String createdTime, String updatedTime) {
-        this.id = id;
-        this.bgColor = bgColor;
-        this.selectedColor = selectedColor;
-        this.selectedShade = selectedShade;
-        this.isCustom = isCustom;
-        this.createdBy = createdBy;
-        this.updatedBy = updatedBy;
-        this.createdTime = createdTime;
-        this.updatedTime = updatedTime;
-    }
 }
-

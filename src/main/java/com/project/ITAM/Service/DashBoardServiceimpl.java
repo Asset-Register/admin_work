@@ -174,14 +174,15 @@ public class DashBoardServiceimpl implements  DashBoardService{
         List<DashBoard> dashBoards = dashBoardRepo.findByFolderId(folderId);
         for (DashBoard dashBoard:dashBoards) {
             for(String tableName: dashBoard.getTableNames()) {
-                String columnNames = dashBoard.getColumnNames().entrySet().stream()
+                List<String> columnNames = dashBoard.getColumnNames().entrySet().stream()
                         .filter(entry-> entry.getKey().equalsIgnoreCase(tableName))
                         .flatMap(entry-> entry.getValue().stream())
-                        .collect(Collectors.joining(","));
+                        .collect(Collectors.toList());
+                       // .collect(Collectors.joining(","));
               //  String encodedColumns = URLDecoder.decode(columnNames, StandardCharsets.UTF_8);
              //   URI uri = URI.create(URLDecoder.decode(finalUrl, StandardCharsets.UTF_8));
                 List<Map<String, Object>> columnNamesWithValues =  itamClient
-                        .getColumnValues(tableName, columnNames.replace("%2C",","));
+                        .getColumnValues(tableName,columnNames);
 
                 Map<Map<String, Object>, Long> groupedRecords = columnNamesWithValues.stream()
                         .collect(Collectors.groupingBy(
@@ -189,7 +190,7 @@ public class DashBoardServiceimpl implements  DashBoardService{
                                 Collectors.counting()
                         ));
                 dashBoard.setColumnNamesWithValuesANDCounting(groupedRecords);
-                logger.info("dashBoard with uniqueColumns"+dashBoard);
+               // logger.info("dashBoard with uniqueColumns"+dashBoard);
             }
         }
         logger.info("dashBoard with uniqueColumns"+dashBoards);

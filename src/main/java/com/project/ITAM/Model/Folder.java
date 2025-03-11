@@ -2,8 +2,7 @@ package com.project.ITAM.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -13,7 +12,10 @@ import java.util.Set;
 @Entity
 @Builder
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "folders")
+@ToString(exclude = {"parentFolder", "childFolders", "allowedUsers", "allowedGroups", "allowedObjects"})
 public class Folder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,7 +35,6 @@ public class Folder {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    @JsonIgnore
     private Users user;
 
     @ManyToMany(cascade = CascadeType.ALL)
@@ -76,23 +77,5 @@ public class Folder {
     @Column(name="updatedTime")
     private String updatedTime;
 
-    public Folder() {
-    }
-
-    public Folder(Long id, String folderName, Folder parentFolder, FolderType folderType, Users user, Set<Users> allowedUsers, Set<Groups> allowedGroups, Set<ObjectEntity> allowedObjects, List<Folder> childFolders, String createdBy, String updatedBy, String createdTime, String updatedTime) {
-        this.id = id;
-        this.folderName = folderName;
-        this.parentFolder = parentFolder;
-        this.folderType = folderType;
-        this.user = user;
-        this.allowedUsers = allowedUsers;
-        this.allowedGroups = allowedGroups;
-        this.allowedObjects = allowedObjects;
-        this.childFolders = childFolders;
-        this.createdBy = createdBy;
-        this.updatedBy = updatedBy;
-        this.createdTime = createdTime;
-        this.updatedTime = updatedTime;
-    }
 }
 
