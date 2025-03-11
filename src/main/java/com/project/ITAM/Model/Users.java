@@ -1,5 +1,6 @@
 package com.project.ITAM.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.Builder;
@@ -38,6 +39,7 @@ public class Users {
     private String disabled;
 
     @ManyToMany(mappedBy = "allowedUsers",cascade = CascadeType.ALL)
+    @JsonIgnore
     private Set<Folder> accessibleFolders = new HashSet<>();
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
@@ -46,6 +48,7 @@ public class Users {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "group_id")
     )
+    @JsonIgnore
     private Set<Groups> groups = new HashSet<>();
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
@@ -54,6 +57,7 @@ public class Users {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
+    @JsonIgnore
     private Set<Role> roles = new HashSet<>();
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})

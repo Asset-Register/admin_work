@@ -1,8 +1,11 @@
 package com.project.ITAM.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -10,6 +13,8 @@ import java.util.Set;
 @Entity
 @Builder
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name= "ObjectEntity")
 public class ObjectEntity {
 
@@ -24,31 +29,22 @@ public class ObjectEntity {
     private String email;
 
     @ManyToMany(mappedBy = "allowedObjects")
+    @JsonIgnore
     private Set<Folder> accessibleFolders = new HashSet<>();
 
     @Column(name="createdBy")
+    @JsonIgnore
     private String createdBy;
 
     @Column(name="updatedBy")
+    @JsonIgnore
     private String updatedBy;
 
     @Column(name="createdTime")
+    @JsonIgnore
     private String createdTime;
 
     @Column(name="updatedTime")
+    @JsonIgnore
     private String updatedTime;
-
-    public ObjectEntity() {
-    }
-
-    public ObjectEntity(Long objectId, String objectName, String email, Set<Folder> accessibleFolders, String createdBy, String updatedBy, String createdTime, String updatedTime) {
-        this.objectId = objectId;
-        this.objectName = objectName;
-        this.email = email;
-        this.accessibleFolders = accessibleFolders;
-        this.createdBy = createdBy;
-        this.updatedBy = updatedBy;
-        this.createdTime = createdTime;
-        this.updatedTime = updatedTime;
-    }
 }
