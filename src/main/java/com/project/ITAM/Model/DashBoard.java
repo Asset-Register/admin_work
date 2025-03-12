@@ -46,7 +46,7 @@ public class DashBoard {
     private String dashBoardName;
 
     @Column(name="accessType")
-    private  FolderType accessType;
+    private AccessType accessType;
 
     @ManyToOne
     @JoinColumn(name = "objectId")

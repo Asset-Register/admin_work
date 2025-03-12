@@ -46,7 +46,6 @@ public class SSOConfigureServiceImpl implements SSOConfigureService{
         ssoConfig.setUpdatedBy("default");
         ssoConfig.setUpdatedTime(DateTimeUtil.currentDateTime());
 
-
         return ssoConfigRepo.save(ssoConfig);
     }
 

@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -48,14 +47,14 @@ public class FolderServiceimpl implements FolderService{
     public Folder createFolder(FolderRequest folderRequest, Long userId) {
         Folder folder = new Folder();
         folder.setFolderName(folderRequest.getFolderName());
-        folder.setFolderType(folderRequest.getFolderType());
+        folder.setAccessType(folderRequest.getAccessType());
         if (userId != null) {
             Users users = userRepo.findById(userId)
                     .orElseThrow(() -> new NotFoundException("userId not found"));
             folder.setUser(users);
         }
 
-        if (folderRequest.getFolderType() == FolderType.Restricted) {
+        if (folderRequest.getAccessType() == AccessType.Restricted) {
             if(!CollectionUtils.isEmpty(folderRequest.getUserIds())) {
                 Set<Users>    allowedUsers = userRepo.findAllById(folderRequest.getUserIds()).stream().collect(Collectors.toSet());
                 folder.setAllowedUsers(allowedUsers);
@@ -90,23 +89,23 @@ public class FolderServiceimpl implements FolderService{
             folder.setParentFolder(parent_folder);
         }
 
-        if(!StringUtils.isEmpty(folderRequest.getFolderType().toString())) {
-            folder.setFolderType(folderRequest.getFolderType());
+        if(!StringUtils.isEmpty(folderRequest.getAccessType().toString())) {
+            folder.setAccessType(folderRequest.getAccessType());
         }
 
-        if(folder.getFolderType()== FolderType.Restricted && !CollectionUtils.isEmpty(folderRequest.getUserIds())) {
+        if(folder.getAccessType()== AccessType.Restricted && !CollectionUtils.isEmpty(folderRequest.getUserIds())) {
             // Fetch users from the database
             Set<Users> users = userRepo.findAllById(folderRequest.getUserIds()).stream().collect(Collectors.toSet());
             // Update allowed users
             folder.setAllowedUsers(users);
         }
-        if(folder.getFolderType()== FolderType.Restricted && !CollectionUtils.isEmpty(folderRequest.getGroupIds())) {
+        if(folder.getAccessType()== AccessType.Restricted && !CollectionUtils.isEmpty(folderRequest.getGroupIds())) {
             // Fetch groups from the database
             Set<Groups> groups = groupRepo.findAllById(folderRequest.getGroupIds()).stream().collect(Collectors.toSet());
             // Update allowed groups
             folder.setAllowedGroups(groups);
         }
-        if(folder.getFolderType()== FolderType.Restricted && !CollectionUtils.isEmpty(folderRequest.getObjectIds())) {
+        if(folder.getAccessType()== AccessType.Restricted && !CollectionUtils.isEmpty(folderRequest.getObjectIds())) {
             // Fetch objects from the database
             Set<ObjectEntity> objects = objectRepo.findAllById(folderRequest.getObjectIds()).stream().collect(Collectors.toSet());
             // Update allowed objects
@@ -152,7 +151,7 @@ public class FolderServiceimpl implements FolderService{
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
 
-        return new FolderDTO(folder.getId(), folder.getFolderName(), childDTOs,folder.getUser().getUserId(),folder.getFolderType());
+        return new FolderDTO(folder.getId(), folder.getFolderName(), childDTOs,folder.getUser().getUserId(),folder.getAccessType());
     }
 
     @Transactional
