@@ -1,5 +1,6 @@
 package com.project.ITAM.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,6 +23,7 @@ public class JobSchedule {
 
     private String updatedBy;
 
+    @JsonIgnore
     private String cronexpression;
 
     private String updatedSTP;
@@ -38,10 +40,13 @@ public class JobSchedule {
 
     private String ACTableName;
 
+    @JsonIgnore
     private int numberOfJobs;
 
+    @JsonIgnore
     private String jsonData;
 
+    @JsonIgnore
     private byte[] googleCloudFile;
 
     private String dataConsole;
