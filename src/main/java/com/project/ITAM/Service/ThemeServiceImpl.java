@@ -47,7 +47,7 @@ public class ThemeServiceImpl implements ThemeService {
     public Theme updateTheme(ThemeRequest themeRequest, Long themeId) {
         Theme theme = themeRepo.findById(themeId)
                 .orElseThrow(() -> new NotFoundException(themeId + " not found"));
-        if(!StringUtils.isEmpty(themeRequest.getIsCustom())) {
+        if(themeRequest.getIsCustom()!=null) {
             theme.setIsCustom(themeRequest.getIsCustom());
         }
         if(!StringUtils.isEmpty(themeRequest.getSelectedColor())) {

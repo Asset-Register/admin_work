@@ -1,5 +1,5 @@
 package com.project.ITAM.Model;
 
-public enum FolderType {
+public enum AccessType {
     Public, Private, Restricted
 }

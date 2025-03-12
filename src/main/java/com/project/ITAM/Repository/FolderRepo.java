@@ -16,9 +16,9 @@ public interface FolderRepo extends JpaRepository<Folder,Long> {
 
     @Query("SELECT f FROM Folder f " +
             "LEFT JOIN f.allowedUsers u " +
-            "WHERE (f.folderType = 'PUBLIC' " +
+            "WHERE (f.accessType = 'PUBLIC' " +
             "   OR f.user.id = :userId " +
-            "   OR (f.folderType = 'RESTRICTED' AND u.id = :userId)) " +
+            "   OR (f.accessType = 'RESTRICTED' AND u.id = :userId)) " +
             "AND f.parentFolder IS NULL")
     List<Folder> findAccessibleFolders(@Param("userId") Long userId);
 
@@ -32,10 +32,10 @@ public interface FolderRepo extends JpaRepository<Folder,Long> {
     WHERE 
         (u.userId = :userId
         OR f.user_id = :userId
-        OR f.folderType = 'PUBLIC'
-        OR (f.folderType = 'RESTRICTED' AND fu.user_id IS NOT NULL)
-        OR (f.folderType = 'RESTRICTED' AND fg.group_id IS NOT NULL)
-        OR (f.folderType = 'RESTRICTED' AND fo.object_id IS NOT NULL))
+        OR f.accessType = 'PUBLIC'
+        OR (f.accessType = 'RESTRICTED' AND fu.user_id IS NOT NULL)
+        OR (f.accessType = 'RESTRICTED' AND fg.group_id IS NOT NULL)
+        OR (f.accessType = 'RESTRICTED' AND fo.object_id IS NOT NULL))
         AND f.parent_id IS NULL
     """, nativeQuery = true)
     List<Folder> findAccessFolders(@Param("userId") Long userId);
@@ -50,9 +50,9 @@ public interface FolderRepo extends JpaRepository<Folder,Long> {
     WHERE
     u.userId = 3  -- User must be the logged-in user
     OR f.user_id = 3  -- Condition 1: User is the owner
-    OR f.folderType = 'PUBLIC'  -- Condition 2: Folder is public
-    OR (f.folderType = 'RESTRICTED' AND fu.user_id IS NOT NULL)  -- Condition 3: User is explicitly granted access
-    OR (f.folderType = 'RESTRICTED' AND fg.group_id IS NOT NULL);  -- Condition 4: User belongs to a group with access*/
+    OR f.accessType = 'PUBLIC'  -- Condition 2: Folder is public
+    OR (f.accessType = 'RESTRICTED' AND fu.user_id IS NOT NULL)  -- Condition 3: User is explicitly granted access
+    OR (f.accessType = 'RESTRICTED' AND fg.group_id IS NOT NULL);  -- Condition 4: User belongs to a group with access*/
 
 
 

@@ -12,10 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.net.URI;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -63,7 +59,7 @@ public class DashBoardServiceimpl implements  DashBoardService{
         }
         Set<Users> allowedUsers = new HashSet<>();
         Set<Groups> allowedGroups = new HashSet<>();
-        if (dashBoardRequest.getFolderType() == FolderType.Restricted) {
+        if (dashBoardRequest.getFolderType() == AccessType.Restricted) {
             if (!CollectionUtils.isEmpty(dashBoardRequest.getUserIds())) {
                 allowedUsers = userRepo.findAllById(dashBoardRequest.getUserIds()).stream().collect(Collectors.toSet());
             }
@@ -138,13 +134,13 @@ public class DashBoardServiceimpl implements  DashBoardService{
             Optional<ObjectEntity> objectEntity =objectRepo.findById(dashBoardRequest.getObjectId());
             objectEntity.ifPresent(dashBoard::setObject);
         }
-        if(dashBoard.getAccessType()== FolderType.Restricted && !CollectionUtils.isEmpty(dashBoardRequest.getUserIds())) {
+        if(dashBoard.getAccessType()== AccessType.Restricted && !CollectionUtils.isEmpty(dashBoardRequest.getUserIds())) {
             // Fetch users from the database
             Set<Users> users = new HashSet<>(userRepo.findAllById(dashBoardRequest.getUserIds()));
             // Update allowed users
             dashBoard.setUsers(users);
         }
-        if(dashBoard.getAccessType()== FolderType.Restricted && !CollectionUtils.isEmpty(dashBoardRequest.getGroupIds())) {
+        if(dashBoard.getAccessType()== AccessType.Restricted && !CollectionUtils.isEmpty(dashBoardRequest.getGroupIds())) {
             // Fetch groups from the database
             Set<Groups> groups = new HashSet<>(groupRepo.findAllById(dashBoardRequest.getGroupIds()));
             // Update allowed groups

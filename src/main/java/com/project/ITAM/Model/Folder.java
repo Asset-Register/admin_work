@@ -31,7 +31,7 @@ public class Folder {
 
     @Enumerated(EnumType.STRING)
     @Column(name= "folderType")
-    private FolderType folderType;// "private" or "public" or "Restricted"
+    private AccessType accessType;// "private" or "public" or "Restricted"
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)

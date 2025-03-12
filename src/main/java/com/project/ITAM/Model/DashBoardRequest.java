@@ -15,7 +15,7 @@ public class DashBoardRequest {
 
     private Long objectId;
 
-    private FolderType folderType;
+    private AccessType folderType;
 
     private String description;
 

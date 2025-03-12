@@ -1,15 +1,22 @@
 package com.project.ITAM.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Builder
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "savedViews")
 public class SavedView {
     
@@ -45,19 +52,28 @@ public class SavedView {
     @Column(name="updatedTime")
     private String updatedTime;
 
-    public SavedView() {
-    }
+    @Column(name="accessType")
+    private AccessType accessType;
 
-    public SavedView(Long id, String viewName, String jobName, String dataSource, Folder folder, String filters, String createdBy, String updatedBy, String createdTime, String updatedTime) {
-        this.id = id;
-        this.viewName = viewName;
-        this.jobName = jobName;
-        this.dataSource = dataSource;
-        this.folder = folder;
-        this.filters = filters;
-        this.createdBy = createdBy;
-        this.updatedBy = updatedBy;
-        this.createdTime = createdTime;
-        this.updatedTime = updatedTime;
-    }
+    @ManyToOne
+    @JoinColumn(name = "objectId")
+    private ObjectEntity object;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "saveView_users",
+            joinColumns = @JoinColumn(name = "saveView_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    @JsonIgnore
+    private Set<Users> users;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "saveView_group",
+            joinColumns = @JoinColumn(name = "saveView_id"),
+            inverseJoinColumns = @JoinColumn(name = "group_id")
+    )
+    @JsonIgnore
+    private Set<Groups> groups = new HashSet<>();
 }
