@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface SSOConfigureService {
 
-public SsoConfig createSSOConfiguration(SSOConfigurationRequest ssoConfigurationRequest);
+public SsoConfig createSSOConfiguration(SSOConfigurationRequest ssoConfigurationRequest) throws Exception;
 
 public SsoConfig updateSSOConfiguration(Long ssoId,SSOConfigurationRequest ssoConfigurationRequest);
 
