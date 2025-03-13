@@ -25,7 +25,7 @@ public class SSOController {
      * @return
      */
     @PostMapping("/configure")
-    public ResponseEntity<SsoConfig> configurenewSSO(@RequestBody SSOConfigurationRequest ssoConfigurationRequest) {
+    public ResponseEntity<SsoConfig> configurenewSSO(@RequestBody SSOConfigurationRequest ssoConfigurationRequest) throws Exception {
         return ResponseEntity.ok(ssoConfigureService.createSSOConfiguration(ssoConfigurationRequest));
     }
 
