@@ -43,4 +43,7 @@ public class SmtpConfig {
     @Column(name="provider")
     private String provider;
 
+    @Column(name="whiteListedDomain")
+    private String whiteListedDomain;
+
 }

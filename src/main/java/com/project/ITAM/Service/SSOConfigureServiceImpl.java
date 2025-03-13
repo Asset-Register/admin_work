@@ -80,4 +80,9 @@ public class SSOConfigureServiceImpl implements SSOConfigureService{
         return ssoConfigRepo.findById(ssoId)
                 .orElseThrow(() -> new NotFoundException(ssoId + " not found"));
     }
+
+    @Override
+    public Optional<SsoConfig> getSSOConfigByProviderNameAndEnabled(String provider) {
+        return ssoConfigRepo.findByProviderAndEnabled(provider);
+    }
 }
