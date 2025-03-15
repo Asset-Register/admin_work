@@ -32,5 +32,7 @@ public class SSOConfigurationRequest {
 
     private String jwkSetUri;
 
+    private String issuerUri;
+
 }
 

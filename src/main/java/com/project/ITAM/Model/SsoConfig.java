@@ -52,4 +52,7 @@ public class SsoConfig {
     @Column(name="jwkSetUri")
     private String jwkSetUri;
 
+    @Column(name="issuerUri")
+    private String issuerUri;
+
 }
