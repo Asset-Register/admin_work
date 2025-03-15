@@ -1,5 +1,6 @@
 package com.project.ITAM.Model;
 
+import jakarta.persistence.Column;
 import lombok.Builder;
 import lombok.Data;
 
@@ -28,6 +29,8 @@ public class SSOConfigurationRequest {
     private boolean isEnable;
 
     private String userInfoUri;
+
+    private String jwkSetUri;
 
 }
 
