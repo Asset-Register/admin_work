@@ -2,6 +2,7 @@ package com.project.ITAM.Model;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.NonNull;
 
 import java.util.List;
 
@@ -9,11 +10,15 @@ import java.util.List;
 @Builder
 public class SavedViewRequest {
 
+    @NonNull
     private String viewName;
 
     private String jobName;
 
     private String dataSource;
+
+    @NonNull
+    private String tableName;
 
     private Long folderId;
 

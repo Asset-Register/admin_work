@@ -75,6 +75,7 @@ public class SavedViewServiceImpl implements SavedViewService{
         return saveViewRepo.save(SavedView.builder().viewName(savedViewRequest.getViewName()).createdBy("default")
                         .groups(allowedGroups).users(allowedUsers).object(objectEntity).jobName(savedViewRequest.getJobName())
                         .dataSource(savedViewRequest.getDataSource()).accessType(savedViewRequest.getAccessType())
+                        .tableName(savedViewRequest.getTableName())
                 .createdTime(formattedDate).filters(jsonString).folder(folder).build());
     }
 
@@ -88,7 +89,7 @@ public class SavedViewServiceImpl implements SavedViewService{
         SavedView savedView = saveViewRepo.findById(viewId).orElseThrow(()->new NotFoundException("saved View id not exist"));
         FilterRequest filterRequest= new ObjectMapper().readValue(savedView.getFilters(),FilterRequest.class);
         return SavedViewRequest.builder().filters(filterRequest).viewName(savedView.getViewName())
-                .dataSource(savedView.getDataSource()).accessType(savedView.getAccessType())
+                .dataSource(savedView.getDataSource()).accessType(savedView.getAccessType()).tableName(savedView.getTableName())
                 .folderId(savedView.getId()).build();
     }
 
@@ -102,6 +103,9 @@ public class SavedViewServiceImpl implements SavedViewService{
         SavedView view = saveViewRepo.findById(id).orElseThrow(()->new NotFoundException("saved View id not exist"));
         if(!StringUtils.isEmpty(savedViewRequest.getViewName())) {
             view.setViewName(savedViewRequest.getViewName());
+        }
+        if(!StringUtils.isEmpty(savedViewRequest.getTableName())) {
+            view.setTableName(savedViewRequest.getTableName());
         }
 
         if(!ObjectUtils.isEmpty(savedViewRequest.getFilters())) {
