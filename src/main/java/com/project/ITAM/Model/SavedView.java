@@ -33,6 +33,9 @@ public class SavedView {
     @Column(name="dataSource")
     private String dataSource;
 
+    @Column(name="tableName;")
+    private String tableName;
+
     @ManyToOne
     @JoinColumn(name = "folder_id", nullable = false)
     private Folder folder;

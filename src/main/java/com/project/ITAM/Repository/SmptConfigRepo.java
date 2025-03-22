@@ -1,6 +1,6 @@
 package com.project.ITAM.Repository;
 
-import com.project.ITAM.Model.SsoConfig;
+import com.project.ITAM.Model.SmtpConfig;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -9,9 +9,8 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 @EnableJpaRepositories
-public interface SSOConfigRepo extends JpaRepository<SsoConfig,Long> {
+public interface SmptConfigRepo extends JpaRepository<SmtpConfig,Long> {
 
-    @Query(value = "SELECT * FROM sso_config WHERE providerName = :providerName AND enabled = 'true'", nativeQuery = true)
-    Optional<SsoConfig> findByProviderAndEnabled(@Param("providerName") String providerName);
-
+    @Query(value = "SELECT * FROM SmtpConfig WHERE provider = :provider", nativeQuery = true)
+    Optional<SmtpConfig> findByProvider(@Param("provider") String provider);
 }

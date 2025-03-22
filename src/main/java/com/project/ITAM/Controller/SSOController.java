@@ -9,6 +9,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/sso")
@@ -25,7 +26,7 @@ public class SSOController {
      * @return
      */
     @PostMapping("/configure")
-    public ResponseEntity<SsoConfig> configurenewSSO(@RequestBody SSOConfigurationRequest ssoConfigurationRequest) {
+    public ResponseEntity<SsoConfig> configurenewSSO(@RequestBody SSOConfigurationRequest ssoConfigurationRequest) throws Exception {
         return ResponseEntity.ok(ssoConfigureService.createSSOConfiguration(ssoConfigurationRequest));
     }
 
@@ -51,7 +52,7 @@ public class SSOController {
         return "SSO deleted";
     }
 
-    /** get ALll SSO configuration
+    /** get ALL SSO configuration
      *
      * @return
      */
@@ -68,5 +69,15 @@ public class SSOController {
     public ResponseEntity<SsoConfig> getSSOConfigurationbyId(@PathVariable("ssoId") Long ssoId){
         return  ResponseEntity.ok(ssoConfigureService.getSSOConfigById(ssoId));
     }
+
+    /** get  SSO configuration by provider
+     *
+     * @return
+     */
+    @GetMapping("/{provider}/get")
+    public ResponseEntity<Optional<SsoConfig>> getSSOConfigurationbyProvider(@PathVariable("provider") String provider){
+        return  ResponseEntity.ok(ssoConfigureService.getSSOConfigByProviderNameAndEnabled(provider));
+    }
+
 
 }

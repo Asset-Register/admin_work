@@ -1,13 +1,17 @@
 package com.project.ITAM.Model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "sso_config")
 @Builder
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class SsoConfig {
     
     @Id
@@ -45,24 +49,10 @@ public class SsoConfig {
     @Column(name="updatedTime")
     private String updatedTime;
 
-    public SsoConfig() {
-    }
+    @Column(name="jwkSetUri")
+    private String jwkSetUri;
 
-    public SsoConfig(Long id, String ssoConfigurationName, String providerName, String clientId, String clientSecret, String redirectUri, String authorizationUri, String tokenUri, String userInfoUri, String scope, boolean enabled, String createdBy, String updatedBy, String createdTime, String updatedTime) {
-        this.id = id;
-        this.ssoConfigurationName = ssoConfigurationName;
-        this.providerName = providerName;
-        this.clientId = clientId;
-        this.clientSecret = clientSecret;
-        this.redirectUri = redirectUri;
-        this.authorizationUri = authorizationUri;
-        this.tokenUri = tokenUri;
-        this.userInfoUri = userInfoUri;
-        this.scope = scope;
-        this.enabled = enabled;
-        this.createdBy = createdBy;
-        this.updatedBy = updatedBy;
-        this.createdTime = createdTime;
-        this.updatedTime = updatedTime;
-    }
+    @Column(name="issuerUri")
+    private String issuerUri;
+
 }
