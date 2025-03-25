@@ -1,5 +1,6 @@
 package com.project.ITAM.Model;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
@@ -10,14 +11,14 @@ import java.util.List;
 @Builder
 public class SavedViewRequest {
 
-    @NonNull
+    @NotNull(message = "viewName is mandatory")
     private String viewName;
 
     private String jobName;
 
     private String dataSource;
 
-    @NonNull
+    @NotNull(message = "tableName is mandatory")
     private String tableName;
 
     private Long folderId;
