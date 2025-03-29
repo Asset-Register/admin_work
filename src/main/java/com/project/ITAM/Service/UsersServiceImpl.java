@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -64,12 +65,13 @@ public class UsersServiceImpl implements UsersService{
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         String hashedPassword = encoder.encode(usersRequest.getPassword()); // Encrypt password
         System.out.println("Hashed Password: " + hashedPassword);
+        String authenticatedUsername = SecurityContextHolder.getContext().getAuthentication().getName();
 
         return userRepo.save(Users.builder().email(usersRequest.getEmail())
                 .disabled(usersRequest.getDisabled()).authentication(usersRequest.getAuthentication())
                 .firstName(usersRequest.getFirstName()).groups(groups).roles(role).objects(objectEntity)
                 .lastName(usersRequest.getLastName()).middleName(usersRequest.getMiddleName()).password(hashedPassword)
-                .createdBy("default").createdTime(formattedDate).build());
+                .createdBy(authenticatedUsername).createdTime(formattedDate).build());
     }
 
     @Override
