@@ -1,6 +1,7 @@
 package com.project.ITAM.helper;
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.function.Consumer;
 
@@ -18,6 +19,10 @@ public class ExtractJsonUtil {
                 setter.accept(value);
             }
         }
+    }
+
+    public static String getUserdetails(){
+        return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 
 }
