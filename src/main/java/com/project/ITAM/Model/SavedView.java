@@ -33,7 +33,7 @@ public class SavedView {
     @Column(name="dataSource")
     private String dataSource;
 
-    @Column(name="tableName;")
+    @Column(name="tableName")
     private String tableName;
 
     @ManyToOne
