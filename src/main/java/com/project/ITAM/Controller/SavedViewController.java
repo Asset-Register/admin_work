@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.project.ITAM.Model.SavedView;
 import com.project.ITAM.Model.SavedViewRequest;
 import com.project.ITAM.Service.SavedViewService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -26,7 +27,7 @@ public class SavedViewController {
      * @return
      */
     @PostMapping("/saved")
-    public ResponseEntity<SavedView> saveView(@RequestBody SavedViewRequest savedViewRequest) throws JsonProcessingException {
+    public ResponseEntity<SavedView> saveView(@Valid @RequestBody SavedViewRequest savedViewRequest) throws JsonProcessingException {
         return ResponseEntity.ok(savedViewService.saveView(savedViewRequest));
     }
 
