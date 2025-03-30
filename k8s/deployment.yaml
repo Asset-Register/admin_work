@@ -16,7 +16,10 @@ spec:
     spec:
       containers:
         - name: adminservertestcontainer
-          image: itamexpertsregistry.azurecr.io/adminservertest:v2
+          image: itamexpertsregistry.azurecr.io/adminservertest:v3
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8090
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "test"
