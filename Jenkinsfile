@@ -17,7 +17,7 @@ tools {
     stages {
         stage('Clone Repository') {
             steps {
-                git credentialsId: '3185006e-b5c6-4e1e-8bff-0e457e03c3aa', branch: 'main', url: "${REPO_URL}"
+                git credentialsId: '3185006e-b5c6-4e1e-8bff-0e457e03c3aa', branch: 'security', url: "${REPO_URL}"
             }
         }
 
