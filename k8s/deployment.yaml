@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: adminservertest-deploy
+  labels:
+    app: adminservertest
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: adminservertest
+  template:
+    metadata:
+      labels:
+        app: adminservertest
+    spec:
+      containers:
+        - name: adminservertestcontainer
+          image: itamexpertsregistry.azurecr.io/adminservertest:v2
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8090
