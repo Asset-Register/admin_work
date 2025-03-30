@@ -8,7 +8,7 @@ tools {
 
     environment {
         REPO_URL = 'https://github.com/Asset-Register/admin_work.git'
-        IMAGE_NAME = 'adminserver'
+        IMAGE_NAME = 'adminservertest'
         DOCKER_REGISTRY = 'localhost:5000' // Use 'localhost' if local
         CONTAINER_PORT = '8082'
         CONTAINER_NAME = "adminserver-${env.BUILD_ID}"
