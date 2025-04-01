@@ -190,10 +190,10 @@ public class DashBoardServiceimpl implements  DashBoardService {
                                    .getColumnValues(tableName, columnNames);
                        } catch (FeignException.NotFound ex) {
                            logger.warn("tablename {} not found.", tableName);
-                           throw new NotFoundException("viewid not found");
+                     //      throw new NotFoundException("viewid not found");
                        } catch (FeignException ex) {
                            logger.error("Feign client error: {}", ex.getMessage());
-                           throw new NotFoundException("Error while fetching table " + ex.getMessage());
+                     //      throw new NotFoundException("Error while fetching table " + ex.getMessage());
                        }
                        Map<Map<String, Object>, Long> groupedRecords = columnNamesWithValues.stream()
                                .collect(Collectors.groupingBy(
