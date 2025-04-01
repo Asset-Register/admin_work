@@ -4,6 +4,7 @@ import com.project.ITAM.Exception.NotFoundException;
 import com.project.ITAM.Model.*;
 import com.project.ITAM.Repository.*;
 import com.project.ITAM.client.ITAMClient;
+import feign.FeignException;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -183,9 +184,17 @@ public class DashBoardServiceimpl implements  DashBoardService {
                        // .collect(Collectors.joining(","));
                        //  String encodedColumns = URLDecoder.decode(columnNames, StandardCharsets.UTF_8);
                        //   URI uri = URI.create(URLDecoder.decode(finalUrl, StandardCharsets.UTF_8));
-                       List<Map<String, Object>> columnNamesWithValues = itamClient
-                               .getColumnValues(tableName, columnNames);
-
+                       List<Map<String, Object>> columnNamesWithValues = new ArrayList<>();
+                       try {
+                           columnNamesWithValues = itamClient
+                                   .getColumnValues(tableName, columnNames);
+                       } catch (FeignException.NotFound ex) {
+                           logger.warn("tablename {} not found.", tableName);
+                           throw new NotFoundException("viewid not found");
+                       } catch (FeignException ex) {
+                           logger.error("Feign client error: {}", ex.getMessage());
+                           throw new NotFoundException("Error while fetching table " + ex.getMessage());
+                       }
                        Map<Map<String, Object>, Long> groupedRecords = columnNamesWithValues.stream()
                                .collect(Collectors.groupingBy(
                                        map -> new HashMap<>(map),  // Ensures a proper key instance

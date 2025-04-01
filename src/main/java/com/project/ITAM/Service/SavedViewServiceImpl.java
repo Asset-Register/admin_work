@@ -6,6 +6,7 @@ import com.project.ITAM.Exception.NotFoundException;
 import com.project.ITAM.Model.*;
 import com.project.ITAM.Repository.*;
 import com.project.ITAM.client.ITAMClient;
+import feign.FeignException;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -58,7 +59,19 @@ public class SavedViewServiceImpl implements SavedViewService{
         String jsonString = mapper.writeValueAsString(savedViewRequest.getFilters());
 
         ObjectEntity objectEntity = new ObjectEntity();
-        JobSchedule jobSchedule = itamClient.viewJobs(savedViewRequest.getJobName()).orElseThrow(()-> new NotFoundException("job not found"));
+
+        JobSchedule jobSchedule = new JobSchedule();
+
+        try {
+          jobSchedule=  itamClient.viewJobs(savedViewRequest.getJobName()).orElseThrow(()-> new NotFoundException("job not found"));
+        } catch (FeignException.NotFound ex) {
+            logger.warn("jobName {} not found.", savedViewRequest.getJobName());
+            throw new NotFoundException("jobName not found");
+        } catch (FeignException ex) {
+            logger.error("Feign client error: {}", ex.getMessage());
+            throw new NotFoundException("Error while fetching table " + ex.getMessage());
+        }
+
             objectEntity = objectRepo.findById(jobSchedule.getObject()).orElseThrow(() -> new NotFoundException("object not found"));
 
         Set<Users> allowedUsers = new HashSet<>();
