@@ -19,7 +19,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class DashBoardServiceimpl implements  DashBoardService{
+public class DashBoardServiceimpl implements  DashBoardService {
     @Autowired
     private DashBoardRepo dashBoardRepo;
 
@@ -36,13 +36,14 @@ public class DashBoardServiceimpl implements  DashBoardService{
     private GroupRepo groupRepo;
 
     @Autowired
-            private ITAMClient itamClient;
+    private ITAMClient itamClient;
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
     LocalDateTime updateddate = LocalDateTime.now(ZoneId.systemDefault());
-    String formattedDate = updateddate.format(DateTimeFormatter. ofPattern("yyyy-MM-dd HH:mm:ss"));
+    String formattedDate = updateddate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
-    /** update dashBoard
+    /**
+     * update dashBoard
      *
      * @param dashBoardRequest
      * @return
@@ -50,11 +51,11 @@ public class DashBoardServiceimpl implements  DashBoardService{
     @Override
     public DashBoard uploadDashBoard(DashBoardRequest dashBoardRequest) {
         Folder folder = new Folder();
-        if(dashBoardRequest.getFolderId()!=null) {
-             folder = folderRepo.findById(dashBoardRequest.getFolderId()).orElseThrow(() -> new NotFoundException("Folder not found"));
+        if (dashBoardRequest.getFolderId() != null) {
+            folder = folderRepo.findById(dashBoardRequest.getFolderId()).orElseThrow(() -> new NotFoundException("Folder not found"));
         }
         ObjectEntity objectEntity = new ObjectEntity();
-        if(dashBoardRequest.getObjectId()!=null) {
+        if (dashBoardRequest.getObjectId() != null) {
             objectEntity = objectRepo.findById(dashBoardRequest.getObjectId()).orElseThrow(() -> new NotFoundException("object not found"));
         }
         Set<Users> allowedUsers = new HashSet<>();
@@ -69,13 +70,14 @@ public class DashBoardServiceimpl implements  DashBoardService{
         }
         return dashBoardRepo.save(DashBoard.builder().dashBoardName(dashBoardRequest.getDashboardName())
                 .createdBy("dafault").createdTime(formattedDate).users(allowedUsers).groups(allowedGroups)
-                        .accessType(dashBoardRequest.getFolderType()).chartType(dashBoardRequest.getChartType())
-                        .tableNames(dashBoardRequest.getTableName())
-                        .columnNames(dashBoardRequest.getColumnNames()).description(dashBoardRequest.getDescription())
+                .accessType(dashBoardRequest.getFolderType()).chartType(dashBoardRequest.getChartType())
+                .tableNames(dashBoardRequest.getTableName())
+                .columnNames(dashBoardRequest.getColumnNames()).description(dashBoardRequest.getDescription())
                 .folder(folder).object(objectEntity).build());
     }
 
-    /** get dashboard in folder
+    /**
+     * get dashboard in folder
      *
      * @param folderId
      * @return
@@ -90,7 +92,8 @@ public class DashBoardServiceimpl implements  DashBoardService{
         return dashBoardRepo.findByObjectId(objectId);
     }
 
-    /** get ALl dashBoard
+    /**
+     * get ALl dashBoard
      *
      * @return
      */
@@ -99,7 +102,8 @@ public class DashBoardServiceimpl implements  DashBoardService{
         return dashBoardRepo.findAll();
     }
 
-    /** update DashBoard
+    /**
+     * update DashBoard
      *
      * @param id
      * @param dashBoardRequest
@@ -107,52 +111,53 @@ public class DashBoardServiceimpl implements  DashBoardService{
      */
     @Override
     public DashBoard updatedashBoard(Long id, DashBoardRequest dashBoardRequest) {
-        DashBoard dashBoard = dashBoardRepo.findById(id).orElseThrow(()->new NotFoundException("dashBoard id not exist"));
-        if(!StringUtils.isEmpty(dashBoardRequest.getDashboardName())) {
+        DashBoard dashBoard = dashBoardRepo.findById(id).orElseThrow(() -> new NotFoundException("dashBoard id not exist"));
+        if (!StringUtils.isEmpty(dashBoardRequest.getDashboardName())) {
             dashBoard.setDashBoardName(dashBoardRequest.getDashboardName());
         }
-        if(!StringUtils.isEmpty(dashBoardRequest.getChartType())) {
+        if (!StringUtils.isEmpty(dashBoardRequest.getChartType())) {
             dashBoard.setChartType(dashBoardRequest.getChartType());
         }
-        if(!StringUtils.isEmpty(dashBoardRequest.getDescription())) {
+        if (!StringUtils.isEmpty(dashBoardRequest.getDescription())) {
             dashBoard.setDescription(dashBoardRequest.getDescription());
         }
-        if(!ObjectUtils.isEmpty(dashBoardRequest.getFolderType())) {
+        if (!ObjectUtils.isEmpty(dashBoardRequest.getFolderType())) {
             dashBoard.setAccessType(dashBoardRequest.getFolderType());
         }
-        if(!CollectionUtils.isEmpty(dashBoardRequest.getColumnNames())) {
+        if (!CollectionUtils.isEmpty(dashBoardRequest.getColumnNames())) {
             dashBoard.setColumnNames(dashBoardRequest.getColumnNames());
         }
-        if(!CollectionUtils.isEmpty(dashBoardRequest.getTableName())) {
-           dashBoard.setTableNames(dashBoardRequest.getTableName());
+        if (!CollectionUtils.isEmpty(dashBoardRequest.getTableName())) {
+            dashBoard.setTableNames(dashBoardRequest.getTableName());
         }
-        if(dashBoardRequest.getFolderId()!=null) {
-            Optional<Folder> folder =folderRepo.findById(dashBoardRequest.getFolderId());
+        if (dashBoardRequest.getFolderId() != null) {
+            Optional<Folder> folder = folderRepo.findById(dashBoardRequest.getFolderId());
             folder.ifPresent(dashBoard::setFolder);
         }
-        if(dashBoardRequest.getObjectId()!=null) {
-            Optional<ObjectEntity> objectEntity =objectRepo.findById(dashBoardRequest.getObjectId());
+        if (dashBoardRequest.getObjectId() != null) {
+            Optional<ObjectEntity> objectEntity = objectRepo.findById(dashBoardRequest.getObjectId());
             objectEntity.ifPresent(dashBoard::setObject);
         }
-        if(dashBoard.getAccessType()== AccessType.Restricted && !CollectionUtils.isEmpty(dashBoardRequest.getUserIds())) {
+        if (dashBoard.getAccessType() == AccessType.Restricted && !CollectionUtils.isEmpty(dashBoardRequest.getUserIds())) {
             // Fetch users from the database
             Set<Users> users = new HashSet<>(userRepo.findAllById(dashBoardRequest.getUserIds()));
             // Update allowed users
             dashBoard.setUsers(users);
         }
-        if(dashBoard.getAccessType()== AccessType.Restricted && !CollectionUtils.isEmpty(dashBoardRequest.getGroupIds())) {
+        if (dashBoard.getAccessType() == AccessType.Restricted && !CollectionUtils.isEmpty(dashBoardRequest.getGroupIds())) {
             // Fetch groups from the database
             Set<Groups> groups = new HashSet<>(groupRepo.findAllById(dashBoardRequest.getGroupIds()));
             // Update allowed groups
             dashBoard.setGroups(groups);
         }
 
-           dashBoard.setUpdatedBy("default");
+        dashBoard.setUpdatedBy("default");
         dashBoard.setUpdatedTime(formattedDate);
         return dashBoardRepo.save(dashBoard);
     }
 
-    /** Delete DashBoard
+    /**
+     * Delete DashBoard
      *
      * @param id
      */
@@ -165,31 +170,39 @@ public class DashBoardServiceimpl implements  DashBoardService{
     }
 
     @Override
-    public List<DashBoard> getSelectedColumnValueDashBoard(Long folderId){
-
-        List<DashBoard> dashBoards = dashBoardRepo.findByFolderId(folderId);
-        for (DashBoard dashBoard:dashBoards) {
-            for(String tableName: dashBoard.getTableNames()) {
-                List<String> columnNames = dashBoard.getColumnNames().entrySet().stream()
-                        .filter(entry-> entry.getKey().equalsIgnoreCase(tableName))
-                        .flatMap(entry-> entry.getValue().stream())
-                        .collect(Collectors.toList());
+    public List<DashBoard> getSelectedColumnValueDashBoard(Long folderId) {
+       if(folderRepo.existsById(folderId)) {
+           List<DashBoard> dashBoards = dashBoardRepo.findByFolderId(folderId);
+           if (!CollectionUtils.isEmpty(dashBoards)) {
+               for (DashBoard dashBoard : dashBoards) {
+                   for (String tableName : dashBoard.getTableNames()) {
+                       List<String> columnNames = dashBoard.getColumnNames().entrySet().stream()
+                               .filter(entry -> entry.getKey().equalsIgnoreCase(tableName))
+                               .flatMap(entry -> entry.getValue().stream())
+                               .collect(Collectors.toList());
                        // .collect(Collectors.joining(","));
-              //  String encodedColumns = URLDecoder.decode(columnNames, StandardCharsets.UTF_8);
-             //   URI uri = URI.create(URLDecoder.decode(finalUrl, StandardCharsets.UTF_8));
-                List<Map<String, Object>> columnNamesWithValues =  itamClient
-                        .getColumnValues(tableName,columnNames);
+                       //  String encodedColumns = URLDecoder.decode(columnNames, StandardCharsets.UTF_8);
+                       //   URI uri = URI.create(URLDecoder.decode(finalUrl, StandardCharsets.UTF_8));
+                       List<Map<String, Object>> columnNamesWithValues = itamClient
+                               .getColumnValues(tableName, columnNames);
 
-                Map<Map<String, Object>, Long> groupedRecords = columnNamesWithValues.stream()
-                        .collect(Collectors.groupingBy(
-                                map -> new HashMap<>(map),  // Ensures a proper key instance
-                                Collectors.counting()
-                        ));
-                dashBoard.setColumnNamesWithValuesANDCounting(groupedRecords);
-               // logger.info("dashBoard with uniqueColumns"+dashBoard);
-            }
-        }
-        logger.info("dashBoard with uniqueColumns"+dashBoards);
-        return dashBoards;
+                       Map<Map<String, Object>, Long> groupedRecords = columnNamesWithValues.stream()
+                               .collect(Collectors.groupingBy(
+                                       map -> new HashMap<>(map),  // Ensures a proper key instance
+                                       Collectors.counting()
+                               ));
+                       dashBoard.setColumnNamesWithValuesANDCounting(groupedRecords);
+                       // logger.info("dashBoard with uniqueColumns"+dashBoard);
+                   }
+               }
+               logger.info("dashBoard with uniqueColumns" + dashBoards);
+               return dashBoards;
+           } else {
+               new NotFoundException("dashboard not exist in folderId"+folderId);
+           }
+       }else{
+           new NotFoundException("folder id not exist");
+       }
+        return Collections.emptyList();
     }
 }
