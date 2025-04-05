@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: adminserver
+  labels:
+    app: adminserver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: adminserver
+  template:
+    metadata:
+      labels:
+        app: adminserver
+    spec:
+      containers:
+        - name: adminservercontainer
+          image: itamexpertsregistry.azurecr.io/adminserver:v46
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8005
