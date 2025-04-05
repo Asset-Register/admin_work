@@ -8,7 +8,7 @@ tools {
 
     environment {
         REPO_URL = 'https://github.com/Asset-Register/admin_work.git'
-        IMAGE_NAME = 'adminserver'
+        IMAGE_NAME = 'adminservertest'
         DOCKER_REGISTRY = 'localhost:5000' // Use 'localhost' if local
         CONTAINER_PORT = '8082'
         CONTAINER_NAME = "adminserver-${env.BUILD_ID}"
@@ -17,7 +17,7 @@ tools {
     stages {
         stage('Clone Repository') {
             steps {
-                git credentialsId: '3185006e-b5c6-4e1e-8bff-0e457e03c3aa', branch: 'main', url: "${REPO_URL}"
+                git credentialsId: '3185006e-b5c6-4e1e-8bff-0e457e03c3aa', branch: 'security', url: "${REPO_URL}"
             }
         }
 

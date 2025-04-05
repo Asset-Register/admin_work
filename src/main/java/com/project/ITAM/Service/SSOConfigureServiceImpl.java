@@ -28,7 +28,8 @@ public class SSOConfigureServiceImpl implements SSOConfigureService{
              encryptedClientSecret = EncryptionUtil.encrypt(ssoConfigurationRequest.getClientSecret());
         }
         return ssoConfigRepo.save(SsoConfig.builder().createdBy("default").createdTime(DateTimeUtil.currentDateTime())
-                        .ssoConfigurationName(ssoConfigurationRequest.getSsoConfigureName())
+                        .ssoConfigurationName(ssoConfigurationRequest.getSsoConfigureName()).issuerUri(ssoConfigurationRequest.getIssuerUri())
+                        .jwkSetUri(ssoConfigurationRequest.getJwkSetUri())
                 .scope(ssoConfigurationRequest.getScope()).authorizationUri(ssoConfigurationRequest.getAuthorizationUri())
                 .clientId(ssoConfigurationRequest.getClientId()).enabled(ssoConfigurationRequest.isEnable())
                 .providerName(ssoConfigurationRequest.getProviderName()).redirectUri(ssoConfigurationRequest.getRedirectUri())
@@ -56,6 +57,8 @@ public class SSOConfigureServiceImpl implements SSOConfigureService{
         updateIfNotEmpty(ssoConfigurationRequest.getProviderName(), ssoConfig::setProviderName);
         updateIfNotEmpty(ssoConfigurationRequest.getUserInfoUri(), ssoConfig::setUserInfoUri);
         updateIfNotEmpty(ssoConfigurationRequest.getAuthorizationUri(), ssoConfig::setAuthorizationUri);
+        updateIfNotEmpty(ssoConfigurationRequest.getIssuerUri(), ssoConfig::setIssuerUri);
+        updateIfNotEmpty(ssoConfigurationRequest.getJwkSetUri(), ssoConfig::setJwkSetUri);
 
         ssoConfig.setUpdatedBy("default");
         ssoConfig.setUpdatedTime(DateTimeUtil.currentDateTime());
