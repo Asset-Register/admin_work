@@ -6,6 +6,8 @@ import com.project.ITAM.Repository.FolderRepo;
 import com.project.ITAM.Repository.GroupRepo;
 import com.project.ITAM.Repository.ObjectRepo;
 import com.project.ITAM.Repository.UserRepo;
+import com.project.ITAM.helper.DateTimeUtil;
+import com.project.ITAM.helper.ExtractJsonUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,13 +35,11 @@ public class ObjectEntityServiceimpl implements ObjectEntityService{
     private FolderRepo folderRepo;
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
-    LocalDateTime updateddate = LocalDateTime.now(ZoneId.systemDefault());
-    String formattedDate = updateddate.format(DateTimeFormatter. ofPattern("yyyy-MM-dd HH:mm:ss"));
 
     @Override
     public ObjectEntity createObjectEntity(ObjectEntityRequest objectEntityRequest) {
         return objectRepo.save(ObjectEntity.builder().objectName(objectEntityRequest.getObjectName()).email(objectEntityRequest.getEmail())
-                .createdBy("default").createdTime(formattedDate).build());
+                .createdBy("default").createdTime(DateTimeUtil.currentDateTime()).build());
     }
 
     @Override
@@ -62,8 +62,8 @@ public class ObjectEntityServiceimpl implements ObjectEntityService{
         if(!StringUtils.isEmpty(objectEntityRequest.getObjectName())){
             objectEntity.setObjectName(objectEntityRequest.getObjectName());
         }
-        objectEntity.setUpdatedBy("default");
-        objectEntity.setUpdatedTime(formattedDate);
+        objectEntity.setUpdatedBy(ExtractJsonUtil.getUserdetails());
+        objectEntity.setUpdatedTime(DateTimeUtil.currentDateTime());
         return objectRepo.save(objectEntity);
     }
 

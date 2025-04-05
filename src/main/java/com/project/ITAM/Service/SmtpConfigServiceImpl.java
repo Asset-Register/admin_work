@@ -6,6 +6,7 @@ import com.project.ITAM.Model.SmtpConfigRequest;
 import com.project.ITAM.Repository.SmptConfigRepo;
 import com.project.ITAM.helper.DateTimeUtil;
 import com.project.ITAM.helper.EncryptionUtil;
+import com.project.ITAM.helper.ExtractJsonUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ public class SmtpConfigServiceImpl implements SmtpConfigService {
         if(!StringUtils.isEmpty(smtpConfigRequest.getPassword())){
              encryptedPassword = EncryptionUtil.encrypt(smtpConfigRequest.getPassword());
         }
-        return smptConfigRepo.save(SmtpConfig.builder().createdBy("default").createdTime(DateTimeUtil.currentDateTime())
+        return smptConfigRepo.save(SmtpConfig.builder().createdBy(ExtractJsonUtil.getUserdetails()).createdTime(DateTimeUtil.currentDateTime())
                         .port(smtpConfigRequest.getPort()).host(smtpConfigRequest.getHost()).encryptionType(smtpConfigRequest.getEncryptionType())
                 .username(smtpConfigRequest.getUsername()).fromEmail(smtpConfigRequest.getFromEmail()).password(encryptedPassword)
                         .build());
@@ -54,7 +55,7 @@ public class SmtpConfigServiceImpl implements SmtpConfigService {
         updateIfNotEmpty(smtpConfigRequest.getFromEmail(), smtpConfig::setFromEmail);
         updateIfNotEmpty(smtpConfigRequest.getEncryptionType(), smtpConfig::setEncryptionType);
 
-        smtpConfig.setUpdatedBy("default");
+        smtpConfig.setUpdatedBy(ExtractJsonUtil.getUserdetails());
         smtpConfig.setUpdatedTime(DateTimeUtil.currentDateTime());
 
         return smptConfigRepo.save(smtpConfig);

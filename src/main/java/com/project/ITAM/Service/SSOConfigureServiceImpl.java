@@ -6,6 +6,7 @@ import com.project.ITAM.Model.SsoConfig;
 import com.project.ITAM.Repository.SSOConfigRepo;
 import com.project.ITAM.helper.DateTimeUtil;
 import com.project.ITAM.helper.EncryptionUtil;
+import com.project.ITAM.helper.ExtractJsonUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ public class SSOConfigureServiceImpl implements SSOConfigureService{
         if(!StringUtils.isEmpty(ssoConfigurationRequest.getClientSecret())){
              encryptedClientSecret = EncryptionUtil.encrypt(ssoConfigurationRequest.getClientSecret());
         }
-        return ssoConfigRepo.save(SsoConfig.builder().createdBy("default").createdTime(DateTimeUtil.currentDateTime())
+        return ssoConfigRepo.save(SsoConfig.builder().createdBy(ExtractJsonUtil.getUserdetails()).createdTime(DateTimeUtil.currentDateTime())
                         .ssoConfigurationName(ssoConfigurationRequest.getSsoConfigureName()).issuerUri(ssoConfigurationRequest.getIssuerUri())
                         .jwkSetUri(ssoConfigurationRequest.getJwkSetUri())
                 .scope(ssoConfigurationRequest.getScope()).authorizationUri(ssoConfigurationRequest.getAuthorizationUri())
@@ -60,7 +61,7 @@ public class SSOConfigureServiceImpl implements SSOConfigureService{
         updateIfNotEmpty(ssoConfigurationRequest.getIssuerUri(), ssoConfig::setIssuerUri);
         updateIfNotEmpty(ssoConfigurationRequest.getJwkSetUri(), ssoConfig::setJwkSetUri);
 
-        ssoConfig.setUpdatedBy("default");
+        ssoConfig.setUpdatedBy(ExtractJsonUtil.getUserdetails());
         ssoConfig.setUpdatedTime(DateTimeUtil.currentDateTime());
 
         return ssoConfigRepo.save(ssoConfig);

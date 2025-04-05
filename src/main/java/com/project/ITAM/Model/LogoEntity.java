@@ -24,5 +24,16 @@ public class LogoEntity {
     @Lob
     @Column
     private byte[] image;
+    @Column(name="createdBy")
+    private String createdBy;
+
+    @Column(name="updatedBy")
+    private String updatedBy;
+
+    @Column(name="createdTime")
+    private String createdTime;
+
+    @Column(name="updatedTime")
+    private String updatedTime;
 
 }

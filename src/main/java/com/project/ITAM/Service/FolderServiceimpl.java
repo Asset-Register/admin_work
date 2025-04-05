@@ -3,17 +3,16 @@ package com.project.ITAM.Service;
 import com.project.ITAM.Exception.NotFoundException;
 import com.project.ITAM.Model.*;
 import com.project.ITAM.Repository.*;
+import com.project.ITAM.helper.DateTimeUtil;
+import com.project.ITAM.helper.ExtractJsonUtil;
 import jakarta.transaction.Transactional;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -40,8 +39,6 @@ public class FolderServiceimpl implements FolderService{
     private DashBoardRepo dashBoardRepo;
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
-    LocalDateTime updateddate = LocalDateTime.now(ZoneId.systemDefault());
-    String formattedDate = updateddate.format(DateTimeFormatter. ofPattern("yyyy-MM-dd HH:mm:ss"));
 
     @Override
     public Folder createFolder(FolderRequest folderRequest, Long userId) {
@@ -74,8 +71,8 @@ public class FolderServiceimpl implements FolderService{
                     .orElse(null);
             folder.setParentFolder(parentFolder);
         }
-            folder.setCreatedBy("default");
-        folder.setCreatedTime(formattedDate);
+            folder.setCreatedBy(ExtractJsonUtil.getUserdetails());
+        folder.setCreatedTime(DateTimeUtil.currentDateTime());
         return folderRepo.save(folder);
     }
 
@@ -115,8 +112,8 @@ public class FolderServiceimpl implements FolderService{
         if(!StringUtils.isEmpty(folderRequest.getFolderName())) {
            folder.setFolderName(folderRequest.getFolderName());
         }
-            folder.setUpdatedBy("default");
-        folder.setUpdatedTime(formattedDate);
+            folder.setUpdatedBy(ExtractJsonUtil.getUserdetails());
+        folder.setUpdatedTime(DateTimeUtil.currentDateTime());
         return folderRepo.save(folder);
     }
 

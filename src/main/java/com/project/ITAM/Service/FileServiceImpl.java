@@ -6,6 +6,8 @@ import com.project.ITAM.Model.FileEntityRequest;
 import com.project.ITAM.Model.Folder;
 import com.project.ITAM.Repository.FileRepo;
 import com.project.ITAM.Repository.FolderRepo;
+import com.project.ITAM.helper.DateTimeUtil;
+import com.project.ITAM.helper.ExtractJsonUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,8 +30,6 @@ public class FileServiceImpl implements FileService{
     private FolderRepo folderRepo;
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
-    LocalDateTime updateddate = LocalDateTime.now(ZoneId.systemDefault());
-    String formattedDate = updateddate.format(DateTimeFormatter. ofPattern("yyyy-MM-dd HH:mm:ss"));
 
     @Override
     public FileEntity uploadFile(FileEntityRequest fileEntityRequest) {
@@ -37,7 +37,7 @@ public class FileServiceImpl implements FileService{
         if(fileEntityRequest.getFolderId()!=null) {
              folder = folderRepo.findById(fileEntityRequest.getFolderId()).orElseThrow(() -> new NotFoundException("Folder not found"));
         }
-        return fileRepo.save(FileEntity.builder().createdBy("default").createdTime(formattedDate)
+        return fileRepo.save(FileEntity.builder().createdBy(ExtractJsonUtil.getUserdetails()).createdTime(DateTimeUtil.currentDateTime())
                 .fileName(fileEntityRequest.getFileName()).filePath(fileEntityRequest.getFilePath()).fileType(fileEntityRequest.getFileType()).folder(folder).build());
     }
 
@@ -66,8 +66,8 @@ public class FileServiceImpl implements FileService{
                 file.setFolder(folder.get());
             }
         }
-           file.setUpdatedBy("default");
-        file.setUpdatedTime(formattedDate);
+           file.setUpdatedBy(ExtractJsonUtil.getUserdetails());
+        file.setUpdatedTime(DateTimeUtil.currentDateTime());
         return fileRepo.save(file);
     }
 

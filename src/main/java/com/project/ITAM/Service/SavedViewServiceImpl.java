@@ -6,6 +6,8 @@ import com.project.ITAM.Exception.NotFoundException;
 import com.project.ITAM.Model.*;
 import com.project.ITAM.Repository.*;
 import com.project.ITAM.client.ITAMClient;
+import com.project.ITAM.helper.DateTimeUtil;
+import com.project.ITAM.helper.ExtractJsonUtil;
 import feign.FeignException;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -46,8 +48,6 @@ public class SavedViewServiceImpl implements SavedViewService{
             private ITAMClient itamClient;
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
-    LocalDateTime updateddate = LocalDateTime.now(ZoneId.systemDefault());
-    String formattedDate = updateddate.format(DateTimeFormatter. ofPattern("yyyy-MM-dd HH:mm:ss"));
      ObjectMapper mapper = new ObjectMapper();
 
     @Override
@@ -85,11 +85,11 @@ public class SavedViewServiceImpl implements SavedViewService{
             }
         }
 
-        return saveViewRepo.save(SavedView.builder().viewName(savedViewRequest.getViewName()).createdBy("default")
+        return saveViewRepo.save(SavedView.builder().viewName(savedViewRequest.getViewName()).createdBy(ExtractJsonUtil.getUserdetails())
                         .groups(allowedGroups).users(allowedUsers).object(objectEntity).jobName(savedViewRequest.getJobName())
                         .dataSource(savedViewRequest.getDataSource()).accessType(savedViewRequest.getAccessType())
                         .tableName(savedViewRequest.getTableName())
-                .createdTime(formattedDate).filters(jsonString).folder(folder).build());
+                .createdTime(DateTimeUtil.currentDateTime()).filters(jsonString).folder(folder).build());
     }
 
     @Override
@@ -163,8 +163,8 @@ public class SavedViewServiceImpl implements SavedViewService{
             view.setGroups(groups);
         }
 
-        view.setUpdatedBy("default");
-        view.setUpdatedTime(formattedDate);
+        view.setUpdatedBy(ExtractJsonUtil.getUserdetails());
+        view.setUpdatedTime(DateTimeUtil.currentDateTime());
         return saveViewRepo.save(view);
     }
 

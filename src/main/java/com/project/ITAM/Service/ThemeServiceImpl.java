@@ -5,6 +5,8 @@ import com.project.ITAM.Model.BgColor;
 import com.project.ITAM.Model.Theme;
 import com.project.ITAM.Model.ThemeRequest;
 import com.project.ITAM.Repository.ThemeRepo;
+import com.project.ITAM.helper.DateTimeUtil;
+import com.project.ITAM.helper.ExtractJsonUtil;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -24,20 +26,18 @@ public class ThemeServiceImpl implements ThemeService {
     private ThemeRepo themeRepo;
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
-    LocalDateTime updateddate = LocalDateTime.now(ZoneId.systemDefault());
-    String formattedDate = updateddate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
     @Override
     public Theme createTheme(ThemeRequest themeRequest) {
         if (themeRequest.getBgColor() != null) {
-            return themeRepo.save(Theme.builder().createdBy("default").createdTime(formattedDate)
+            return themeRepo.save(Theme.builder().createdBy(ExtractJsonUtil.getUserdetails()).createdTime(DateTimeUtil.currentDateTime())
                     .bgColor(BgColor.builder().backgroundColor(themeRequest.getBgColor().getBackgroundColor())
                             .textColor(themeRequest.getBgColor().getTextColor()).layoutTextColor(themeRequest.getBgColor().getLayoutTextColor())
                             .textBlack(themeRequest.getBgColor().getTextBlack()).textWhite(themeRequest.getBgColor().getTextWhite()).build())
                     .isCustom(themeRequest.getIsCustom())
                     .selectedShade(themeRequest.getSelectedShade()).selectedColor(themeRequest.getSelectedColor()).build());
         } else {
-            return themeRepo.save(Theme.builder().createdBy("default").createdTime(formattedDate)
+            return themeRepo.save(Theme.builder().createdBy(ExtractJsonUtil.getUserdetails()).createdTime(DateTimeUtil.currentDateTime())
                     .isCustom(themeRequest.getIsCustom())
                     .selectedShade(themeRequest.getSelectedShade()).selectedColor(themeRequest.getSelectedColor()).build());
         }
@@ -75,8 +75,8 @@ public class ThemeServiceImpl implements ThemeService {
             }
             theme.setBgColor(bgColor);
         }
-         theme.setUpdatedBy("default");
-        theme.setUpdatedTime(formattedDate);
+         theme.setUpdatedBy(ExtractJsonUtil.getUserdetails());
+        theme.setUpdatedTime(DateTimeUtil.currentDateTime());
         return themeRepo.save(theme);
     }
 

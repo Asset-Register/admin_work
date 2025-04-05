@@ -5,6 +5,7 @@ import com.project.ITAM.Model.*;
 import com.project.ITAM.Repository.PermissionRepo;
 import com.project.ITAM.Repository.RolesRepo;
 import com.project.ITAM.Repository.UserRepo;
+import com.project.ITAM.helper.DateTimeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +33,6 @@ public class RoleServiceImpl implements RoleService{
     private PermissionRepo permissionRepo;
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
-    LocalDateTime updateddate = LocalDateTime.now(ZoneId.systemDefault());
-    String formattedDate = updateddate.format(DateTimeFormatter. ofPattern("yyyy-MM-dd HH:mm:ss"));
 
 
     @Override
@@ -45,7 +44,7 @@ public class RoleServiceImpl implements RoleService{
                 throw new NotFoundException("permission Id not found");
             }
         }
-        return rolesRepo.save(Role.builder().createdBy("default").createdTime(formattedDate)
+        return rolesRepo.save(Role.builder().createdBy("ExtractJsonUtil.getUserdetails()").createdTime(DateTimeUtil.currentDateTime())
                 .permissions(permission).roleName(roleRequest.getRoleName()).disabled(roleRequest.getDisabled()).build());
     }
 
@@ -79,8 +78,8 @@ public class RoleServiceImpl implements RoleService{
         if(!StringUtils.isEmpty(roleRequest.getDisabled())) {
             role.setDisabled(roleRequest.getDisabled());
         }
-role.setUpdatedBy("default");
-        role.setUpdatedTime(formattedDate);
+role.setUpdatedBy("ExtractJsonUtil.getUserdetails()");
+        role.setUpdatedTime(DateTimeUtil.currentDateTime());
         return rolesRepo.save(role);
     }
 

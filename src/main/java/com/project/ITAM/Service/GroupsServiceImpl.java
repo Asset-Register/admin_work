@@ -3,6 +3,8 @@ package com.project.ITAM.Service;
 import com.project.ITAM.Exception.NotFoundException;
 import com.project.ITAM.Model.*;
 import com.project.ITAM.Repository.*;
+import com.project.ITAM.helper.DateTimeUtil;
+import com.project.ITAM.helper.ExtractJsonUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,8 +38,6 @@ public class GroupsServiceImpl implements GroupsService{
             private DashBoardRepo dashBoardRepo;
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
-    LocalDateTime updateddate = LocalDateTime.now(ZoneId.systemDefault());
-    String formattedDate = updateddate.format(DateTimeFormatter. ofPattern("yyyy-MM-dd HH:mm:ss"));
 
 
     @Override
@@ -51,7 +51,8 @@ public class GroupsServiceImpl implements GroupsService{
             }
         }
 
-        return groupRepo.save(Groups.builder().groupName(groupRequest.getGroupName()).createdBy("default").createdTime(formattedDate)
+        return groupRepo.save(Groups.builder().groupName(groupRequest.getGroupName()).createdBy(ExtractJsonUtil.getUserdetails())
+                .createdTime(DateTimeUtil.currentDateTime())
                 .authentication(groupRequest.getAuthentication())
                 .disabled(groupRequest.getDisabled()).email(groupRequest.getEmail()).objectEntities(objectEntity).build());
     }
@@ -94,8 +95,8 @@ public class GroupsServiceImpl implements GroupsService{
         if(!StringUtils.isEmpty(groupRequest.getDisabled())) {
             groups.setDisabled(groupRequest.getDisabled());
         }
-         groups.setUpdatedBy("default");
-        groups.setUpdatedTime(formattedDate);
+         groups.setUpdatedBy(ExtractJsonUtil.getUserdetails());
+        groups.setUpdatedTime(DateTimeUtil.currentDateTime());
         return groupRepo.save(groups);
     }
 

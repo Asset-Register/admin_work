@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("api/sso")
+@RequestMapping("api/data/sso")
 @CrossOrigin(origins = "http://localhost:5173")
 @Validated
 public class SSOController {

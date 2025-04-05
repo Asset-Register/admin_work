@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/objects")
+@RequestMapping("api/data/objects")
 @CrossOrigin
 @Validated
 public class ObjectEntityController {

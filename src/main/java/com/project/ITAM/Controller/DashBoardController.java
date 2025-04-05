@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/dashboard")
+@RequestMapping("api/data/dashboard")
 @CrossOrigin(origins = "http://localhost:5173")
 @Validated
 public class DashBoardController {

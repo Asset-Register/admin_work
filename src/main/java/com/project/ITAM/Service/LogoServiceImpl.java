@@ -4,6 +4,8 @@ import com.project.ITAM.Exception.NotFoundException;
 import com.project.ITAM.Model.LogoEntity;
 import com.project.ITAM.Model.LogoRequest;
 import com.project.ITAM.Repository.LogoRepo;
+import com.project.ITAM.helper.DateTimeUtil;
+import com.project.ITAM.helper.ExtractJsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -11,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.channels.MulticastChannel;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -22,7 +25,8 @@ public class LogoServiceImpl implements LogoService{
     @Override
     public LogoEntity createLogo(String name, MultipartFile file) throws IOException {
 
-        return logoRepo.save(LogoEntity.builder().name(name).image(file.getBytes()).build());
+        return logoRepo.save(LogoEntity.builder().name(name).image(file.getBytes()).createdBy(ExtractJsonUtil.getUserdetails())
+                .createdTime(DateTimeUtil.currentDateTime()).build());
     }
 
     @Override
@@ -47,6 +51,8 @@ public class LogoServiceImpl implements LogoService{
         if (file != null && !file.isEmpty()) {
             logoEntity.setImage(file.getBytes());
         }
+        logoEntity.setUpdatedBy(ExtractJsonUtil.getUserdetails());
+        logoEntity.setUpdatedTime(DateTimeUtil.currentDateTime());
         return logoRepo.save(logoEntity);
     }
 

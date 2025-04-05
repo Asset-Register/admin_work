@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/folder")
+@RequestMapping("/api/data/folder")
 @CrossOrigin
 @Validated
 public class FolderController {

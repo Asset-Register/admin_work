@@ -3,6 +3,7 @@ package com.project.ITAM.Service;
 import com.project.ITAM.Exception.NotFoundException;
 import com.project.ITAM.Model.*;
 import com.project.ITAM.Repository.*;
+import com.project.ITAM.helper.DateTimeUtil;
 import com.project.ITAM.helper.ExtractJsonUtil;
 import jakarta.transaction.Transactional;
 import org.apache.commons.lang3.StringUtils;
@@ -42,8 +43,6 @@ public class UsersServiceImpl implements UsersService{
             private DashBoardRepo dashBoardRepo;
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
-    LocalDateTime updateddate = LocalDateTime.now(ZoneId.systemDefault());
-    String formattedDate = updateddate.format(DateTimeFormatter. ofPattern("yyyy-MM-dd HH:mm:ss"));
 
     @Override
     public Users createUser(UsersRequest usersRequest) {
@@ -72,7 +71,7 @@ public class UsersServiceImpl implements UsersService{
                 .disabled(usersRequest.getDisabled()).authentication(usersRequest.getAuthentication())
                 .firstName(usersRequest.getFirstName()).groups(groups).roles(role).objects(objectEntity)
                 .lastName(usersRequest.getLastName()).middleName(usersRequest.getMiddleName()).password(hashedPassword)
-                .createdBy(ExtractJsonUtil.getUserdetails()).createdTime(formattedDate).build());
+                .createdBy(ExtractJsonUtil.getUserdetails()).createdTime(DateTimeUtil.currentDateTime()).build());
     }
 
     @Override
@@ -122,8 +121,8 @@ public class UsersServiceImpl implements UsersService{
         if(!StringUtils.isEmpty(usersRequest.getDisabled())) {
             users.setDisabled(usersRequest.getDisabled());
         }
-        users.setUpdatedTime(formattedDate);
-        users.setUpdatedBy("default");
+        users.setUpdatedTime(DateTimeUtil.currentDateTime());
+        users.setUpdatedBy(ExtractJsonUtil.getUserdetails());
         return userRepo.save(users);
     }
 
@@ -146,8 +145,8 @@ public class UsersServiceImpl implements UsersService{
         }else{
            throw  new NotFoundException("enter valid role id");
         }
-        users.setUpdatedTime(formattedDate);
-        users.setUpdatedBy("default");
+        users.setUpdatedTime(DateTimeUtil.currentDateTime());
+        users.setUpdatedBy(ExtractJsonUtil.getUserdetails());
         return users;
     }
 

@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/permission")
+@RequestMapping("/api/data/permission")
 @CrossOrigin
 @Validated
 public class PermissionController {

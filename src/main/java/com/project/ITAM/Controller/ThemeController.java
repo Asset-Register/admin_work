@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/theme")
+@RequestMapping("/api/data/theme")
 @Validated
 @CrossOrigin
 public class ThemeController {

@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("api/smpt")
+@RequestMapping("api/data/smpt")
 @CrossOrigin(origins = "http://localhost:5173")
 @Validated
 public class SMPTController {

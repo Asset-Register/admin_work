@@ -4,6 +4,8 @@ import com.project.ITAM.Exception.NotFoundException;
 import com.project.ITAM.Model.*;
 import com.project.ITAM.Repository.*;
 import com.project.ITAM.client.ITAMClient;
+import com.project.ITAM.helper.DateTimeUtil;
+import com.project.ITAM.helper.ExtractJsonUtil;
 import feign.FeignException;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -40,8 +42,6 @@ public class DashBoardServiceimpl implements  DashBoardService {
     private ITAMClient itamClient;
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
-    LocalDateTime updateddate = LocalDateTime.now(ZoneId.systemDefault());
-    String formattedDate = updateddate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
     /**
      * update dashBoard
@@ -70,7 +70,7 @@ public class DashBoardServiceimpl implements  DashBoardService {
             }
         }
         return dashBoardRepo.save(DashBoard.builder().dashBoardName(dashBoardRequest.getDashboardName())
-                .createdBy("dafault").createdTime(formattedDate).users(allowedUsers).groups(allowedGroups)
+                .createdBy(ExtractJsonUtil.getUserdetails()).createdTime(DateTimeUtil.currentDateTime()).users(allowedUsers).groups(allowedGroups)
                 .accessType(dashBoardRequest.getFolderType()).chartType(dashBoardRequest.getChartType())
                 .tableNames(dashBoardRequest.getTableName())
                 .columnNames(dashBoardRequest.getColumnNames()).description(dashBoardRequest.getDescription())
@@ -152,8 +152,8 @@ public class DashBoardServiceimpl implements  DashBoardService {
             dashBoard.setGroups(groups);
         }
 
-        dashBoard.setUpdatedBy("default");
-        dashBoard.setUpdatedTime(formattedDate);
+        dashBoard.setUpdatedBy(ExtractJsonUtil.getUserdetails());
+        dashBoard.setUpdatedTime(DateTimeUtil.currentDateTime());
         return dashBoardRepo.save(dashBoard);
     }
 

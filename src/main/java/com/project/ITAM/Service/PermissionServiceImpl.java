@@ -6,6 +6,8 @@ import com.project.ITAM.Model.PermissionRequest;
 import com.project.ITAM.Model.Role;
 import com.project.ITAM.Repository.PermissionRepo;
 import com.project.ITAM.Repository.RolesRepo;
+import com.project.ITAM.helper.DateTimeUtil;
+import com.project.ITAM.helper.ExtractJsonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +30,12 @@ public class PermissionServiceImpl implements PermissionService{
     private PermissionRepo permissionRepo;
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
-    LocalDateTime updateddate = LocalDateTime.now(ZoneId.systemDefault());
-    String formattedDate = updateddate.format(DateTimeFormatter. ofPattern("yyyy-MM-dd HH:mm:ss"));
 
 
     @Override
     public Permission createPermission(PermissionRequest permissionRequest) {
-        return permissionRepo.save(Permission.builder().createdBy("default").createdTime(formattedDate)
+        return permissionRepo.save(Permission.builder().createdBy(ExtractJsonUtil.getUserdetails())
+                .createdTime(DateTimeUtil.currentDateTime())
                 .permissionName(permissionRequest.getPermissionName()).type(permissionRequest.getType()).build());
     }
 
@@ -60,8 +61,8 @@ public class PermissionServiceImpl implements PermissionService{
         if(!StringUtils.isEmpty(permissionRequest.getType())) {
             permission.setPermissionName(permissionRequest.getType());
         }
-        permission.setUpdatedBy("default");
-        permission.setUpdatedTime(formattedDate);
+        permission.setUpdatedBy(ExtractJsonUtil.getUserdetails());
+        permission.setUpdatedTime(DateTimeUtil.currentDateTime());
         return permissionRepo.save(permission);
     }
 

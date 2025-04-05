@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/logo")
+@RequestMapping("/api/data/logo")
 @Validated
 @CrossOrigin
 public class LogoController {
