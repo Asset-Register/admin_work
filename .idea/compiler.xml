@@ -7,13 +7,22 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="eurekaserver" />
+        <module name="itamgateway" />
+        <module name="scheduler" />
         <module name="admin_access" />
+        <module name="adminwork" />
+        <module name="itam" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="admin_access" options="-parameters" />
+      <module name="adminwork" options="-parameters" />
+      <module name="eurekaserver" options="-parameters" />
+      <module name="itam" options="-parameters" />
+      <module name="itamgateway" options="-parameters" />
+      <module name="scheduler" options="-parameters" />
     </option>
   </component>
 </project>

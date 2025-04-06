@@ -1,2 +1,0 @@
-ALTER TABLE Users
-ADD CreatedBY VARCHAR(255);

@@ -5,6 +5,10 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/../EurekaServerProject/pom.xml" />
+        <option value="$PROJECT_DIR$/../ITAM/pom.xml" />
+        <option value="$PROJECT_DIR$/../ItamAPIGateWay/pom.xml" />
+        <option value="$PROJECT_DIR$/../Scheduler/pom.xml" />
       </list>
     </option>
   </component>
