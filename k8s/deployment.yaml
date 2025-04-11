@@ -16,7 +16,10 @@ spec:
     spec:
       containers:
         - name: adminservercontainer
-          image: adminservertest:v1
+          image: adminservertest:v2
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8082
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "dev"
