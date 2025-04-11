@@ -44,14 +44,17 @@ public class Users {
     @JsonIgnore
     private Set<Folder> accessibleFolders = new HashSet<>();
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE,CascadeType.REFRESH}, fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_groups",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "group_id")
     )
     @JsonIgnore
-    private Set<Groups> groups = new HashSet<>();
+    private Set<Groups> groupMapped = new HashSet<>();
+
+    @Transient
+    private Set<String> groupName;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     @JoinTable(

@@ -59,6 +59,9 @@ public class DashBoard {
     @Column(name="chartType")
     private String chartType;
 
+    @Column(name="sourceType")
+    private String sourceType;
+
     @Column(columnDefinition = "TEXT") // Stores the List<String> as JSON string
     @JsonIgnore
     private String tableNamesJson;

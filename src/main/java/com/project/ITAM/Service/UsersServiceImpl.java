@@ -69,15 +69,23 @@ public class UsersServiceImpl implements UsersService{
 
         return userRepo.save(Users.builder().email(usersRequest.getEmail())
                 .disabled(usersRequest.getDisabled()).authentication(usersRequest.getAuthentication())
-                .firstName(usersRequest.getFirstName()).groups(groups).roles(role).objects(objectEntity)
+                .firstName(usersRequest.getFirstName()).groupMapped(groups).roles(role).objects(objectEntity)
                 .lastName(usersRequest.getLastName()).middleName(usersRequest.getMiddleName()).password(hashedPassword)
                 .createdBy(ExtractJsonUtil.getUserdetails()).createdTime(DateTimeUtil.currentDateTime()).build());
     }
 
+    @Transactional
     @Override
     public Users getUsersById(Long userId) {
         Users users = userRepo.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User not found"));
+
+        Users users1 = userRepo.findByIdWithGroups(userId).orElseThrow(() -> new NotFoundException("User not found"));
+        // Extract group names into a Set<String>
+        Set<String> groupNames = users.getGroupMapped().stream()
+                .map(Groups::getGroupName) // get the groupName from each Group
+                .collect(Collectors.toSet()); // collect into a Set
+        users.setGroupName(groupNames);
         return users;
     }
 
@@ -89,7 +97,7 @@ public class UsersServiceImpl implements UsersService{
             // Fetch groups from the database
             Set<Groups> groups = new HashSet<>(groupRepo.findAllById(usersRequest.getGroupId()));
             // Update allowed groups
-            users.setGroups(groups);
+            users.setGroupMapped(groups);
         }
         if(!CollectionUtils.isEmpty(usersRequest.getRoleId())) {
             // Fetch roles from the database
@@ -183,7 +191,7 @@ public class UsersServiceImpl implements UsersService{
             Users user = userOpt.get();
             Groups group = groupOpt.get();
 
-            user.getGroups().add(group);
+            user.getGroupMapped().add(group);
              return userRepo.save(user);
         } else {
             throw new NotFoundException("User or Group not found");
@@ -192,7 +200,16 @@ public class UsersServiceImpl implements UsersService{
 
     @Override
     public List<Users> getAllUsers() {
-        return userRepo.findAll();
+        List<Users> users = userRepo.findAll();
+        for(Users users1:users){
+            // Extract group names into a Set<String>
+            Set<String> groupNames = users1.getGroupMapped().stream()
+                    .map(Groups::getGroupName) // get the groupName from each Group
+                    .collect(Collectors.toSet()); // collect into a Set
+            users1.setGroupName(groupNames);
+        }
+
+        return users;
     }
 
 }

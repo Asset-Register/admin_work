@@ -25,6 +25,8 @@ public class DashBoardRequest {
 
     private List<String> tableName;
 
+    private String sourceType;
+
     private List<Long> userIds; // Only required for RESTRICTED folders
     private List<Long> groupIds; // Only required for RESTRICTED folders
 }

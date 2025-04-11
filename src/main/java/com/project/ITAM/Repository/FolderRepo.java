@@ -7,12 +7,18 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 @EnableJpaRepositories
 public interface FolderRepo extends JpaRepository<Folder,Long> {
 
     // Find all root folders (parentFolder is NULL)
     List<Folder> findByParentFolderIsNull();
+
+    @Query(value = "SELECT * FROM folders WHERE id = :folderid AND sourceType = :sourcetype", nativeQuery = true)
+    Optional<Folder> findByFolderidAndSourcetype(@Param("folderid") Long folderid, @Param("sourcetype") String sourcetype);
+
+    boolean existsByFolderNameAndSourceType(String folderName, String sourceType);
 
     /** Particular user can access the all Public folders and Only the owner and allowed users
      *
@@ -59,12 +65,12 @@ LEFT JOIN folder_group_access fg ON f.id = fg.folder_id
 LEFT JOIN folder_object_access fo ON f.id = fo.folder_id
 WHERE 
     (
-        f.accessType = 'PUBLIC'
+        f.folderType = 'Public'
         OR f.user_id = :userId
-        OR (f.accessType = 'RESTRICTED' AND (
+        OR (f.folderType = 'Restricted' AND (
             fu.user_id = :userId
-            OR fg.group_id = (SELECT group_id FROM users WHERE user_id = :userId)
-            OR fo.object_id = (SELECT object_id FROM users WHERE user_id = :userId)
+            OR fg.group_id = (SELECT group_id FROM users u WHERE u.userId = :userId)
+            OR fo.object_id = (SELECT object_id FROM users u WHERE u.userId = :userId)
         ))
     )
     AND f.parent_id IS NULL

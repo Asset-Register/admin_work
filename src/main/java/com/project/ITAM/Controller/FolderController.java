@@ -48,10 +48,10 @@ public class FolderController {
      *
      * @return
      */
-    @GetMapping("/getAll")
-    public ResponseEntity<List<FolderDTO>> getAllFolders() {
-        logger.info("Number of folders:" + folderService.getAllFolders().size());
-        return ResponseEntity.ok(folderService.getAllFolders());
+    @GetMapping("/getAll/{sourceType}")
+    public ResponseEntity<List<FolderDTO>> getAllFolders(@PathVariable("sourceType") String sourceType) {
+        logger.info("Number of folders:" + folderService.getAllFolders(sourceType).size());
+        return ResponseEntity.ok(folderService.getAllFolders(sourceType));
     }
 
     /** update folder based on folderId
@@ -70,10 +70,10 @@ public class FolderController {
      *
      * @return
      */
-    @GetMapping("/getfolder/root")
-    public ResponseEntity<List<FolderDTO>> getRootFolders() {
-        logger.info("Root Folders:" + folderService.getParentFolders());
-        return ResponseEntity.ok(folderService.getParentFolders());
+    @GetMapping("/getfolder/{sourceType}/root")
+    public ResponseEntity<List<FolderDTO>> getRootFolders(@PathVariable("sourceType") String sourceType) {
+        logger.info("Root Folders:" + folderService.getParentFolders(sourceType));
+        return ResponseEntity.ok(folderService.getParentFolders(sourceType));
     }
 
     /** get Folder details by folder id
@@ -81,9 +81,9 @@ public class FolderController {
      * @param folderId
      * @return
      */
-    @GetMapping("/{folderId}")
-    public ResponseEntity<FolderDTO> getFolderById(@PathVariable Long folderId) {
-        FolderDTO folder = folderService.getFolderById(folderId);
+    @GetMapping("/{folderId}/folder/{sourceType}")
+    public ResponseEntity<FolderDTO> getFolderById(@PathVariable Long folderId,@PathVariable("sourceType") String sourceType) {
+        FolderDTO folder = folderService.getFolderById(folderId,sourceType);
         logger.info("Get Folder By Id:" + folder);
         return ResponseEntity.ok(folder);
     }
@@ -93,9 +93,9 @@ public class FolderController {
       * @param userId
      * @return
      */
-    @GetMapping("/{userId}/user")
-    public ResponseEntity<List<FolderDTO>> getFolderByUserId(@PathVariable Long userId) {
-        List<FolderDTO> folder = folderService.getFolderByUserId(userId);
+    @GetMapping("/{userId}/user/{sourceType}")
+    public ResponseEntity<List<FolderDTO>> getFolderByUserId(@PathVariable Long userId,@PathVariable("sourceType") String sourceType) {
+        List<FolderDTO> folder = folderService.getFolderByUserId(userId,sourceType);
         logger.info("Get Folders By UserId:" + folder);
         return ResponseEntity.ok(folder);
     }
@@ -107,16 +107,16 @@ public class FolderController {
      * @param userId
      * @return
      */
-    @GetMapping("/{userId}/all")
-    public ResponseEntity<List<FolderDTO>> getAllUserIDFolders(@PathVariable Long userId) {
-        List<FolderDTO> folder = folderService.getFolderByUserIdANDGroupID(userId);
+    @GetMapping("/{userId}/all/{sourceType}")
+    public ResponseEntity<List<FolderDTO>> getAllUserIDFolders(@PathVariable Long userId,@PathVariable("sourceType") String sourceType) {
+        List<FolderDTO> folder = folderService.getFolderByUserIdANDGroupID(userId,sourceType);
         logger.info("Get ALL Folders Related to UserId:" + folder);
         return ResponseEntity.ok(folder);
     }
 
-    @DeleteMapping("/{folderId}/delete")
-    public String deleteByFolderId(@PathVariable Long folderId){
-        folderService.deleteByFolderId(folderId);
+    @DeleteMapping("/{folderId}/delete/{sourceType}")
+    public String deleteByFolderId(@PathVariable Long folderId,@PathVariable("sourceType") String sourceType) {
+        folderService.deleteByFolderId(folderId,sourceType);
         return "folder deleted";
     }
 

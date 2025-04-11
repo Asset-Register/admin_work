@@ -11,16 +11,16 @@ public interface FolderService {
 
     public Folder updateFolder(FolderRequest folder, Long UserId);
 
-    public FolderDTO getFolderById(Long folderId);
+    public FolderDTO getFolderById(Long folderId,String sourceType);
 
-    public List<FolderDTO> getAllFolders();
+    public List<FolderDTO> getAllFolders(String sourceType);
 
-    public List<FolderDTO> getParentFolders();
+    public List<FolderDTO> getParentFolders(String sourceType);
 
-    public List<FolderDTO> getFolderByUserId(Long folderId);
+    public List<FolderDTO> getFolderByUserId(Long folderId,String sourceType);
 
-    public List<FolderDTO> getFolderByUserIdANDGroupID(Long folderId);
+    public List<FolderDTO> getFolderByUserIdANDGroupID(Long folderId,String sourceType);
 
-    public void deleteByFolderId(Long folderId);
+    public void deleteByFolderId(Long folderId,String sourceType);
 
 }

@@ -65,6 +65,9 @@ public class Folder {
     @JsonIgnore // Prevent recursion when serializing
     private List<Folder> childFolders = new ArrayList<>();
 
+    @Column(name="sourceType")
+    private String sourceType;
+
     @Column(name="createdBy")
     private String createdBy;
 

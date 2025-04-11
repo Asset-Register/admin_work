@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -43,7 +44,12 @@ public class FolderServiceimpl implements FolderService{
     @Override
     public Folder createFolder(FolderRequest folderRequest, Long userId) {
         Folder folder = new Folder();
-        folder.setFolderName(folderRequest.getFolderName());
+      boolean check=  folderRepo.existsByFolderNameAndSourceType(folderRequest.getFolderName(),folderRequest.getSourceType().toString());
+      if(!check) {
+          folder.setFolderName(folderRequest.getFolderName());
+      }else{
+          throw new NotFoundException("FolderName already exist for sourceType "+folderRequest.getSourceType().toString());
+      }
         folder.setAccessType(folderRequest.getAccessType());
         if (userId != null) {
             Users users = userRepo.findById(userId)
@@ -53,15 +59,15 @@ public class FolderServiceimpl implements FolderService{
 
         if (folderRequest.getAccessType() == AccessType.Restricted) {
             if(!CollectionUtils.isEmpty(folderRequest.getUserIds())) {
-                Set<Users>    allowedUsers = userRepo.findAllById(folderRequest.getUserIds()).stream().collect(Collectors.toSet());
+                Set<Users>    allowedUsers = new HashSet<>(userRepo.findAllById(folderRequest.getUserIds()));
                 folder.setAllowedUsers(allowedUsers);
             }
             if(!CollectionUtils.isEmpty(folderRequest.getGroupIds())) {
-                Set<Groups>  allowedGroups = groupRepo.findAllById(folderRequest.getGroupIds()).stream().collect(Collectors.toSet());
+                Set<Groups>  allowedGroups = new HashSet<>(groupRepo.findAllById(folderRequest.getGroupIds()));
                 folder.setAllowedGroups(allowedGroups);
             }
             if(!CollectionUtils.isEmpty(folderRequest.getObjectIds())) {
-                Set<ObjectEntity> allowedObjects = objectRepo.findAllById(folderRequest.getObjectIds()).stream().collect(Collectors.toSet());
+                Set<ObjectEntity> allowedObjects = new HashSet<>(objectRepo.findAllById(folderRequest.getObjectIds()));
                 folder.setAllowedObjects(allowedObjects);
             }
         }
@@ -73,6 +79,7 @@ public class FolderServiceimpl implements FolderService{
         }
             folder.setCreatedBy(ExtractJsonUtil.getUserdetails());
         folder.setCreatedTime(DateTimeUtil.currentDateTime());
+        folder.setSourceType(folderRequest.getSourceType().toString());
         return folderRepo.save(folder);
     }
 
@@ -119,26 +126,28 @@ public class FolderServiceimpl implements FolderService{
 
     @Transactional
     @Override
-    public FolderDTO getFolderById(Long folderId) {
-        Folder folder = folderRepo.findById(folderId)
-                .orElseThrow(() ->  new NotFoundException( + folderId + " not found"));
+    public FolderDTO getFolderById(Long folderId,String sourceType) {
+        Folder folder = folderRepo.findByFolderidAndSourcetype(folderId,sourceType)
+                .orElseThrow(()-> new NotFoundException("folder Id not found given"+sourceType));
         return convertToDTO(folder);
     }
 
     @Transactional
     @Override
-    public List<FolderDTO> getAllFolders() {
+    public List<FolderDTO> getAllFolders(String sourceType) {
         List<Folder> folders = folderRepo.findAll();
-        return folders.stream()
+        List<Folder> folders1=  folders.stream().filter(folder-> folder.getSourceType().equalsIgnoreCase(sourceType)).toList();
+        return folders1.stream()
                 .map(this::convertToDTO) // Convert each Folder to FolderDTO
                 .collect(Collectors.toList());
     }
 
     @Transactional
     @Override
-    public List<FolderDTO> getParentFolders() {
+    public List<FolderDTO> getParentFolders(String sourceType) {
         List<Folder> folders = folderRepo.findByParentFolderIsNull();
-        return folders.stream()
+        List<Folder> folders1=  folders.stream().filter(folder-> folder.getSourceType().equalsIgnoreCase(sourceType)).toList();
+        return folders1.stream()
                 .map(this::convertToDTO) // Convert each Folder to FolderDTO
                 .collect(Collectors.toList());
     }
@@ -153,29 +162,32 @@ public class FolderServiceimpl implements FolderService{
 
     @Transactional
     @Override
-    public List<FolderDTO> getFolderByUserId(Long userId) {
+    public List<FolderDTO> getFolderByUserId(Long userId,String sourceType) {
         List<Folder> folders =  folderRepo.findAccessibleFolders(userId);
-        return folders.stream()
+        List<Folder> folders1=  folders.stream().filter(folder-> folder.getSourceType().equalsIgnoreCase(sourceType)).toList();
+        return folders1.stream()
                 .map(this::convertToDTO) // Convert each Folder to FolderDTO
                 .collect(Collectors.toList());
     }
 
     @Transactional
     @Override
-    public List<FolderDTO> getFolderByUserIdANDGroupID(Long userId) {
+    public List<FolderDTO> getFolderByUserIdANDGroupID(Long userId,String sourceType) {
         List<Folder> folders = folderRepo.findAccessFolders(userId);
-        return folders.stream()
+        List<Folder> folders1=  folders.stream().filter(folder-> folder.getSourceType().equalsIgnoreCase(sourceType)).toList();
+        return folders1.stream()
                 .map(this::convertToDTO) // Convert each Folder to FolderDTO
                 .collect(Collectors.toList());
     }
 
     @Transactional
     @Override
-    public void deleteByFolderId(Long folderId) {
+    public void deleteByFolderId(Long folderId,String sourceType) {
         if (!folderRepo.existsById(folderId)) {
             throw new NotFoundException("folder with ID " + folderId + " not found");
         }
-        Folder folder = folderRepo.findById(folderId).orElseThrow(()-> new NotFoundException("folder Id not found"));
+        Folder folder = folderRepo.findByFolderidAndSourcetype(folderId,sourceType)
+                .orElseThrow(()-> new NotFoundException("folder Id not found given"+sourceType));
            fileRepo.deleteByFolder(folder);
             dashBoardRepo.deleteByFolder(folder);
 

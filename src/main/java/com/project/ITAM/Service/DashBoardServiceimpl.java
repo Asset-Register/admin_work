@@ -69,6 +69,7 @@ public class DashBoardServiceimpl implements  DashBoardService {
                 allowedGroups = groupRepo.findAllById(dashBoardRequest.getGroupIds()).stream().collect(Collectors.toSet());
             }
         }
+
         return dashBoardRepo.save(DashBoard.builder().dashBoardName(dashBoardRequest.getDashboardName())
                 .createdBy(ExtractJsonUtil.getUserdetails()).createdTime(DateTimeUtil.currentDateTime()).users(allowedUsers).groups(allowedGroups)
                 .accessType(dashBoardRequest.getFolderType()).chartType(dashBoardRequest.getChartType())
