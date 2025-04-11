@@ -22,4 +22,6 @@ public interface DashBoardService {
     public void deleteDashBoard(Long id);
 
     public List<DashBoard> getSelectedColumnValueDashBoard(Long folderId);
+
+    public boolean checkdashBoardUniqueNameInSameObjectandFolder(Long folderId,Long ObjectId,String dashBoardName);
 }

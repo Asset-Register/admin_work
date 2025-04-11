@@ -21,7 +21,7 @@ public class Folder {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false,name="folderName")
+    @Column(nullable = false,name="folderName")
     private String folderName;
 
     @ManyToOne

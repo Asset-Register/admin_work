@@ -14,6 +14,11 @@ public interface FolderRepo extends JpaRepository<Folder,Long> {
     // Find all root folders (parentFolder is NULL)
     List<Folder> findByParentFolderIsNull();
 
+    /** Particular user can access the all Public folders and Only the owner and allowed users
+     *
+     * @param userId
+     * @return
+     */
     @Query("SELECT f FROM Folder f " +
             "LEFT JOIN f.allowedUsers u " +
             "WHERE (f.accessType = 'PUBLIC' " +
@@ -22,7 +27,7 @@ public interface FolderRepo extends JpaRepository<Folder,Long> {
             "AND f.parentFolder IS NULL")
     List<Folder> findAccessibleFolders(@Param("userId") Long userId);
 
-    @Query(value = """
+    /*@Query(value = """
     SELECT DISTINCT f.*
     FROM folders f
     LEFT JOIN folder_access fu ON f.id = fu.folder_id
@@ -37,7 +42,33 @@ public interface FolderRepo extends JpaRepository<Folder,Long> {
         OR (f.accessType = 'RESTRICTED' AND fg.group_id IS NOT NULL)
         OR (f.accessType = 'RESTRICTED' AND fo.object_id IS NOT NULL))
         AND f.parent_id IS NULL
-    """, nativeQuery = true)
+    """, nativeQuery = true)*/
+
+    /** public all allowed
+     * RESTRICTED :If user is in folder_access / folder_group_access / folder_object_access
+     * PRIVATE: Only if f.user_id = :userId (the owner)
+     *
+     * @param userId
+     * @return
+     */
+    @Query(value = """
+SELECT DISTINCT f.*
+FROM folders f
+LEFT JOIN folder_access fu ON f.id = fu.folder_id
+LEFT JOIN folder_group_access fg ON f.id = fg.folder_id
+LEFT JOIN folder_object_access fo ON f.id = fo.folder_id
+WHERE 
+    (
+        f.accessType = 'PUBLIC'
+        OR f.user_id = :userId
+        OR (f.accessType = 'RESTRICTED' AND (
+            fu.user_id = :userId
+            OR fg.group_id = (SELECT group_id FROM users WHERE user_id = :userId)
+            OR fo.object_id = (SELECT object_id FROM users WHERE user_id = :userId)
+        ))
+    )
+    AND f.parent_id IS NULL
+""", nativeQuery = true)
     List<Folder> findAccessFolders(@Param("userId") Long userId);
 
 

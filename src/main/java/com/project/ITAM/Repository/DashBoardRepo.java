@@ -18,4 +18,11 @@ public interface DashBoardRepo extends JpaRepository<DashBoard,Long> {
     List<DashBoard> findByObjectId(Long objectId);
 
     void deleteByFolder(Folder folder);
+
+    /*@Query(value="SELECT CASE WHEN COUNT(*) > 0 THEN true ELSE false END\n" +
+            "FROM DashBoard\n" +
+            "WHERE dashBoardName = :dashboardName\n" +
+            "AND objectId = :objectId\n" +
+            "AND folder_id = :folderId;",nativeQuery = true)*/
+    boolean existsByDashBoardNameAndObject_objectIdAndFolder_id(String dashBoardName, Long objectId, Long folderId);
 }

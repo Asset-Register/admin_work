@@ -170,6 +170,15 @@ public class DashBoardServiceimpl implements  DashBoardService {
         dashBoardRepo.deleteById(id);
     }
 
+    /**
+     * in particular folder get the dashboards
+     * Each dashboard get the columnNames from Table
+     * From itamClient api we get the value of columnNames selected  for particular table
+     * group the unique records key (columnname and value ) and value -> counting of unique values
+     *
+     * @param folderId
+     * @return
+     */
     @Override
     public List<DashBoard> getSelectedColumnValueDashBoard(Long folderId) {
        if(folderRepo.existsById(folderId)) {
@@ -195,6 +204,7 @@ public class DashBoardServiceimpl implements  DashBoardService {
                            logger.error("Feign client error: {}", ex.getMessage());
                      //      throw new NotFoundException("Error while fetching table " + ex.getMessage());
                        }
+                       // group the unique records key (columnname and value ) and value -> counting of unique values
                        Map<Map<String, Object>, Long> groupedRecords = columnNamesWithValues.stream()
                                .collect(Collectors.groupingBy(
                                        map -> new HashMap<>(map),  // Ensures a proper key instance
@@ -213,5 +223,10 @@ public class DashBoardServiceimpl implements  DashBoardService {
            new NotFoundException("folder id not exist");
        }
         return Collections.emptyList();
+    }
+
+    @Override
+    public boolean checkdashBoardUniqueNameInSameObjectandFolder(Long folderId, Long objectId, String dashBoardName) {
+        return dashBoardRepo.existsByDashBoardNameAndObject_objectIdAndFolder_id(dashBoardName,objectId,folderId);
     }
 }
