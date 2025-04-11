@@ -8,9 +8,9 @@ WORKDIR /app
 COPY target/adminwork-0.0.1-snapshot.jar app.jar
 
 # Expose the port your Spring Boot app runs on
-EXPOSE 8087
+EXPOSE 8082
 
 # Set the entry point to run your Spring Boot application
 ENTRYPOINT ["java", "-jar", "app.jar"]
 
-ENV SPRING_PROFILES_ACTIVE=test
+ENV SPRING_PROFILES_ACTIVE=dev

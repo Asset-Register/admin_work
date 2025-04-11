@@ -19,4 +19,4 @@ spec:
           image: adminservertest:v1
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 8005
+            - containerPort: 8082
