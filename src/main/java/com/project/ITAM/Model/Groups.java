@@ -1,5 +1,6 @@
 package com.project.ITAM.Model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -41,7 +42,8 @@ public class Groups {
     @ManyToMany(mappedBy = "allowedGroups",cascade = CascadeType.ALL)
     private Set<Folder> accessibleFolders = new HashSet<>();
 
-    @ManyToMany(mappedBy = "groupMapped")
+    @ManyToMany(mappedBy = "groupMapped",cascade = CascadeType.ALL)
+    @JsonBackReference
     private Set<Users> users = new HashSet<>();
 
     @Column(name="createdBy")

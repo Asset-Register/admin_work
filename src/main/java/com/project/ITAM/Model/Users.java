@@ -1,6 +1,7 @@
 package com.project.ITAM.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.*;
@@ -50,7 +51,7 @@ public class Users {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "group_id")
     )
-    @JsonIgnore
+    @JsonManagedReference
     private Set<Groups> groupMapped = new HashSet<>();
 
     @Transient

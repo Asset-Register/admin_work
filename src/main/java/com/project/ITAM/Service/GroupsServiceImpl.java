@@ -109,7 +109,7 @@ public class GroupsServiceImpl implements GroupsService{
                 .orElseThrow(() ->  new NotFoundException( + groupId + " not found"));
         // Remove the group from all users before deleting
         for (Users user : userRepo.findAll()) {
-            user.getGroups().remove(groups);
+            user.getGroupMapped().remove(groups);
         }
         userRepo.saveAll(userRepo.findAll());
 

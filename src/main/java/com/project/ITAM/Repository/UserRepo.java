@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface UserRepo extends JpaRepository<Users,Long> {
     Optional<Users> findByEmail(String email);
 
-    @Query("SELECT u FROM Users u LEFT JOIN FETCH u.groups WHERE u.userId = :userId")
+    @Query("SELECT u FROM Users u LEFT JOIN FETCH u.groupMapped WHERE u.userId = :userId")
     Optional<Users> findByIdWithGroups(@Param("userId") Long userId);
 
 
