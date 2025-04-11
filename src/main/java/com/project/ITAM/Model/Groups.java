@@ -42,7 +42,7 @@ public class Groups {
     @ManyToMany(mappedBy = "allowedGroups",cascade = CascadeType.ALL)
     private Set<Folder> accessibleFolders = new HashSet<>();
 
-    @ManyToMany(mappedBy = "groupMapped",cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "groupMapped",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JsonBackReference
     private Set<Users> users = new HashSet<>();
 
