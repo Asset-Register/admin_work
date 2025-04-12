@@ -31,7 +31,7 @@ public class Users {
     @Column(name="middleName")
     private String middleName;
 
-    @Column(name="email")
+    @Column(name = "email", unique = true)
     @Email(message = "Please provide a valid email address")
     private String email;
 
