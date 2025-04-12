@@ -67,11 +67,18 @@ public class UsersServiceImpl implements UsersService{
         System.out.println("Hashed Password: " + hashedPassword);
       //  String authenticatedUsername = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        return userRepo.save(Users.builder().email(usersRequest.getEmail())
+        Users user = Users.builder().email(usersRequest.getEmail())
                 .disabled(usersRequest.getDisabled()).authentication(usersRequest.getAuthentication())
                 .firstName(usersRequest.getFirstName()).groupMapped(groups).roles(role).objects(objectEntity)
                 .lastName(usersRequest.getLastName()).middleName(usersRequest.getMiddleName()).password(hashedPassword)
-                .createdBy(ExtractJsonUtil.getUserdetails()).createdTime(DateTimeUtil.currentDateTime()).build());
+                .createdBy(ExtractJsonUtil.getUserdetails()).createdTime(DateTimeUtil.currentDateTime()).build();
+
+        // optional but good
+        for (Groups group : groups) {
+            group.getUsers().add(user); // ADD user inside the group too
+        }
+
+        return userRepo.save(user);
     }
 
     @Transactional
@@ -158,6 +165,7 @@ public class UsersServiceImpl implements UsersService{
         return users;
     }
 
+    @Transactional
     @Override
     public void deleteUsersById(Long userId) {
         if (!userRepo.existsById(userId)) {
@@ -177,6 +185,12 @@ public class UsersServiceImpl implements UsersService{
             dashBoard.getUsers().remove(users);
         }
         dashBoardRepo.saveAll(dashBoardRepo.findAll());
+
+        // Important: Remove all role associations
+        users.getRoles().clear();
+        users.getGroupMapped().clear();
+        users.getObjects().clear();
+        userRepo.save(users);  // Update DB to clear the relations
 
          userRepo.delete(users);
     }
@@ -210,6 +224,11 @@ public class UsersServiceImpl implements UsersService{
         }
 
         return users;
+    }
+
+    @Override
+    public int countUsers() {
+        return userRepo.countUsers();
     }
 
 }

@@ -15,5 +15,8 @@ public interface UserRepo extends JpaRepository<Users,Long> {
     @Query("SELECT u FROM Users u LEFT JOIN FETCH u.groupMapped WHERE u.userId = :userId")
     Optional<Users> findByIdWithGroups(@Param("userId") Long userId);
 
+    @Query(value = "SELECT COUNT(*) FROM users",nativeQuery = true)
+    int countUsers();
+
 
 }

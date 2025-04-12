@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: adminservercontainer
-          image: adminserver:v6
+          image: adminserver:v7
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8082

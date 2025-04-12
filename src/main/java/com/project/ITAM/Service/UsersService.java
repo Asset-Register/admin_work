@@ -20,4 +20,6 @@ public interface UsersService {
 
     public List<Users> getAllUsers();
 
+    public int countUsers();
+
 }

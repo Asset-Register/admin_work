@@ -7,7 +7,7 @@ spec:
     app: adminserver    # This should match the label on your Pod
   ports:
     - protocol: TCP
-      port: 8084             # The port your application is exposed on internally
+      port: 8082             # The port your application is exposed on internally
       targetPort: 8082       # The port on the container
       nodePort: 30088     # The port on the node (external port)
   type: NodePort

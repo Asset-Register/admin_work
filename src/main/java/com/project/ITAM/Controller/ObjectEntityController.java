@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/data/objects")
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:5173")
 @Validated
 public class ObjectEntityController {
 
