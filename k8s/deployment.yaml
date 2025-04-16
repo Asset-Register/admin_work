@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: adminservercontainer
-          image: adminserver:v7
+          image: itamexpertsregistry.azurecr.io/adminserver:v46
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8082

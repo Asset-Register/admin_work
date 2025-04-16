@@ -18,6 +18,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="admin_access" options="-parameters" />
       <module name="adminwork" options="-parameters" />
       <module name="eurekaserver" options="-parameters" />
       <module name="itam" options="-parameters" />
