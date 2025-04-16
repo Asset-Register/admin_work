@@ -10,4 +10,4 @@ spec:
       port: 8082             # The port your application is exposed on internally
       targetPort: 8082       # The port on the container
       nodePort: 30088     # The port on the node (external port)
-  type: NodePort
+  type: LoadBalancer
