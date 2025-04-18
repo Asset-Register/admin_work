@@ -24,20 +24,19 @@ public class Folder {
     @Column(nullable = false,name="folderName")
     private String folderName;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
-    @JsonIgnore
     private Folder parentFolder; // Null if it's a root folder
 
     @Enumerated(EnumType.STRING)
     @Column(name= "folderType")
     private AccessType accessType;// "private" or "public" or "Restricted"
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private Users user;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JoinTable(
             name = "folder_access",
             joinColumns = @JoinColumn(name = "folder_id"),
@@ -45,7 +44,7 @@ public class Folder {
     )
     private Set<Users> allowedUsers;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JoinTable(
             name = "folder_group_access",
             joinColumns = @JoinColumn(name = "folder_id"),
@@ -53,7 +52,7 @@ public class Folder {
     )
     private Set<Groups> allowedGroups = new HashSet<>();
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JoinTable(
             name = "folder_object_access",
             joinColumns = @JoinColumn(name = "folder_id"),
@@ -61,8 +60,7 @@ public class Folder {
     )
     private Set<ObjectEntity> allowedObjects = new HashSet<>();
 
-    @OneToMany(mappedBy = "parentFolder", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonIgnore // Prevent recursion when serializing
+    @OneToMany(mappedBy = "parentFolder", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private List<Folder> childFolders = new ArrayList<>();
 
     @Column(name="sourceType")

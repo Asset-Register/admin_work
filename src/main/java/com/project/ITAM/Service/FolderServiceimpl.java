@@ -93,7 +93,7 @@ public class FolderServiceimpl implements FolderService{
             folder.setParentFolder(parent_folder);
         }
 
-        if(!StringUtils.isEmpty(folderRequest.getAccessType().toString())) {
+        if (folderRequest.getAccessType() != null && !folderRequest.getAccessType().toString().isEmpty()) {
             folder.setAccessType(folderRequest.getAccessType());
         }
 
@@ -105,13 +105,13 @@ public class FolderServiceimpl implements FolderService{
         }
         if(folder.getAccessType()== AccessType.Restricted && !CollectionUtils.isEmpty(folderRequest.getGroupIds())) {
             // Fetch groups from the database
-            Set<Groups> groups = groupRepo.findAllById(folderRequest.getGroupIds()).stream().collect(Collectors.toSet());
+            Set<Groups> groups = new HashSet<>(groupRepo.findAllById(folderRequest.getGroupIds()));
             // Update allowed groups
             folder.setAllowedGroups(groups);
         }
         if(folder.getAccessType()== AccessType.Restricted && !CollectionUtils.isEmpty(folderRequest.getObjectIds())) {
             // Fetch objects from the database
-            Set<ObjectEntity> objects = objectRepo.findAllById(folderRequest.getObjectIds()).stream().collect(Collectors.toSet());
+            Set<ObjectEntity> objects = new HashSet<>(objectRepo.findAllById(folderRequest.getObjectIds()));
             // Update allowed objects
             folder.setAllowedObjects(objects);
         }
@@ -173,7 +173,7 @@ public class FolderServiceimpl implements FolderService{
     @Transactional
     @Override
     public List<FolderDTO> getFolderByUserIdANDGroupID(Long userId,String sourceType) {
-        List<Folder> folders = folderRepo.findAccessFolders(userId);
+         List<Folder> folders = folderRepo.findAccessFolders(userId);
         List<Folder> folders1=  folders.stream().filter(folder-> folder.getSourceType().equalsIgnoreCase(sourceType)).toList();
         return folders1.stream()
                 .map(this::convertToDTO) // Convert each Folder to FolderDTO

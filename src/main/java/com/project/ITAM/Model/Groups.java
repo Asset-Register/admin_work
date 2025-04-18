@@ -1,6 +1,7 @@
 package com.project.ITAM.Model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,7 +26,7 @@ public class Groups {
     @Column(name="email")
     private String email;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JoinTable(
             name = "groups_object",
             joinColumns = @JoinColumn(name = "group_id"),
@@ -39,11 +40,10 @@ public class Groups {
     @Column(name="authentication")
     private String authentication;
 
-    @ManyToMany(mappedBy = "allowedGroups",cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "allowedGroups",cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private Set<Folder> accessibleFolders = new HashSet<>();
 
-    @ManyToMany(mappedBy = "groupMapped",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-    @JsonBackReference
+    @ManyToMany(mappedBy = "groupMapped",cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private Set<Users> users = new HashSet<>();
 
     @Column(name="createdBy")

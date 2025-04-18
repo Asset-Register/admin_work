@@ -1,24 +1,25 @@
 package com.project.ITAM.Service;
 
+import com.project.ITAM.Model.UserDTO;
 import com.project.ITAM.Model.Users;
 import com.project.ITAM.Model.UsersRequest;
 
 import java.util.List;
 
 public interface UsersService {
-    public Users createUser(UsersRequest usersRequest);
+    public String createUser(UsersRequest usersRequest);
 
-    public Users getUsersById(Long userId);
+    public UserDTO getUsersById(Long userId);
 
-    public Users updateUsersById(UsersRequest usersRequest,Long userId);
+    public String updateUsersById(UsersRequest usersRequest,Long userId);
 
-    public Users updateUsersByRoleId(Long userId,String roleId);
+    public String updateUsersByRoleId(Long userId,String roleId);
 
     public void deleteUsersById(Long userId);
 
-    public Users addUserToGroup(Long userId,Long GroupId);
+    public String addUserToGroup(Long userId,Long GroupId);
 
-    public List<Users> getAllUsers();
+    public List<UserDTO> getAllUsers();
 
     public int countUsers();
 

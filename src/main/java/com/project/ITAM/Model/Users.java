@@ -41,23 +41,21 @@ public class Users {
     @Column(name="disabled")
     private String disabled;
 
-    @ManyToMany(mappedBy = "allowedUsers",cascade = CascadeType.ALL)
-    @JsonIgnore
+    @ManyToMany(mappedBy = "allowedUsers",cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private Set<Folder> accessibleFolders = new HashSet<>();
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JoinTable(
             name = "user_groups",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "group_id")
     )
-   @JsonManagedReference
     private Set<Groups> groupMapped = new HashSet<>();
 
     @Transient
     private Set<String> groupName;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE},fetch = FetchType.LAZY)
     @JoinTable(
             name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -65,7 +63,7 @@ public class Users {
     )
     private Set<Role> roles = new HashSet<>();
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE},fetch = FetchType.LAZY)
     @JoinTable(
             name = "user_objects",
             joinColumns = @JoinColumn(name = "user_id"),
