@@ -11,14 +11,14 @@ import java.util.List;
 
 public interface LogoService {
 
-    public LogoEntity createLogo(String name, MultipartFile file) throws IOException;
+    public LogoEntity createLogo(String name, MultipartFile file,String filepath) throws IOException;
 
     public LogoEntity getLogo(Long logoId);
 
 
     public List<LogoEntity> getAllLogos();
 
-    public LogoEntity updateLogo(Long id, String name, MultipartFile file) throws IOException;
+    public LogoEntity updateLogo(Long id, String name, MultipartFile file,String filePath) throws IOException;
 
     public void deleteLogo(Long id);
 

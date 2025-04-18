@@ -21,6 +21,9 @@ public class LogoEntity {
     @Column
     private String name;
 
+    @Column
+    private String filePath;
+
     @Lob
     @Column
     private byte[] image;

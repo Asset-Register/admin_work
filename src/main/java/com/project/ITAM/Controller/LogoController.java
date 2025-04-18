@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -31,14 +32,19 @@ public class LogoController {
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @PostMapping("/add")
-    public ResponseEntity<LogoEntity> addLogo(@Valid @RequestParam("name") String name, @RequestParam("file") MultipartFile file) throws IOException {
-        return ResponseEntity.ok(logoService.createLogo(name,file));
+    public ResponseEntity<LogoEntity> addLogo(
+            @RequestParam(value = "name") String name,
+            @RequestParam(value = "file", required = false) MultipartFile file,
+            @RequestParam(value = "path", required = false) String filePath) throws IOException {
+        return ResponseEntity.ok(logoService.createLogo(name,file,filePath));
     }
 
     @PatchMapping("/{logoId}/update")
     public ResponseEntity<LogoEntity> updateLogo(@RequestParam("name") String name,
-                                                 @RequestParam("file") MultipartFile file,@PathVariable("logoId") Long logoId) throws IOException {
-        return ResponseEntity.ok(logoService.updateLogo(logoId,name,file));
+                                                 @RequestParam(value = "file", required = false) MultipartFile file,
+                                                 @RequestParam(value = "path", required = false) String filePath,
+            @PathVariable("logoId") Long logoId) throws IOException {
+        return ResponseEntity.ok(logoService.updateLogo(logoId,name,file,filePath));
     }
 
     @DeleteMapping("/{logoId}/delete")
@@ -48,7 +54,7 @@ public class LogoController {
     }
 
     @GetMapping("/{logoId}/get")
-    public ResponseEntity<byte[]> getUser(@PathVariable("logoId") Long id){
+    public ResponseEntity<byte[]> getUserLogoImage(@PathVariable("logoId") Long id){
         LogoEntity logoEntity = logoService.getLogo(id);
         if (logoEntity.getImage() != null) {
             return ResponseEntity.ok()
@@ -58,12 +64,30 @@ public class LogoController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
 
+    @GetMapping("/{logoId}/get")
+    public ResponseEntity<String> getLogoPath(@PathVariable("logoId") Long id){
+        LogoEntity logoEntity = logoService.getLogo(id);
+        if (logoEntity.getImage() != null) {
+            return ResponseEntity.ok(
+                    logoEntity.getFilePath());
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+    }
+
     @GetMapping("/getAll")
-    public ResponseEntity<List<byte[]>> getAllLogos(){
+    public ResponseEntity<List<byte[]>> getAllLogosImage(){
         List<byte[]> images = logoService.getAllLogos()
                 .stream()
                 .map(LogoEntity::getImage) // Get image byte array
                 .collect(Collectors.toList());
+        return ResponseEntity.ok(images);
+    }
+
+    @GetMapping("/getAll")
+    public ResponseEntity<Map<String,String>> getAllLogosFilePath(){
+        Map<String,String> images = logoService.getAllLogos()
+                .stream()
+                .collect(Collectors.toMap(LogoEntity::getName,LogoEntity::getFilePath));
         return ResponseEntity.ok(images);
     }
 

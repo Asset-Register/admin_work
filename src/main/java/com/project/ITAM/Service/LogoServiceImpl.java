@@ -6,6 +6,7 @@ import com.project.ITAM.Model.LogoRequest;
 import com.project.ITAM.Repository.LogoRepo;
 import com.project.ITAM.helper.DateTimeUtil;
 import com.project.ITAM.helper.ExtractJsonUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -23,9 +24,10 @@ public class LogoServiceImpl implements LogoService{
     private LogoRepo logoRepo;
 
     @Override
-    public LogoEntity createLogo(String name, MultipartFile file) throws IOException {
+    public LogoEntity createLogo(String name, MultipartFile file,String filePath) throws IOException {
 
         return logoRepo.save(LogoEntity.builder().name(name).image(file.getBytes()).createdBy(ExtractJsonUtil.getUserdetails())
+                        .filePath(filePath)
                 .createdTime(DateTimeUtil.currentDateTime()).build());
     }
 
@@ -40,11 +42,15 @@ public class LogoServiceImpl implements LogoService{
     }
 
     @Override
-    public LogoEntity updateLogo(Long id, String name, MultipartFile file) throws IOException {
+    public LogoEntity updateLogo(Long id, String name, MultipartFile file,String filePath) throws IOException {
         LogoEntity logoEntity=logoRepo.findById(id).orElseThrow(()-> new NotFoundException("logo id not found"));
         // Update name if provided
-        if (name != null && !name.isEmpty()) {
+        if (StringUtils.isEmpty(name)) {
             logoEntity.setName(name);
+        }
+
+        if (StringUtils.isEmpty(filePath)) {
+            logoEntity.setFilePath(filePath);
         }
 
         // Update image if file is provided
