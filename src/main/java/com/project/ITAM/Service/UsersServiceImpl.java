@@ -74,9 +74,9 @@ public class UsersServiceImpl implements UsersService {
                 .createdBy(ExtractJsonUtil.getUserdetails()).createdTime(DateTimeUtil.currentDateTime()).build();
 
         // optional but good
-        for (Groups group : groups) {
+       /* for (Groups group : groups) {
             group.getUsers().add(user); // ADD user inside the group too
-        }
+        }*/
         userRepo.save(user);
         return "user created";
     }
