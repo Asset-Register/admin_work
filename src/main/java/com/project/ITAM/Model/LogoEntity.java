@@ -22,6 +22,7 @@ public class LogoEntity {
     private String name;
 
     @Column
+    @Lob
     private String filePath;
 
     @Lob

@@ -32,15 +32,29 @@ public class LogoController {
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @PostMapping("/add")
-    public ResponseEntity<LogoEntity> addLogo(
+    public ResponseEntity<?> addLogo(
             @RequestParam(value = "name") String name,
             @RequestParam(value = "file", required = false) MultipartFile file,
-            @RequestParam(value = "path", required = false) String filePath) throws IOException {
-        return ResponseEntity.ok(logoService.createLogo(name,file,filePath));
+            @RequestParam(value = "path", required = false) String filePath) {
+        try {
+            LogoEntity createdLogo = logoService.createLogo(name, file, filePath);
+            return ResponseEntity.ok(createdLogo);
+        } catch (IllegalArgumentException e) {
+            // For bad input
+            return ResponseEntity.badRequest().body("Invalid input: " + e.getMessage());
+        } catch (IOException e) {
+            // For file handling errors
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error processing file: " + e.getMessage());
+        } catch (Exception e) {
+            // For any other errors
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An unexpected error occurred: " + e.getMessage());
+        }
     }
 
     @PatchMapping("/{logoId}/update")
-    public ResponseEntity<LogoEntity> updateLogo(@RequestParam("name") String name,
+    public ResponseEntity<LogoEntity> updateLogo(@RequestParam(value="name",required = false) String name,
                                                  @RequestParam(value = "file", required = false) MultipartFile file,
                                                  @RequestParam(value = "path", required = false) String filePath,
             @PathVariable("logoId") Long logoId) throws IOException {
@@ -64,7 +78,7 @@ public class LogoController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
 
-    @GetMapping("/{logoId}/get")
+    @GetMapping("/{logoId}/getlogoPath")
     public ResponseEntity<String> getLogoPath(@PathVariable("logoId") Long id){
         LogoEntity logoEntity = logoService.getLogo(id);
         if (logoEntity.getImage() != null) {
@@ -74,7 +88,7 @@ public class LogoController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
 
-    @GetMapping("/getAll")
+    @GetMapping("/getAllLogoImages")
     public ResponseEntity<List<byte[]>> getAllLogosImage(){
         List<byte[]> images = logoService.getAllLogos()
                 .stream()
@@ -83,7 +97,7 @@ public class LogoController {
         return ResponseEntity.ok(images);
     }
 
-    @GetMapping("/getAll")
+    @GetMapping("/getAllLogoPathswithNames")
     public ResponseEntity<Map<String,String>> getAllLogosFilePath(){
         Map<String,String> images = logoService.getAllLogos()
                 .stream()

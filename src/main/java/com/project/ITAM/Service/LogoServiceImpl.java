@@ -25,12 +25,16 @@ public class LogoServiceImpl implements LogoService{
 
     @Override
     public LogoEntity createLogo(String name, MultipartFile file,String filePath) throws IOException {
-
-        return logoRepo.save(LogoEntity.builder().name(name).image(file.getBytes()).createdBy(ExtractJsonUtil.getUserdetails())
-                        .filePath(filePath)
-                .createdTime(DateTimeUtil.currentDateTime()).build());
+        if (file != null && !file.isEmpty()) {
+            return logoRepo.save(LogoEntity.builder().name(name).image(file.getBytes()).createdBy(ExtractJsonUtil.getUserdetails())
+                    .filePath(filePath)
+                    .createdTime(DateTimeUtil.currentDateTime()).build());
+        } else {
+            return logoRepo.save(LogoEntity.builder().name(name).createdBy(ExtractJsonUtil.getUserdetails())
+                    .filePath(filePath)
+                    .createdTime(DateTimeUtil.currentDateTime()).build());
+        }
     }
-
     @Override
     public LogoEntity getLogo(Long logoId) {
        return logoRepo.findById(logoId).orElseThrow(()-> new NotFoundException("logo id not found"));
