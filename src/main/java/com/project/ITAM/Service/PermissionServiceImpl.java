@@ -59,7 +59,7 @@ public class PermissionServiceImpl implements PermissionService{
             permission.setPermissionName(permissionRequest.getPermissionName());
         }
         if(!StringUtils.isEmpty(permissionRequest.getType())) {
-            permission.setPermissionName(permissionRequest.getType());
+            permission.setType(permissionRequest.getType());
         }
         permission.setUpdatedBy(ExtractJsonUtil.getUserdetails());
         permission.setUpdatedTime(DateTimeUtil.currentDateTime());

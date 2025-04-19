@@ -6,6 +6,7 @@ import com.project.ITAM.Repository.*;
 import com.project.ITAM.helper.DateTimeUtil;
 import com.project.ITAM.helper.ExtractJsonUtil;
 import jakarta.transaction.Transactional;
+import org.apache.catalina.Group;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -89,7 +90,10 @@ public class UsersServiceImpl implements UsersService {
      */
     private UserDTO convertToDTO(Users users) {
         return new UserDTO(users.getFirstName(), users.getLastName(), users.getMiddleName(), users.getEmail(), users.getAuthentication(),
-                users.getDisabled(), users.getGroupName(), users.getRoles(), users.getObjects());
+                users.getDisabled(), users.getGroupMapped().stream().map(Groups::getGroupName).collect(Collectors.toList())
+                , users.getRoles().stream().map(Role::getRoleName).collect(Collectors.toList()),
+                 users.getObjects().stream().map(ObjectEntity::getObjectName).collect(Collectors.toList())
+        );
     }
 
     @Transactional
@@ -98,12 +102,12 @@ public class UsersServiceImpl implements UsersService {
         Users users = userRepo.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User not found"));
 
-        Users users1 = userRepo.findByIdWithGroups(userId).orElseThrow(() -> new NotFoundException("User not found"));
+     //   Users users1 = userRepo.findByIdWithGroups(userId).orElseThrow(() -> new NotFoundException("User not found"));
         // Extract group names into a Set<String>
-        Set<String> groupNames = users.getGroupMapped().stream()
+        /*Set<String> groupNames = users.getGroupMapped().stream()
                 .map(Groups::getGroupName) // get the groupName from each Group
                 .collect(Collectors.toSet()); // collect into a Set
-        users.setGroupName(groupNames);
+        users.setGroupName(groupNames);*/
         return convertToDTO(users);
     }
 
@@ -229,13 +233,13 @@ public class UsersServiceImpl implements UsersService {
     @Override
     public List<UserDTO> getAllUsers() {
         List<Users> users = userRepo.findAll();
-        for (Users users1 : users) {
+       /* for (Users users1 : users) {
             // Extract group names into a Set<String>
             Set<String> groupNames = users1.getGroupMapped().stream()
                     .map(Groups::getGroupName) // get the groupName from each Group
                     .collect(Collectors.toSet()); // collect into a Set
             users1.setGroupName(groupNames);
-        }
+        }*/
 
         return users.stream()
                 .map(this::convertToDTO) // Convert each Folder to FolderDTO

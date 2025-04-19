@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Builder
@@ -26,11 +27,12 @@ public class UserDTO {
 
     private String disabled;
 
-    private Set<String> groupName;
+    private List<String> groupName;
+    private List<String> rolesName;
+    private List<String> objectName;
+   // private Set<Role> roles = new HashSet<>();
 
-    private Set<Role> roles = new HashSet<>();
-
-    private Set<ObjectEntity> objects = new HashSet<>();
+   // private Set<ObjectEntity> objects = new HashSet<>();
 
 
 }
